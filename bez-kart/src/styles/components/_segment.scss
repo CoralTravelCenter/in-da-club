@@ -1,0 +1,97 @@
+@use '../abstracts/mixins' as mixins;
+@use '../abstracts/tokens' as tokens;
+
+.bez-kart-segment {
+  min-width: 0;
+  padding: tokens.$space-xl 0;
+
+  &__title {
+    margin: 0 0 28px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    padding-inline: tokens.$space-md;
+  }
+
+  &__content {
+    display: grid;
+    gap: tokens.$layout-gap;
+    min-width: 0;
+
+    @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(5, minmax(0, 1fr));
+      height: 400px;
+    }
+  }
+
+  &__featured {
+    min-height: 340px;
+    padding-inline: tokens.$space-md;
+
+    @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+    }
+  }
+
+  &__list {
+    min-height: 220px;
+    list-style: none;
+    margin: 0;
+    padding-left: 16px;
+    scroll-padding-left: 16px;
+
+    @include mixins.scroll-snap(
+            $gap: tokens.$layout-gap,
+            $item-selector: '> li',
+            $item-size: 90%,
+            $hide-scrollbar: true
+    );
+
+    @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
+      display: contents;
+    }
+
+    &--scroll-locked {
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
+    }
+  }
+
+  &__item {
+    @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
+      scroll-snap-align: none;
+    }
+  }
+
+  @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
+    &__item {
+      &[data-block-id='welcome-bonus'] {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+      }
+
+      &[data-block-id='manager'] {
+        grid-column: 1;
+        grid-row: 3 / span 3;
+      }
+
+      &[data-block-id='birthday-bonus'] {
+        grid-column: 2;
+        grid-row: 4 / span 2;
+      }
+
+      &[data-block-id='cashback'] {
+        grid-column: 3;
+        grid-row: 1 / span 2;
+      }
+
+      &[data-block-id='private-sales'] {
+        grid-column: 3;
+        grid-row: 3 / span 3;
+      }
+    }
+  }
+}

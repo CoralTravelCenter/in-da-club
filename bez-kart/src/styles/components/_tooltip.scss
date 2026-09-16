@@ -1,0 +1,61 @@
+.bez-kart-tooltip {
+  margin: 0;
+
+  &__title {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  &__text {
+    margin: 0;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__content[popover] {
+    position: fixed;
+    inset: auto;
+    display: flex;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 24px 32px 20px 16px;
+    overflow-y: auto;
+    align-items: flex-start;
+    gap: 4px;
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.10);
+  }
+
+  &__close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+}
+
+.bez-kart-tooltip-trigger {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  display: flex;
+  border: none;
+  margin-top: auto;
+  padding: 0;
+}
+
+.bez-kart-tooltip__content[popover]::backdrop {
+  background-color: rgb(0 0 0 / 0.3);
+}
+
+.bez-kart-tooltip__content[popover]:not(:popover-open) {
+  display: none;
+}

@@ -1,0 +1,128 @@
+@use '../abstracts/mixins' as mixins;
+@use '../abstracts/tokens' as tokens;
+
+.bez-kart-block {
+  position: relative;
+  display: block;
+  height: 100%;
+  min-width: 0;
+  padding: tokens.$space-md;
+  color: tokens.$color-text;
+  text-decoration: none;
+  background-color: tokens.$color-surface;
+  border-radius: tokens.$radius-card;
+
+  &--video {
+    overflow: hidden;
+    padding: 0;
+
+    > .bez-kart-block__content {
+      position: relative;
+      z-index: 1;
+      align-items: flex-start;
+      padding: tokens.$space-md;
+    }
+  }
+
+  &__video {
+    position: absolute;
+    right: 0;
+    bottom: -4%;
+    width: 55%;
+    height: 55%;
+    object-fit: cover;
+    filter: brightness(1.05);
+
+    @media (prefers-reduced-motion: reduce) {
+      display: none;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: tokens.$space-md;
+    height: 100%;
+  }
+
+  &__title,
+  &__value {
+    color: var(--Text-color_Text_Dark, #000);
+    font-size: 24px;
+    font-weight: var(--font-font_Weight_Semibold, 600);
+    line-height: 28px;
+  }
+
+  &__value {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+    padding: 9px 12px;
+    background: rgba(210, 233, 251, 0.8);
+    border-radius: 16px;
+    color: #E84E0F;
+  }
+
+  &__value-prefix {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  &__quantity {
+    font-size: 38px;
+    line-height: 1;
+  }
+
+  &__description {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+
+  &[data-block-id='cashback'] {
+    @include mixins.public-background(
+            'cashback.png',
+            45% auto,
+            right bottom
+    );
+  }
+
+  &[data-block-id='birthday-bonus'] {
+    @include mixins.public-background(
+            'birthday.png',
+            auto 100%,
+            right bottom
+    );
+  }
+
+  &[data-block-id='welcome-bonus'] {
+    @include mixins.public-background(
+            'hello-bonus.png',
+            auto 100%,
+            right bottom
+    );
+  }
+
+  &[data-block-id='private-sales'] {
+    @include mixins.public-background(
+            'closed-promo.png',
+            auto 70%,
+            right bottom
+    );
+  }
+
+  &[data-block-id='manager'] {
+    @include mixins.public-background(
+            'manager.png',
+            auto 70%,
+            right bottom
+    );
+  }
+}
