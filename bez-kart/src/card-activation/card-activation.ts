@@ -6,6 +6,7 @@ interface UserProfile {
     email?: string;
     mobilePhone?: string;
     BonusUserId?: string | number;
+
     [key: string]: unknown;
 }
 
@@ -229,7 +230,7 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
 
         try {
             if (submit) submit.disabled = true;
-            const response = await postJson<{result?: {isSuccess?: unknown; errorMessage?: string}}>(
+            const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
                 '/endpoints/Customer/BonusRegister', registration,
             );
             if (!isSuccess(response.result?.isSuccess)) {
@@ -247,7 +248,12 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
 async function applyConsents(data: RegistrationData): Promise<void> {
     const response = await fetch('https://apishar.coral.school/consents/api/documentlist/coral.ru');
     if (!response.ok) throw new Error('Не удалось загрузить документы согласий');
-    const documents = await response.json() as Array<{docId: number; project_id: number; doctype_id: number; is_active: boolean}>;
+    const documents = await response.json() as Array<{
+        docId: number;
+        project_id: number;
+        doctype_id: number;
+        is_active: boolean
+    }>;
     const confirmation: Record<number, boolean> = {
         23: data.isConsentToSms,
         24: data.isConsentToAdditional,
@@ -280,7 +286,7 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
     stage.innerHTML = '<div class="bez-kart-activation__status">Отправляем код активации…</div>';
 
     try {
-        const response = await postJson<{result?: {isSuccess?: unknown; errorMessage?: string}}>(
+        const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
             '/endpoints/Customer/BonusSendVerificationCode', {mobilePhone: data.mobilePhone},
         );
         if (!isSuccess(response.result?.isSuccess)) {
@@ -299,7 +305,7 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
             if (!form.reportValidity()) return;
             const code = new FormData(form).get('code');
             try {
-                const activation = await postJson<{result?: {isSuccess?: unknown; errorMessage?: string}}>(
+                const activation = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
                     '/endpoints/Customer/BonusActivation', {
                         mobilePhone: data.mobilePhone,
                         activationCode: String(code ?? ''),
@@ -319,7 +325,7 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
 }
 
 async function refreshUser(): Promise<void> {
-    const response = await postJson<{result?: {token?: string}}>('/endpoints/Customer/RefreshLogin', {});
+    const response = await postJson<{ result?: { token?: string } }>('/endpoints/Customer/RefreshLogin', {});
     const token = response.result?.token;
     if (!token) return;
     const payload = token.split('.')[1];
