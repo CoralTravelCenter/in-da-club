@@ -1,0 +1,93 @@
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
+import {activateCard, normalizePhone, refreshUser, registerCard, sendVerificationCode, type RegistrationData} from './customer-api';
+
+const registration: RegistrationData = {
+    givenName: 'Анна',
+    familyName: 'Тестова',
+    middleName: '',
+    email: 'anna@example.test',
+    gender: 1,
+    birthDate: '1990-01-02',
+    city: 'Москва',
+    isConsentToPersonalData: true,
+    isConsentToSms: true,
+    isConsentToEmail: true,
+    isConsentToAdditional: false,
+    mobilePhone: '79990000000',
+};
+
+function response(body: unknown, ok = true, status = 200): Response {
+    return {ok, status, json: async () => body} as Response;
+}
+
+describe('Customer API', () => {
+    const fetchMock = vi.fn();
+    const storage = new Map<string, string>();
+
+    beforeEach(() => {
+        fetchMock.mockReset();
+        storage.clear();
+        vi.stubGlobal('fetch', fetchMock);
+        vi.stubGlobal('window', {
+            localStorage: {
+                getItem: (key: string) => storage.get(key) ?? null,
+                setItem: (key: string, value: string) => { storage.set(key, value); },
+            },
+        });
+    });
+
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('регистрирует карту с полным телом запроса и принимает оба строковых формата успеха', async () => {
+        for (const success of ['True', 'true']) {
+            fetchMock.mockResolvedValueOnce(response({result: {isSuccess: success}}));
+            await registerCard(registration);
+        }
+
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+        expect(fetchMock).toHaveBeenCalledWith('/endpoints/Customer/BonusRegister', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify(registration),
+        });
+    });
+
+    it('передаёт номер и код в соответствующие операции', async () => {
+        fetchMock.mockResolvedValue(response({result: {isSuccess: true}}));
+
+        await sendVerificationCode(registration.mobilePhone);
+        await activateCard(registration.mobilePhone, '123456');
+
+        expect(fetchMock.mock.calls.map(([url, options]) => [url, JSON.parse(options.body)])).toEqual([
+            ['/endpoints/Customer/BonusSendVerificationCode', {mobilePhone: registration.mobilePhone}],
+            ['/endpoints/Customer/BonusActivation', {mobilePhone: registration.mobilePhone, activationCode: '123456'}],
+        ]);
+    });
+
+    it('сообщает об отказе API и HTTP-ошибке', async () => {
+        fetchMock.mockResolvedValueOnce(response({result: {isSuccess: false, errorMessage: 'Отказ регистрации'}}));
+        await expect(registerCard(registration)).rejects.toThrow('Отказ регистрации');
+
+        fetchMock.mockResolvedValueOnce(response({}, false, 503));
+        await expect(sendVerificationCode(registration.mobilePhone)).rejects.toThrow('Request failed: 503');
+    });
+
+    it('обновляет только Bonus-поля профиля из нового токена', async () => {
+        storage.set('user', JSON.stringify({name: 'Анна', BonusUserId: 1}));
+        const payload = btoa(JSON.stringify({name: 'Other name', BonusUserId: 42, BonusLevel: 'Gold'}));
+        fetchMock.mockResolvedValueOnce(response({result: {token: `header.${payload}.signature`}}));
+
+        await expect(refreshUser()).resolves.toBe(true);
+        expect(JSON.parse(storage.get('user') ?? '{}')).toEqual({name: 'Анна', BonusUserId: 42, BonusLevel: 'Gold'});
+    });
+
+    it('не записывает профиль при ответе без токена', async () => {
+        fetchMock.mockResolvedValueOnce(response({result: {}}));
+        await expect(refreshUser()).resolves.toBe(false);
+        expect(storage.has('user')).toBe(false);
+    });
+
+    it('нормализует десятизначный номер', () => {
+        expect(normalizePhone('(999) 000-00-00')).toBe('79990000000');
+    });
+});

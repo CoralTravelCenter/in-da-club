@@ -1,4 +1,5 @@
 import { renderSegment } from '../blocks/render-segment';
+import { requestCardActivation } from '../card-activation/card-activation';
 import { getSegmentConfig } from '../segments/segment.config';
 import type { SegmentId } from '../segments/segment.types';
 
@@ -8,5 +9,5 @@ export interface BootstrapOptions {
 }
 
 export function bootstrap({ container, segmentId }: BootstrapOptions): void {
-  container.replaceChildren(renderSegment(getSegmentConfig(segmentId)));
+  container.replaceChildren(renderSegment(getSegmentConfig(segmentId), requestCardActivation));
 }

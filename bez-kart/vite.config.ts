@@ -17,6 +17,7 @@ export default defineConfig(({mode}) => {
         server: {
             cors: true,
             host: '127.0.0.1',
+            open: '/__vite-plugin-monkey.install.user.js',
             port: 5173,
             strictPort: true,
         },

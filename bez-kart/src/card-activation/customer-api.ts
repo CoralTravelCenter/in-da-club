@@ -1,0 +1,81 @@
+import {getProfile, type UserProfile} from './profile';
+
+export interface RegistrationData {
+    givenName: string;
+    familyName: string;
+    middleName: string;
+    email: string;
+    gender: number;
+    birthDate: string;
+    city: string;
+    isConsentToPersonalData: boolean;
+    isConsentToSms: boolean;
+    isConsentToEmail: boolean;
+    isConsentToAdditional: boolean;
+    mobilePhone: string;
+}
+
+function isSuccess(value: unknown): boolean {
+    return value === true || value === 'True' || value === 'true';
+}
+
+async function postJson<T>(url: string, body: object): Promise<T> {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
+    }
+
+    return response.json() as Promise<T>;
+}
+
+export function normalizePhone(value: string): string {
+    const digits = value.replace(/\D/g, '');
+    return digits.length === 10 ? `7${digits}` : digits;
+}
+
+export async function registerCard(data: RegistrationData): Promise<void> {
+    const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
+        '/endpoints/Customer/BonusRegister', data,
+    );
+    if (!isSuccess(response.result?.isSuccess)) {
+        throw new Error(response.result?.errorMessage || 'Не удалось оформить карту');
+    }
+}
+
+export async function sendVerificationCode(mobilePhone: string): Promise<void> {
+    const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
+        '/endpoints/Customer/BonusSendVerificationCode', {mobilePhone},
+    );
+    if (!isSuccess(response.result?.isSuccess)) {
+        throw new Error(response.result?.errorMessage || 'Не удалось отправить код');
+    }
+}
+
+export async function activateCard(mobilePhone: string, activationCode: string): Promise<void> {
+    const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
+        '/endpoints/Customer/BonusActivation', {mobilePhone, activationCode},
+    );
+    if (!isSuccess(response.result?.isSuccess)) {
+        throw new Error(response.result?.errorMessage || 'Неверный код — попробуйте ещё раз');
+    }
+}
+
+export async function refreshUser(): Promise<boolean> {
+    const response = await postJson<{ result?: { token?: string } }>('/endpoints/Customer/RefreshLogin', {});
+    const token = response.result?.token;
+    if (!token) return false;
+    const payload = token.split('.')[1];
+    if (!payload) return false;
+    const decoded = JSON.parse(decodeURIComponent(escape(atob(payload.replace(/-/g, '+').replace(/_/g, '/'))))) as UserProfile;
+    const current = getProfile() ?? {};
+    for (const [key, value] of Object.entries(decoded)) {
+        if (key.startsWith('Bonus')) current[key] = value;
+    }
+    window.localStorage.setItem('user', JSON.stringify(current));
+    return true;
+}

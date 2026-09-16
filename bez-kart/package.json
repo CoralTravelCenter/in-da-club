@@ -10,13 +10,16 @@
     "build:regular-1": "vite build --mode regular-1",
     "build:regular-2": "vite build --mode regular-2",
     "build:regular-3": "vite build --mode regular-3",
+    "test": "vitest run --config vitest.config.ts",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "jsdom": "^30.0.1",
     "sass": "^1.104.1",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.5",
-    "vite-plugin-monkey": "^5.0.3"
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vite-plugin-monkey": "^8.1.1",
+    "vitest": "^5.0.1"
   },
   "dependencies": {
     "petite-vue": "^0.4.1",

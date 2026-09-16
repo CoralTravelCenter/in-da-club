@@ -1,7 +1,6 @@
 import type {ContentBlockConfig} from '../segments/segment.types';
 import {typographText} from '../shared/typography';
 import {addLockableTarget, disablePageScroll, enablePageScroll} from 'scroll-lock';
-import {requestCardActivation} from '../card-activation/card-activation';
 
 const TOOLTIP_ICON_URL = 'https://b2ccdn.coral.ru/content/info.svg';
 const TOOLTIP_CLOSE_ICON_URL = 'https://b2ccdn.coral.ru/content/cross.svg';
@@ -117,8 +116,98 @@ function createTooltip(config: ContentBlockConfig, block: HTMLElement): {
     return {trigger, content};
 }
 
-export function renderBlock(config: ContentBlockConfig): HTMLElement {
-    const block = document.createElement(config.href ? 'a' : 'article');
+function appendVideo(block: HTMLElement, media: NonNullable<ContentBlockConfig['media']>): void {
+    const video = document.createElement('video');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    block.classList.add('bez-kart-block--video');
+    video.className = 'bez-kart-block__video';
+    video.src = media.src;
+    video.autoplay = !reduceMotion;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'metadata';
+    video.tabIndex = -1;
+    video.setAttribute('aria-hidden', 'true');
+
+    if (media.poster) {
+        video.poster = media.poster;
+    }
+
+    block.append(video);
+}
+
+function appendBadge(content: HTMLElement, badge: string): void {
+    const element = document.createElement('span');
+    element.className = 'bez-kart-block__badge';
+    element.textContent = typographText(badge);
+    content.append(element);
+}
+
+function appendHeadingOrValue(content: HTMLElement, config: ContentBlockConfig): void {
+    if (config.title !== undefined) {
+        const title = document.createElement('h3');
+        title.className = 'bez-kart-block__title';
+        title.textContent = typographText(config.title);
+        content.append(title);
+        return;
+    }
+
+    const value = document.createElement('span');
+    const quantity = document.createElement('span');
+    value.className = 'bez-kart-block__value';
+    quantity.className = 'bez-kart-block__quantity';
+    quantity.textContent = typographText(config.value);
+
+    if (config.valuePrefix) {
+        const prefix = document.createElement('span');
+        prefix.className = 'bez-kart-block__value-prefix';
+        prefix.textContent = typographText(config.valuePrefix);
+        value.append(prefix);
+    }
+
+    value.append(quantity);
+    content.append(value);
+}
+
+function appendDescription(content: HTMLElement, description: string): void {
+    const element = document.createElement('p');
+    element.className = 'bez-kart-block__description';
+    appendTextWithLineBreaks(element, description);
+    content.append(element);
+}
+
+function appendAction(content: HTMLElement, label: string, onActivateCard: () => void | Promise<void>): void {
+    const button = document.createElement('coral-button');
+    button.className = 'bez-kart-block__action';
+    button.setAttribute('trait', 'vivid');
+    button.setAttribute('shape', 'pill');
+
+    const link = document.createElement('button');
+    link.type = 'button';
+    link.textContent = typographText(label);
+    link.addEventListener('click', () => {
+        void onActivateCard();
+    });
+
+    button.append(link);
+    content.append(button);
+}
+
+function wrapContentInLink(content: HTMLElement, href: string): void {
+    const link = document.createElement('a');
+    link.className = 'bez-kart-block__link';
+    link.href = href;
+    link.append(...Array.from(content.childNodes));
+    content.append(link);
+}
+
+export function renderBlock(
+    config: ContentBlockConfig,
+    onActivateCard: () => void | Promise<void>,
+): HTMLElement {
+    const block = document.createElement(config.href && !config.tooltip ? 'a' : 'article');
     block.className = 'bez-kart-block';
     block.dataset.blockId = config.id;
 
@@ -127,81 +216,28 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
     }
 
     if (config.media?.type === 'video') {
-        const video = document.createElement('video');
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        block.classList.add('bez-kart-block--video');
-        video.className = 'bez-kart-block__video';
-        video.src = config.media.src;
-        video.autoplay = !reduceMotion;
-        video.muted = true;
-        video.loop = true;
-        video.playsInline = true;
-        video.preload = 'metadata';
-        video.tabIndex = -1;
-        video.setAttribute('aria-hidden', 'true');
-
-        if (config.media.poster) {
-            video.poster = config.media.poster;
-        }
-
-        block.append(video);
+        appendVideo(block, config.media);
     }
 
     const content = document.createElement('div');
     content.className = 'bez-kart-block__content';
 
     if (config.badge) {
-        const badge = document.createElement('span');
-        badge.className = 'bez-kart-block__badge';
-        badge.textContent = typographText(config.badge);
-        content.append(badge);
+        appendBadge(content, config.badge);
     }
 
-    const description = document.createElement('p');
-    description.className = 'bez-kart-block__description';
-    appendTextWithLineBreaks(description, config.description);
+    appendHeadingOrValue(content, config);
 
-    if (config.title !== undefined) {
-        const title = document.createElement('h3');
-        title.className = 'bez-kart-block__title';
-        title.textContent = typographText(config.title);
-        content.append(title);
-    } else {
-        const value = document.createElement('span');
-        const quantity = document.createElement('span');
-        value.className = 'bez-kart-block__value';
-        quantity.className = 'bez-kart-block__quantity';
-        quantity.textContent = typographText(config.value);
-
-        if (config.valuePrefix) {
-            const prefix = document.createElement('span');
-            prefix.className = 'bez-kart-block__value-prefix';
-            prefix.textContent = typographText(config.valuePrefix);
-            value.append(prefix);
-        }
-
-        value.append(quantity);
-        content.append(value);
+    if (config.description) {
+        appendDescription(content, config.description);
     }
 
-    content.append(description);
+    if (config.action && !config.href) {
+        appendAction(content, config.action.label, onActivateCard);
+    }
 
-    if (config.action && !(block instanceof HTMLAnchorElement)) {
-        const button = document.createElement('coral-button');
-        button.className = 'bez-kart-block__action';
-        button.setAttribute('trait', 'vivid');
-        button.setAttribute('shape', 'pill');
-
-        const link = document.createElement('button');
-        link.type = 'button';
-        link.textContent = typographText(config.action.label);
-        link.addEventListener('click', () => {
-            void requestCardActivation();
-        });
-
-        button.append(link);
-        content.append(button);
+    if (config.href && config.tooltip) {
+        wrapContentInLink(content, config.href);
     }
 
     if (config.tooltip) {
