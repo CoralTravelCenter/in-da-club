@@ -14,12 +14,6 @@
   background-size: $size;
 }
 
-@mixin breakpoint-up($width) {
-  @media (min-width: $width) {
-    @content;
-  }
-}
-
 /// Создаёт прокручиваемый flex-контейнер со scroll snap.
 ///
 /// @param {String} $direction - x или y.

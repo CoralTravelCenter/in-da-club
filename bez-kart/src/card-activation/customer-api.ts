@@ -15,6 +15,13 @@ export interface RegistrationData {
     mobilePhone: string;
 }
 
+export interface BonusProfile {
+    cardType?: string;
+    cardNumber?: string;
+    accumulatedBalance?: number;
+    promoBalance?: number;
+}
+
 function isSuccess(value: unknown): boolean {
     return value === true || value === 'True' || value === 'true';
 }
@@ -63,6 +70,14 @@ export async function activateCard(mobilePhone: string, activationCode: string):
     if (!isSuccess(response.result?.isSuccess)) {
         throw new Error(response.result?.errorMessage || 'Неверный код — попробуйте ещё раз');
     }
+}
+
+export async function getBonusProfile(): Promise<BonusProfile> {
+    const response = await postJson<{result?: BonusProfile}>('/endpoints/Customer/BonusProfile', {});
+    if (!response.result || typeof response.result !== 'object') {
+        throw new Error('Не удалось загрузить данные карты');
+    }
+    return response.result;
 }
 
 export async function refreshUser(): Promise<boolean> {

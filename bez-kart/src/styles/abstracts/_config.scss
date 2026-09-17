@@ -1,3 +1,2 @@
-// Vite раздаёт содержимое public от корня dev-сервера.
-// Перед production-сборкой замените значение на публичный CDN/asset host.
+// Vite переопределяет значение: localhost для dev и CDN для production-сборки.
 $public-assets-base: 'http://localhost:5173' !default;

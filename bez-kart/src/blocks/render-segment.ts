@@ -1,5 +1,5 @@
 import type { SegmentConfig } from '../segments/segment.types';
-import { typographText } from '../shared/typography';
+import { typographed } from '../shared/typography';
 import { renderBlock } from './render-block';
 
 export function renderSegment(
@@ -10,19 +10,19 @@ export function renderSegment(
   const titleId = `bez-kart-title-${config.id}`;
   container.className = 'bez-kart-segment';
   container.dataset.segmentId = config.id;
-  container.setAttribute('aria-label', typographText(config.ariaLabel));
+  container.setAttribute('aria-label', config.ariaLabel);
 
   const title = document.createElement('h2');
   title.id = titleId;
   title.className = 'bez-kart-segment__title';
-  title.textContent = typographText('Клуб «Море возможностей»');
+  title.textContent = typographed`Клуб «Море возможностей»`;
 
   const content = document.createElement('div');
   content.className = 'bez-kart-segment__content';
 
   const list = document.createElement('ul');
   list.className = 'bez-kart-segment__list';
-  list.setAttribute('aria-label', typographText('Другие преимущества клуба'));
+  list.setAttribute('aria-label', typographed`Другие преимущества клуба`);
   list.setAttribute('role', 'list');
 
   for (const blockConfig of config.blocks) {

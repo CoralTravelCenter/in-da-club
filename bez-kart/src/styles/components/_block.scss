@@ -12,6 +12,10 @@
   background-color: tokens.$color-surface;
   border-radius: tokens.$radius-card;
 
+  @media (min-width: tokens.$breakpoint-desktop) {
+    padding: tokens.$space-xl;
+  }
+
   &--video {
     overflow: hidden;
     padding: 0;
@@ -21,15 +25,19 @@
       z-index: 1;
       align-items: flex-start;
       padding: tokens.$space-md;
+
+      @media (min-width: tokens.$breakpoint-desktop) {
+        padding: tokens.$space-xl;
+      }
     }
   }
 
   &__video {
     position: absolute;
     right: 0;
-    bottom: -4%;
-    width: 55%;
-    height: 55%;
+    bottom: 0;
+    width: min(55%, 300px);
+    height: min(55%, 300px);
     object-fit: cover;
     filter: brightness(1.05);
 
@@ -98,23 +106,39 @@
 
   &[data-block-id='cashback'] {
     @include mixins.public-background(
-            'cashback.png',
-            45% auto,
+            'cashback.webp',
+            min(45%, 180px) auto,
             right bottom
     );
+
+    @media (min-width: tokens.$breakpoint-desktop) {
+      @include mixins.public-background(
+              'cashback.webp',
+              min(30%, 180px) auto,
+              calc(100% - 32px) 30%
+      );
+    }
   }
 
   &[data-block-id='birthday-bonus'] {
     @include mixins.public-background(
-            'birthday.png',
+            'birthday.webp',
             auto 100%,
             right bottom
     );
+
+    @media (min-width: tokens.$breakpoint-desktop) {
+      @include mixins.public-background(
+              'birthday-d.webp',
+              auto 100%,
+              right bottom
+      );
+    }
   }
 
   &[data-block-id='welcome-bonus'] {
     @include mixins.public-background(
-            'hello-bonus.png',
+            'hello-bonus.webp',
             auto 100%,
             right bottom
     );
@@ -122,17 +146,26 @@
 
   &[data-block-id='private-sales'] {
     @include mixins.public-background(
-            'closed-promo.png',
+            'closed-promo.webp',
+            auto 70%,
+            right bottom
+    );
+
+    @media (min-width: tokens.$breakpoint-desktop) {
+      @include mixins.public-background(
+              'closed-promo-d.webp',
+              auto 60%,
+              right bottom
+      );
+    }
+  }
+
+  &[data-block-id='manager'] {
+    @include mixins.public-background(
+            'manager.webp',
             auto 70%,
             right bottom
     );
   }
 
-  &[data-block-id='manager'] {
-    @include mixins.public-background(
-            'manager.png',
-            auto 70%,
-            right bottom
-    );
-  }
 }

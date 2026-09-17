@@ -11,6 +11,10 @@
     font-weight: 600;
     line-height: 38px;
     padding-inline: tokens.$space-md;
+
+    @media (min-width: tokens.$breakpoint-desktop) {
+      padding-inline: 0;
+    }
   }
 
   &__content {
@@ -18,10 +22,9 @@
     gap: tokens.$layout-gap;
     min-width: 0;
 
-    @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
+    @media (min-width: tokens.$breakpoint-desktop) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      grid-template-rows: repeat(5, minmax(0, 1fr));
-      height: 400px;
+      grid-template-rows: repeat(5, minmax(0, 100px));
     }
   }
 
@@ -29,9 +32,11 @@
     min-height: 340px;
     padding-inline: tokens.$space-md;
 
-    @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
+    @media (min-width: tokens.$breakpoint-desktop) {
       grid-column: 2;
       grid-row: 1 / span 3;
+      min-height: 330px;
+      padding: 0;
     }
   }
 
@@ -39,8 +44,8 @@
     min-height: 220px;
     list-style: none;
     margin: 0;
-    padding-left: 16px;
-    scroll-padding-left: 16px;
+    padding-inline: 16px;
+    scroll-padding-inline: 16px;
 
     @include mixins.scroll-snap(
             $gap: tokens.$layout-gap,
@@ -49,7 +54,7 @@
             $hide-scrollbar: true
     );
 
-    @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
+    @media (min-width: tokens.$breakpoint-desktop) {
       display: contents;
     }
 
@@ -61,13 +66,9 @@
   }
 
   &__item {
-    @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
+    @media (min-width: tokens.$breakpoint-desktop) {
       scroll-snap-align: none;
-    }
-  }
 
-  @include mixins.breakpoint-up(tokens.$breakpoint-desktop) {
-    &__item {
       &[data-block-id='welcome-bonus'] {
         grid-column: 1;
         grid-row: 1 / span 2;

@@ -1,15 +1,18 @@
 import {getProfile, waitForLogin, type UserProfile} from './profile';
-import {activateCard, normalizePhone, refreshUser, registerCard, sendVerificationCode, type RegistrationData} from './customer-api';
+import {activateCard, getBonusProfile, normalizePhone, refreshUser, registerCard, sendVerificationCode, type RegistrationData} from './customer-api';
 import {applyConsents} from './consents';
 import {
     createDialog,
     createRegistrationForm,
     createVerificationForm,
+    parseBirthdate,
+    readVerificationCode,
     setStep,
     showExistingCardResult,
     showMessage,
     showRefreshRequiredResult,
     showSuccessResult,
+    validateRegistrationForm,
     type CoralPopupElement,
 } from './activation-view';
 
@@ -32,7 +35,7 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
     const acceptedDocuments = new Set<string>();
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        if (!form.reportValidity()) return;
+        if (!validateRegistrationForm(form)) return;
         const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
         if (submit?.disabled) return;
         const data = new FormData(form);
@@ -42,7 +45,7 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
             middleName: '',
             email: String(data.get('email') ?? ''),
             gender: Number(data.get('gender')),
-            birthDate: String(data.get('birthDate') ?? ''),
+            birthDate: parseBirthdate(String(data.get('birthDate') ?? ''))!,
             city: String(data.get('city') ?? '').trim(),
             isConsentToPersonalData: data.get('personal') === 'on',
             isConsentToSms: data.get('loyalty') === 'on',
@@ -93,11 +96,11 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
         if (!form.reportValidity()) return;
         const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
         if (submit?.disabled) return;
-        const code = new FormData(form).get('code');
+        const code = readVerificationCode(form);
         try {
             if (submit) submit.disabled = true;
             form.querySelector('.bez-kart-activation__error')?.remove();
-            await activateCard(data.mobilePhone, String(code ?? ''));
+            await activateCard(data.mobilePhone, code);
             await renderSuccess(dialog);
         } catch (error) {
             showMessage(form, error instanceof Error ? error.message : 'Не удалось активировать карту');
@@ -116,22 +119,32 @@ async function renderSuccess(dialog: CoralPopupElement): Promise<void> {
         if (!await refreshUser()) {
             throw new Error('Не удалось обновить данные карты');
         }
-        showSuccessResult(stage);
+        const bonus = await getBonusProfile();
+        const profile = getProfile();
+        if (!profile) throw new Error('Не удалось обновить данные карты');
+        showSuccessResult(stage, bonus, profile);
     } catch {
         showRefreshRequiredResult(stage);
     }
 }
 
-async function showExistingCard(): Promise<void> {
+async function showExistingCard(profile: UserProfile): Promise<void> {
     const dialog = createDialog();
     dialog.setAttribute('aria-label', 'У вас уже есть карта CoralBonus');
     dialog.querySelector('.bez-kart-activation__banner')?.remove();
     dialog.querySelector('.bez-kart-activation__steps')?.remove();
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
     if (stage) {
-        showExistingCardResult(stage);
+        stage.innerHTML = '<div class="bez-kart-activation__status" role="status">Загружаем данные карты…</div>';
     }
     await openPopup(dialog);
+    if (stage) {
+        try {
+            showExistingCardResult(stage, await getBonusProfile(), profile);
+        } catch {
+            showRefreshRequiredResult(stage);
+        }
+    }
 }
 
 let activationPending = false;
@@ -152,7 +165,7 @@ export async function requestCardActivation(): Promise<void> {
         }
         if (!profile) return;
         if (profile.BonusUserId) {
-            await showExistingCard();
+            await showExistingCard(profile);
             return;
         }
         const dialog = createDialog();

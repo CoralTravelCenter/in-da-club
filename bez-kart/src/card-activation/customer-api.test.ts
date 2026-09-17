@@ -1,5 +1,5 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
-import {activateCard, normalizePhone, refreshUser, registerCard, sendVerificationCode, type RegistrationData} from './customer-api';
+import {activateCard, getBonusProfile, normalizePhone, refreshUser, registerCard, sendVerificationCode, type RegistrationData} from './customer-api';
 
 const registration: RegistrationData = {
     givenName: 'Анна',
@@ -62,6 +62,18 @@ describe('Customer API', () => {
             ['/endpoints/Customer/BonusSendVerificationCode', {mobilePhone: registration.mobilePhone}],
             ['/endpoints/Customer/BonusActivation', {mobilePhone: registration.mobilePhone, activationCode: '123456'}],
         ]);
+    });
+
+    it('загружает профиль карты для финального экрана', async () => {
+        const bonus = {cardType: 'Gold', cardNumber: '12345678901'};
+        fetchMock.mockResolvedValueOnce(response({result: bonus}));
+
+        await expect(getBonusProfile()).resolves.toEqual(bonus);
+        expect(fetchMock).toHaveBeenCalledWith('/endpoints/Customer/BonusProfile', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: '{}',
+        });
     });
 
     it('сообщает об отказе API и HTTP-ошибке', async () => {

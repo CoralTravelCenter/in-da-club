@@ -10,12 +10,14 @@
     "build:regular-1": "vite build --mode regular-1",
     "build:regular-2": "vite build --mode regular-2",
     "build:regular-3": "vite build --mode regular-3",
+    "typograf": "node scripts/typograf.mjs",
     "test": "vitest run --config vitest.config.ts",
     "preview": "vite preview"
   },
   "devDependencies": {
     "jsdom": "^30.0.1",
     "sass": "^1.104.1",
+    "typograf": "^7.8.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
     "vite-plugin-monkey": "^8.1.1",
@@ -23,7 +25,6 @@
   },
   "dependencies": {
     "petite-vue": "^0.4.1",
-    "scroll-lock": "^2.1.5",
-    "typograf": "^7.8.0"
+    "scroll-lock": "^2.1.5"
   }
 }

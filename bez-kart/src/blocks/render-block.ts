@@ -1,5 +1,4 @@
 import type {ContentBlockConfig} from '../segments/segment.types';
-import {typographText} from '../shared/typography';
 import {addLockableTarget, disablePageScroll, enablePageScroll} from 'scroll-lock';
 
 const TOOLTIP_ICON_URL = 'https://b2ccdn.coral.ru/content/info.svg';
@@ -15,7 +14,7 @@ function appendTextWithLineBreaks(element: HTMLElement, text: string): void {
             element.append(document.createElement('br'));
         }
 
-        element.append(document.createTextNode(typographText(line)));
+        element.append(document.createTextNode(line));
     });
 }
 
@@ -65,12 +64,12 @@ function createTooltip(config: ContentBlockConfig, block: HTMLElement): {
     body.className = 'bez-kart-tooltip__body';
     title.className = 'bez-kart-tooltip__title';
     title.id = tooltipTitleId;
-    title.textContent = typographText(config.tooltip?.title ?? '');
+    title.textContent = config.tooltip?.title ?? '';
     text.className = 'bez-kart-tooltip__text';
 
     for (const line of config.tooltip?.content ?? []) {
         const paragraph = document.createElement('span');
-        paragraph.textContent = typographText(line);
+        paragraph.textContent = line;
         text.append(paragraph);
     }
 
@@ -141,7 +140,7 @@ function appendVideo(block: HTMLElement, media: NonNullable<ContentBlockConfig['
 function appendBadge(content: HTMLElement, badge: string): void {
     const element = document.createElement('span');
     element.className = 'bez-kart-block__badge';
-    element.textContent = typographText(badge);
+    element.textContent = badge;
     content.append(element);
 }
 
@@ -149,7 +148,7 @@ function appendHeadingOrValue(content: HTMLElement, config: ContentBlockConfig):
     if (config.title !== undefined) {
         const title = document.createElement('h3');
         title.className = 'bez-kart-block__title';
-        title.textContent = typographText(config.title);
+        title.textContent = config.title;
         content.append(title);
         return;
     }
@@ -158,12 +157,12 @@ function appendHeadingOrValue(content: HTMLElement, config: ContentBlockConfig):
     const quantity = document.createElement('span');
     value.className = 'bez-kart-block__value';
     quantity.className = 'bez-kart-block__quantity';
-    quantity.textContent = typographText(config.value);
+    quantity.textContent = config.value;
 
     if (config.valuePrefix) {
         const prefix = document.createElement('span');
         prefix.className = 'bez-kart-block__value-prefix';
-        prefix.textContent = typographText(config.valuePrefix);
+        prefix.textContent = config.valuePrefix;
         value.append(prefix);
     }
 
@@ -186,7 +185,7 @@ function appendAction(content: HTMLElement, label: string, onActivateCard: () =>
 
     const link = document.createElement('button');
     link.type = 'button';
-    link.textContent = typographText(label);
+    link.textContent = label;
     link.addEventListener('click', () => {
         void onActivateCard();
     });
