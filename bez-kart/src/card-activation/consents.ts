@@ -1,7 +1,7 @@
 import type {RegistrationData} from './customer-api';
-import {typographed} from '../shared/typography';
+import {typographed} from '@/shared/typography';
 
-export async function applyConsents(data: RegistrationData, acceptedDocuments: Set<string>): Promise<void> {
+export async function applyConsents(data: RegistrationData, acceptedDocuments: Map<string, boolean>): Promise<void> {
     const response = await fetch('https://apishar.coral.school/consents/api/documentlist/coral.ru');
     if (!response.ok) throw new Error(typographed`Не удалось загрузить документы согласий`);
     const documents = await response.json() as Array<{
@@ -16,7 +16,9 @@ export async function applyConsents(data: RegistrationData, acceptedDocuments: S
         25: data.isConsentToPersonalData,
     };
     const active = documents.filter((document) => document.is_active && [23, 24, 25].includes(document.doctype_id));
-    const pending = active.filter((document) => !acceptedDocuments.has(`${document.project_id}:${document.docId}`));
+    const pending = active.filter((document) =>
+        acceptedDocuments.get(`${document.project_id}:${document.docId}`) !== confirmation[document.doctype_id],
+    );
     const requests = pending.map((document) => fetch('https://apishar.coral.school/consents/api/accept', {
         method: 'POST',
         headers: {'content-type': 'application/json'},
@@ -36,7 +38,7 @@ export async function applyConsents(data: RegistrationData, acceptedDocuments: S
     results.forEach((result, index) => {
         if (result.status === 'fulfilled' && result.value.ok) {
             const document = pending[index];
-            acceptedDocuments.add(`${document.project_id}:${document.docId}`);
+            acceptedDocuments.set(`${document.project_id}:${document.docId}`, confirmation[document.doctype_id]);
         }
     });
     if (results.some((result) => result.status === 'rejected' || !result.value.ok)) {

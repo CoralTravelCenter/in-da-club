@@ -1,7 +1,7 @@
 import {getProfile, waitForLogin, type UserProfile} from './profile';
 import {activateCard, getBonusProfile, normalizePhone, refreshUser, registerCard, sendVerificationCode, type RegistrationData} from './customer-api';
 import {applyConsents} from './consents';
-import {typographed} from '../shared/typography';
+import {typographed} from '@/shared/typography';
 import {
     createDialog,
     createRegistrationForm,
@@ -41,7 +41,7 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
 
     let completedRegistration: RegistrationData | null = null;
     let consentsApplied = false;
-    const acceptedDocuments = new Set<string>();
+    const acceptedDocuments = new Map<string, boolean>();
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
         if (!validateRegistrationForm(form)) return;

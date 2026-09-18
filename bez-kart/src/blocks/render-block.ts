@@ -1,4 +1,4 @@
-import type {ContentBlockConfig} from '../segments/segment.types';
+import type {ContentBlockConfig} from '@/segments/segment.types';
 import {addLockableTarget, disablePageScroll, enablePageScroll} from 'scroll-lock';
 
 const TOOLTIP_ICON_URL = 'https://b2ccdn.coral.ru/content/info.svg';

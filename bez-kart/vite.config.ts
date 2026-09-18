@@ -24,10 +24,13 @@ function htmlBuildOutput(): Plugin {
                 if (output.type !== 'chunk') throw new Error('Userscript собран не как JavaScript chunk');
 
                 delete bundle[fileName];
+                const script = output.code.trim()
+                    .replaceAll('«', '\\u00AB')
+                    .replaceAll('»', '\\u00BB');
                 this.emitFile({
                     type: 'asset',
                     fileName: 'bez-kart.html',
-                    source: `<script>\n${output.code.trim()}\n</script>\n`,
+                    source: `<script>\n${script}\n</script>\n`,
                 });
             },
         },

@@ -42,7 +42,7 @@ describe('consents API', () => {
     it('отправляет только активные нужные документы с корректными флагами и контекстом страницы', async () => {
         fetchMock.mockResolvedValueOnce(response(documents));
         fetchMock.mockResolvedValue(response({}));
-        const accepted = new Set<string>();
+        const accepted = new Map<string, boolean>();
 
         await applyConsents(registration, accepted);
 
@@ -53,7 +53,7 @@ describe('consents API', () => {
             expect.objectContaining({DocumentId: 101, ProjectId: 7, Confirm: true, FName: 'Анна Тестова', PhoneNumber: registration.mobilePhone, FUrl: 'https://www.coral.ru', FormPage: 'https://www.coral.ru/club'}),
             expect.objectContaining({DocumentId: 102, ProjectId: 7, Confirm: false}),
         ]);
-        expect(accepted).toEqual(new Set(['7:101', '7:102']));
+        expect(accepted).toEqual(new Map([['7:101', true], ['7:102', false]]));
     });
 
     it('после частичного отказа повторяет только неуспешное согласие', async () => {
@@ -67,22 +67,52 @@ describe('consents API', () => {
             }
             return Promise.resolve(response({}));
         });
-        const accepted = new Set<string>();
+        const accepted = new Map<string, boolean>();
 
         await expect(applyConsents(registration, accepted)).rejects.toThrow('Не\u00a0удалось сохранить согласия');
-        expect(accepted).toEqual(new Set(['7:101']));
+        expect(accepted).toEqual(new Map([['7:101', true]]));
 
         await applyConsents(registration, accepted);
         const acceptedIds = fetchMock.mock.calls
             .filter(([url]) => String(url).includes('/accept'))
             .map(([, options]) => JSON.parse(options.body).DocumentId);
         expect(acceptedIds).toEqual([101, 102, 102]);
-        expect(accepted).toEqual(new Set(['7:101', '7:102']));
+        expect(accepted).toEqual(new Map([['7:101', true], ['7:102', false]]));
+    });
+
+    it('повторно отправляет документ при изменении необязательного согласия', async () => {
+        let failedOnce = false;
+        fetchMock.mockImplementation((url: string, options?: RequestInit) => {
+            if (url.includes('documentlist')) return Promise.resolve(response(documents));
+            const id = JSON.parse(String(options?.body)).DocumentId as number;
+            if (id === 101 && !failedOnce) {
+                failedOnce = true;
+                return Promise.resolve(response({}, false));
+            }
+            return Promise.resolve(response({}));
+        });
+        const accepted = new Map<string, boolean>();
+
+        await expect(applyConsents(registration, accepted)).rejects.toThrow('Не\u00a0удалось сохранить согласия');
+        expect(accepted).toEqual(new Map([['7:102', false]]));
+
+        await applyConsents({...registration, isConsentToAdditional: true}, accepted);
+        expect(accepted).toEqual(new Map([['7:101', true], ['7:102', true]]));
+
+        await applyConsents(registration, accepted);
+        expect(accepted).toEqual(new Map([['7:101', true], ['7:102', false]]));
+        const sent = fetchMock.mock.calls
+            .filter(([url]) => String(url).includes('/accept'))
+            .map(([, options]) => {
+                const {DocumentId, Confirm} = JSON.parse(String(options.body));
+                return [DocumentId, Confirm];
+            });
+        expect(sent).toEqual([[101, true], [102, false], [101, true], [102, true], [102, false]]);
     });
 
     it('останавливается при ошибке загрузки документов', async () => {
         fetchMock.mockResolvedValueOnce(response({}, false));
-        await expect(applyConsents(registration, new Set())).rejects.toThrow('Не\u00a0удалось загрузить документы согласий');
+        await expect(applyConsents(registration, new Map())).rejects.toThrow('Не\u00a0удалось загрузить документы согласий');
         expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 });

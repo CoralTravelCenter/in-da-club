@@ -1,7 +1,7 @@
-import { renderSegment } from '../blocks/render-segment';
-import { requestCardActivation } from '../card-activation/card-activation';
-import { getSegmentConfig } from '../segments/segment.config';
-import type { SegmentId } from '../segments/segment.types';
+import { renderSegment } from '@/blocks/render-segment';
+import { requestCardActivation } from '@/card-activation/card-activation';
+import { getSegmentConfig } from '@/segments/segment.config';
+import type { SegmentId } from '@/segments/segment.types';
 
 export interface BootstrapOptions {
   container: HTMLElement;

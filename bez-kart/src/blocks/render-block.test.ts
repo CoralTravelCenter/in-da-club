@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
-import type {ContentBlockConfig} from '../segments/segment.types';
+import type {ContentBlockConfig} from '@/segments/segment.types';
 import {renderBlock} from './render-block';
 
 describe('renderBlock', () => {

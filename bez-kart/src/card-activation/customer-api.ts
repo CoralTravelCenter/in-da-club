@@ -1,5 +1,5 @@
 import {getProfile, type UserProfile} from './profile';
-import {typographed} from '../shared/typography';
+import {typographed} from '@/shared/typography';
 
 export interface RegistrationData {
     givenName: string;

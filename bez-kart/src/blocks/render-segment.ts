@@ -1,5 +1,5 @@
-import type { SegmentConfig } from '../segments/segment.types';
-import { typographed } from '../shared/typography';
+import type { SegmentConfig } from '@/segments/segment.types';
+import { typographed } from '@/shared/typography';
 import { renderBlock } from './render-block';
 
 export function renderSegment(
