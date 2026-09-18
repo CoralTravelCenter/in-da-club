@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "npm run typograf",
     "dev": "vite",
+    "prebuild": "npm run typograf",
     "build": "tsc && npm run build:new-client && npm run build:regular-1 && npm run build:regular-2 && npm run build:regular-3",
     "build:new-client": "vite build --mode new-client",
     "build:regular-1": "vite build --mode regular-1",

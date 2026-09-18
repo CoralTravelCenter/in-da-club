@@ -1,5 +1,6 @@
 import {defineConfig, type Plugin} from 'vite';
 import monkey from 'vite-plugin-monkey';
+import {fileURLToPath, URL} from 'node:url';
 
 const segmentIds = ['new-client', 'regular-1', 'regular-2', 'regular-3'] as const;
 const DEV_ASSETS_BASE = 'http://localhost:5173';
@@ -38,6 +39,11 @@ export default defineConfig(({command, mode}) => {
     const publicAssetsBase = command === 'serve' ? DEV_ASSETS_BASE : PRODUCTION_ASSETS_BASE;
 
     return {
+        resolve: {
+            alias: {
+                '@': fileURLToPath(new URL('./src', import.meta.url)),
+            },
+        },
         define: {
             __MINDBOX_SEGMENT__: JSON.stringify(segmentId),
             __PUBLIC_ASSETS_BASE__: JSON.stringify(publicAssetsBase),

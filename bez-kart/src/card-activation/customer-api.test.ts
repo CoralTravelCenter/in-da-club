@@ -81,7 +81,18 @@ describe('Customer API', () => {
         await expect(registerCard(registration)).rejects.toThrow('Отказ регистрации');
 
         fetchMock.mockResolvedValueOnce(response({}, false, 503));
-        await expect(sendVerificationCode(registration.mobilePhone)).rejects.toThrow('Request failed: 503');
+        await expect(sendVerificationCode(registration.mobilePhone)).rejects.toThrow('Не удалось отправить код. Проверьте подключение к интернету и попробуйте ещё раз');
+
+        fetchMock.mockResolvedValueOnce(response({}, false, 400));
+        await expect(activateCard(registration.mobilePhone, '000000')).rejects.toThrow('Неверный код или срок его действия истёк. Попробуйте ещё раз');
+    });
+
+    it('показывает понятную ошибку при сбое сети во время отправки кода', async () => {
+        fetchMock.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+
+        await expect(sendVerificationCode(registration.mobilePhone)).rejects.toThrow(
+            'Не удалось отправить код. Проверьте подключение к интернету и попробуйте ещё раз',
+        );
     });
 
     it('обновляет только Bonus-поля профиля из нового токена', async () => {

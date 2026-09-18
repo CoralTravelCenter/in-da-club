@@ -1,0 +1,105 @@
+.bez-kart-activation {
+  &__submit {
+    display: inline-flex;
+    min-height: 44px;
+    padding: 7px 18px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #fff !important;
+    font: inherit;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    text-decoration: none;
+    background: #3797d4;
+    border: 0;
+    border-radius: 12px;
+    transition:
+      background-color 160ms ease,
+      transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &__submit:hover:not(:disabled) {
+      background: #077dad;
+    }
+  }
+
+  &__submit:active:not(:disabled) {
+    background: #0063b3;
+    transform: scale(0.97);
+  }
+
+  &__submit:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+
+  &__error {
+    margin: 4px 0 0;
+    color: #c2402a;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  &__field-error {
+    display: block;
+    margin-top: 2px;
+    color: #c2402a;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  [aria-invalid='true']:not([type='checkbox']):not([type='radio']) {
+    border-color: #c2402a !important;
+  }
+
+  &__resend {
+    display: inline-flex;
+    padding: 2px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #007db1;
+    font: inherit;
+    background: transparent;
+    border: 0;
+  }
+
+  &__resend:disabled {
+    cursor: default;
+    color: #777;
+  }
+
+  &__form[data-state='sending'] &__submit::before,
+  &__verify[data-state='activating'] &__submit::before,
+  &__resend[data-state='sending']::before {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    box-sizing: border-box;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: bez-kart-button-spinner 700ms linear infinite;
+    content: '';
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__form[data-state='sending'] &__submit::before,
+    &__verify[data-state='activating'] &__submit::before,
+    &__resend[data-state='sending']::before {
+      animation-duration: 1400ms;
+    }
+  }
+
+}
+
+@keyframes bez-kart-button-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}

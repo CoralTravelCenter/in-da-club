@@ -13,6 +13,7 @@ import {
     showRefreshRequiredResult,
     showSuccessResult,
     validateRegistrationForm,
+    validateVerificationForm,
     type CoralPopupElement,
 } from './activation-view';
 
@@ -21,6 +22,13 @@ const LOGIN_BUTTON_SELECTOR = '[class*="LoginButton_loginButton"]';
 async function openPopup(popup: CoralPopupElement): Promise<void> {
     await customElements.whenDefined('coral-popup');
     await popup.show();
+}
+
+function rememberFirstStepHeight(dialog: CoralPopupElement): void {
+    const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
+    if (!stage) return;
+    const height = Math.ceil(Math.max(stage.getBoundingClientRect().height, stage.scrollHeight));
+    if (height > 0) dialog.style.setProperty('--bez-kart-activation-step-height', `${height}px`);
 }
 
 function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): void {
@@ -39,7 +47,7 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
         const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
         if (submit?.disabled) return;
         const data = new FormData(form);
-        const registration: RegistrationData = completedRegistration ?? {
+        const registration: RegistrationData = {
             givenName: String(data.get('givenName') ?? '').trim(),
             familyName: String(data.get('familyName') ?? '').trim(),
             middleName: '',
@@ -55,11 +63,18 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
         };
 
         try {
-            if (submit) submit.disabled = true;
+            if (submit) {
+                submit.disabled = true;
+                submit.textContent = 'Отправляем код…';
+            }
+            form.dataset.state = 'sending';
+            form.setAttribute('aria-busy', 'true');
             form.querySelector('.bez-kart-activation__error')?.remove();
-            if (!completedRegistration) {
+            const registrationChanged = JSON.stringify(completedRegistration) !== JSON.stringify(registration);
+            if (registrationChanged) {
                 await registerCard(registration);
                 completedRegistration = registration;
+                consentsApplied = false;
             }
             if (!consentsApplied) {
                 await applyConsents(registration, acceptedDocuments);
@@ -68,7 +83,12 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
             await renderVerification(dialog, registration);
         } catch (error) {
             showMessage(form, error instanceof Error ? error.message : 'Не удалось оформить карту');
-            if (submit) submit.disabled = false;
+            delete form.dataset.state;
+            form.removeAttribute('aria-busy');
+            if (submit) {
+                submit.disabled = false;
+                submit.textContent = 'Получить код по SMS';
+            }
         }
     });
 }
@@ -77,44 +97,82 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
     if (!stage) throw new Error('Не удалось открыть шаг подтверждения');
 
-    const status = document.createElement('div');
-    status.className = 'bez-kart-activation__status';
-    status.setAttribute('role', 'status');
-    status.textContent = 'Отправляем код активации…';
-    stage.append(status);
-    try {
-        await sendVerificationCode(data.mobilePhone);
-    } finally {
-        status.remove();
-    }
+    await sendVerificationCode(data.mobilePhone);
     setStep(dialog, 1);
     dialog.setAttribute('aria-label', 'Введите код из SMS');
     const form = createVerificationForm(data.mobilePhone);
     stage.replaceChildren(form);
+    const resend = form.querySelector<HTMLButtonElement>('[data-resend-code]')!;
+    let timer: number | undefined;
+    const startResendCooldown = (): void => {
+        let remaining = 60;
+        resend.disabled = true;
+        resend.dataset.state = 'cooldown';
+        resend.removeAttribute('aria-busy');
+        resend.innerHTML = 'Отправить код повторно через <span data-resend-seconds>60</span> сек.';
+        window.clearInterval(timer);
+        timer = window.setInterval(() => {
+            remaining -= 1;
+            const seconds = resend.querySelector<HTMLElement>('[data-resend-seconds]');
+            if (seconds) seconds.textContent = String(remaining);
+            if (remaining > 0) return;
+            window.clearInterval(timer);
+            resend.disabled = false;
+            resend.dataset.state = 'ready';
+            resend.textContent = 'Отправить код повторно';
+        }, 1000);
+    };
+    startResendCooldown();
+    resend.addEventListener('click', async () => {
+        if (resend.disabled) return;
+        resend.disabled = true;
+        resend.dataset.state = 'sending';
+        resend.setAttribute('aria-busy', 'true');
+        resend.textContent = 'Отправляем код…';
+        form.querySelector('.bez-kart-activation__error')?.remove();
+        try {
+            await sendVerificationCode(data.mobilePhone);
+            startResendCooldown();
+        } catch (error) {
+            showMessage(form, error instanceof Error ? error.message : 'Не удалось отправить код повторно');
+            resend.disabled = false;
+            resend.dataset.state = 'ready';
+            resend.removeAttribute('aria-busy');
+            resend.textContent = 'Отправить код повторно';
+        }
+    });
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        if (!form.reportValidity()) return;
+        if (!validateVerificationForm(form)) return;
         const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
         if (submit?.disabled) return;
         const code = readVerificationCode(form);
         try {
-            if (submit) submit.disabled = true;
+            if (submit) {
+                submit.disabled = true;
+                submit.textContent = 'Активируем карту…';
+            }
+            form.dataset.state = 'activating';
+            form.setAttribute('aria-busy', 'true');
             form.querySelector('.bez-kart-activation__error')?.remove();
             await activateCard(data.mobilePhone, code);
+            window.clearInterval(timer);
             await renderSuccess(dialog);
         } catch (error) {
             showMessage(form, error instanceof Error ? error.message : 'Не удалось активировать карту');
-            if (submit) submit.disabled = false;
+            delete form.dataset.state;
+            form.removeAttribute('aria-busy');
+            if (submit) {
+                submit.disabled = false;
+                submit.textContent = 'Активировать';
+            }
         }
     });
 }
 
 async function renderSuccess(dialog: CoralPopupElement): Promise<void> {
-    setStep(dialog, 2);
-    dialog.setAttribute('aria-label', 'Карта активирована');
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
     if (!stage) return;
-    stage.innerHTML = '<div class="bez-kart-activation__status" role="status">Проверяем…</div>';
     try {
         if (!await refreshUser()) {
             throw new Error('Не удалось обновить данные карты');
@@ -122,8 +180,12 @@ async function renderSuccess(dialog: CoralPopupElement): Promise<void> {
         const bonus = await getBonusProfile();
         const profile = getProfile();
         if (!profile) throw new Error('Не удалось обновить данные карты');
+        setStep(dialog, 2);
+        dialog.setAttribute('aria-label', 'Карта активирована');
         showSuccessResult(stage, bonus, profile);
     } catch {
+        setStep(dialog, 2);
+        dialog.setAttribute('aria-label', 'Не удалось обновить данные карты');
         showRefreshRequiredResult(stage);
     }
 }
@@ -171,6 +233,7 @@ export async function requestCardActivation(): Promise<void> {
         const dialog = createDialog();
         renderRegistration(dialog, profile);
         await openPopup(dialog);
+        rememberFirstStepHeight(dialog);
     } catch (error) {
         console.error('CoralBonus: failed to open card activation', error);
     } finally {

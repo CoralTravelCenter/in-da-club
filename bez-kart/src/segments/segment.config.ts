@@ -1,7 +1,7 @@
 import type {ContentBlockConfig, SegmentConfig, SegmentContentConfig, SegmentId,} from './segment.types';
-import {typographed} from '../shared/typography';
+import {typographed} from '@/shared/typography';
 
-const CLUB_VIDEO_URL = 'http://localhost:5173/club.mp4';
+const CLUB_VIDEO_URL = 'http://localhost:5173/club.mov';
 
 export const SEGMENT_CONTENT = {
     'new-client': {
@@ -13,7 +13,7 @@ export const SEGMENT_CONTENT = {
         club: {
             level: 'Silver',
             action: {
-                label: typographed`Активировать карту`,
+                label: typographed`Оформить карту`,
                 type: 'activate-card',
             },
             media: {
@@ -35,7 +35,7 @@ export const SEGMENT_CONTENT = {
         club: {
             level: 'Silver',
             action: {
-                label: typographed`Активировать карту`,
+                label: typographed`Оформить карту`,
                 type: 'activate-card',
             },
             media: {
@@ -57,7 +57,7 @@ export const SEGMENT_CONTENT = {
         club: {
             level: 'Silver',
             action: {
-                label: typographed`Активировать карту`,
+                label: typographed`Оформить карту`,
                 type: 'activate-card',
             },
             media: {
@@ -79,7 +79,7 @@ export const SEGMENT_CONTENT = {
         club: {
             level: 'Silver',
             action: {
-                label: typographed`Активировать карту`,
+                label: typographed`Оформить карту`,
                 type: 'activate-card',
             },
             media: {

@@ -75,6 +75,35 @@ describe('card activation markup and flow', () => {
         expect((form?.elements.namedItem('birthDate') as HTMLInputElement).value).toBe('02 / 01 / 1990');
     });
 
+    it('сохраняет высоту первого шага для следующих экранов', async () => {
+        const rect = {x: 0, y: 0, top: 0, right: 0, bottom: 640, left: 0, width: 0, height: 640, toJSON: () => ({})};
+        const getRect = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(rect);
+
+        await requestCardActivation();
+
+        const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation')!;
+        expect(dialog.style.getPropertyValue('--bez-kart-activation-step-height')).toBe('640px');
+        getRect.mockRestore();
+    });
+
+    it('закрывает попап отдельной доступной кнопкой', async () => {
+        await requestCardActivation();
+        const dialog = document.querySelector<TestPopup>('#bez-kart-card-activation')!;
+        const hide = vi.spyOn(dialog, 'hide');
+        const control = dialog.querySelector<HTMLElement>('.bez-kart-activation__close')!;
+        const close = control.querySelector<HTMLButtonElement>('button')!;
+
+        expect(control.getAttribute('trait')).toBe('pale');
+        expect(control.getAttribute('shape')).toBe('pill');
+        expect(control.getAttribute('size')).toBe('small');
+        expect(close.style.position).toBe('absolute');
+        expect(close.style.top).toBe('calc(-39px)');
+        expect(close.textContent).toBe('Закрыть');
+        close.click();
+
+        expect(hide).toHaveBeenCalledOnce();
+    });
+
     it('предлагает города из исходного списка и не отправляет неизвестный город', async () => {
         await requestCardActivation();
         const form = document.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
@@ -89,7 +118,29 @@ describe('card activation markup and flow', () => {
         city.value = 'Несуществующий город';
         submit(form);
         expect(registerCard).not.toHaveBeenCalled();
-        expect(city.validationMessage).toBe('Укажите город из списка');
+        expect(city.getAttribute('aria-invalid')).toBe('true');
+        expect(form.textContent).toContain('Укажите город из списка');
+    });
+
+    it('перемещает фокус по вариантам городов стрелками', async () => {
+        await requestCardActivation();
+        const form = document.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        const city = form.elements.namedItem('city') as HTMLInputElement;
+        city.value = 'М';
+        city.dispatchEvent(new Event('input', {bubbles: true}));
+
+        const options = [...form.querySelectorAll<HTMLButtonElement>('.bez-kart-activation__city-options button')];
+        city.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}));
+        expect(document.activeElement).toBe(options[0]);
+
+        options[0].dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}));
+        expect(document.activeElement).toBe(options[1]);
+
+        options[1].dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}));
+        expect(document.activeElement).toBe(options[0]);
+
+        options[0].dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}));
+        expect(document.activeElement).toBe(city);
     });
 
     it('не отправляет некорректную дату рождения', async () => {
@@ -100,7 +151,43 @@ describe('card activation markup and flow', () => {
         birthDate.value = '31 / 02 / 1990';
         submit(form);
         expect(registerCard).not.toHaveBeenCalled();
-        expect(birthDate.validationMessage).toBe('Укажите корректную дату рождения');
+        expect(birthDate.getAttribute('aria-invalid')).toBe('true');
+        expect(form.textContent).toContain('Укажите корректную дату рождения');
+    });
+
+    it('показывает собственные сообщения для незаполненных обязательных полей', async () => {
+        await requestCardActivation();
+        const form = document.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        (form.elements.namedItem('familyName') as HTMLInputElement).value = '';
+        submit(form);
+
+        expect(registerCard).not.toHaveBeenCalled();
+        expect(form.noValidate).toBe(true);
+        expect(form.textContent).toContain('Укажите фамилию');
+        expect(form.textContent).toContain('Укажите город');
+        expect(form.textContent).toContain('Подтвердите согласие на обработку персональных данных');
+    });
+
+    it('убирает ошибку поля сразу после его заполнения', async () => {
+        await requestCardActivation();
+        const form = document.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        const familyName = form.elements.namedItem('familyName') as HTMLInputElement;
+        const personal = form.elements.namedItem('personal') as HTMLInputElement;
+        familyName.value = '';
+        submit(form);
+
+        expect(familyName.getAttribute('aria-invalid')).toBe('true');
+        expect(personal.getAttribute('aria-invalid')).toBe('true');
+
+        familyName.value = 'Тестова';
+        familyName.dispatchEvent(new Event('input', {bubbles: true}));
+        personal.checked = true;
+        personal.dispatchEvent(new Event('change', {bubbles: true}));
+
+        expect(familyName.hasAttribute('aria-invalid')).toBe(false);
+        expect(personal.hasAttribute('aria-invalid')).toBe(false);
+        expect(form.textContent).not.toContain('Укажите фамилию');
+        expect(form.textContent).not.toContain('Подтвердите согласие на обработку персональных данных');
     });
 
     it('показывает существующую карту без формы регистрации', async () => {
@@ -156,6 +243,31 @@ describe('card activation markup and flow', () => {
         expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('3');
     });
 
+    it('показывает активацию на кнопке до перехода к результату', async () => {
+        let resolveRefresh!: (value: boolean) => void;
+        vi.mocked(refreshUser).mockImplementationOnce(() => new Promise<boolean>((resolve) => { resolveRefresh = resolve; }));
+        await requestCardActivation();
+        const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation')!;
+        const registration = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        fillRequiredFields(registration);
+        submit(registration);
+        await vi.waitFor(() => expect(dialog.querySelector('.bez-kart-activation__verify')).toBeTruthy());
+
+        const verification = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__verify')!;
+        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
+        submit(verification);
+
+        await vi.waitFor(() => expect(refreshUser).toHaveBeenCalledOnce());
+        expect(verification.dataset.state).toBe('activating');
+        expect(verification.getAttribute('aria-busy')).toBe('true');
+        expect(verification.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.textContent).toBe('Активируем карту…');
+        expect(dialog.textContent).not.toContain('Проверяем…');
+        expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('2');
+
+        resolveRefresh(true);
+        await vi.waitFor(() => expect(dialog.textContent).toContain('Карта активирована!'));
+    });
+
     it('при ошибке SMS оставляет форму и показывает сообщение', async () => {
         vi.mocked(sendVerificationCode).mockRejectedValueOnce(new Error('Сервис SMS недоступен'));
         await requestCardActivation();
@@ -166,6 +278,69 @@ describe('card activation markup and flow', () => {
 
         await vi.waitFor(() => expect(dialog.querySelector('[role="alert"]')?.textContent).toBe('Сервис SMS недоступен'));
         expect(dialog.querySelector('.bez-kart-activation__form')).toBeTruthy();
+        expect(dialog.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.textContent).toBe('Получить код по SMS');
+        expect(dialog.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.disabled).toBe(false);
+    });
+
+    it('показывает отправку кода состоянием основной кнопки', async () => {
+        let resolveSms!: () => void;
+        vi.mocked(sendVerificationCode).mockImplementationOnce(() => new Promise<void>((resolve) => { resolveSms = resolve; }));
+        await requestCardActivation();
+        const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation')!;
+        const form = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        fillRequiredFields(form);
+        submit(form);
+
+        await vi.waitFor(() => expect(form.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.textContent).toBe('Отправляем код…'));
+        await vi.waitFor(() => expect(sendVerificationCode).toHaveBeenCalledOnce());
+        expect(form.getAttribute('aria-busy')).toBe('true');
+        expect(form.dataset.state).toBe('sending');
+        expect(form.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.disabled).toBe(true);
+        expect(dialog.querySelector('.bez-kart-activation__status')).toBeNull();
+
+        resolveSms();
+        await vi.waitFor(() => expect(dialog.querySelector('.bez-kart-activation__verify')).toBeTruthy());
+    });
+
+    it('не позволяет вернуться к форме через степпер с шага SMS', async () => {
+        await requestCardActivation();
+        const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation')!;
+        const form = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        fillRequiredFields(form);
+        submit(form);
+        await vi.waitFor(() => expect(dialog.querySelector('.bez-kart-activation__verify')).toBeTruthy());
+
+        expect(dialog.querySelectorAll('button[data-step-mark]')).toHaveLength(0);
+        expect(dialog.querySelector('.bez-kart-activation__form')).toBeNull();
+        expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('2');
+    });
+
+    it('разрешает повторно отправить SMS после таймера', async () => {
+        vi.useFakeTimers();
+        await requestCardActivation();
+        const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation')!;
+        const form = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        fillRequiredFields(form);
+        submit(form);
+        await vi.advanceTimersByTimeAsync(0);
+        const resend = dialog.querySelector<HTMLButtonElement>('[data-resend-code]')!;
+        expect(resend.disabled).toBe(true);
+
+        await vi.advanceTimersByTimeAsync(60_000);
+        expect(resend.disabled).toBe(false);
+        let resolveResend!: () => void;
+        vi.mocked(sendVerificationCode).mockImplementationOnce(() => new Promise<void>((resolve) => { resolveResend = resolve; }));
+        resend.click();
+        await vi.advanceTimersByTimeAsync(0);
+
+        expect(sendVerificationCode).toHaveBeenCalledTimes(2);
+        expect(resend.textContent).toBe('Отправляем код…');
+        expect(resend.dataset.state).toBe('sending');
+        expect(resend.getAttribute('aria-busy')).toBe('true');
+        resolveResend();
+        await vi.advanceTimersByTimeAsync(0);
+        expect(resend.dataset.state).toBe('cooldown');
+        vi.useRealTimers();
     });
 
     it('после ошибки согласий повторяет попытку без повторной регистрации', async () => {

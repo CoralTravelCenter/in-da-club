@@ -35,15 +35,10 @@
   &__video {
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: -4%;
     width: min(55%, 300px);
     height: min(55%, 300px);
     object-fit: cover;
-    filter: brightness(1.05);
-
-    @media (prefers-reduced-motion: reduce) {
-      display: none;
-    }
   }
 
   &__content {
@@ -163,9 +158,8 @@
   &[data-block-id='manager'] {
     @include mixins.public-background(
             'manager.webp',
-            auto 70%,
+            auto 65%,
             right bottom
     );
   }
-
 }

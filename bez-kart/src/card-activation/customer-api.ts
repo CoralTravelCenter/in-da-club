@@ -26,15 +26,20 @@ function isSuccess(value: unknown): boolean {
     return value === true || value === 'True' || value === 'true';
 }
 
-async function postJson<T>(url: string, body: object): Promise<T> {
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify(body),
-    });
+async function postJson<T>(url: string, body: object, requestError = 'Не удалось выполнить запрос. Попробуйте ещё раз'): Promise<T> {
+    let response: Response;
+    try {
+        response = await fetch(url, {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify(body),
+        });
+    } catch {
+        throw new Error(requestError);
+    }
 
     if (!response.ok) {
-        throw new Error(`Request failed: ${response.status}`);
+        throw new Error(requestError);
     }
 
     return response.json() as Promise<T>;
@@ -56,7 +61,7 @@ export async function registerCard(data: RegistrationData): Promise<void> {
 
 export async function sendVerificationCode(mobilePhone: string): Promise<void> {
     const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
-        '/endpoints/Customer/BonusSendVerificationCode', {mobilePhone},
+        '/endpoints/Customer/BonusSendVerificationCode', {mobilePhone}, 'Не удалось отправить код. Проверьте подключение к интернету и попробуйте ещё раз',
     );
     if (!isSuccess(response.result?.isSuccess)) {
         throw new Error(response.result?.errorMessage || 'Не удалось отправить код');
@@ -65,7 +70,7 @@ export async function sendVerificationCode(mobilePhone: string): Promise<void> {
 
 export async function activateCard(mobilePhone: string, activationCode: string): Promise<void> {
     const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
-        '/endpoints/Customer/BonusActivation', {mobilePhone, activationCode},
+        '/endpoints/Customer/BonusActivation', {mobilePhone, activationCode}, 'Неверный код или срок его действия истёк. Попробуйте ещё раз',
     );
     if (!isSuccess(response.result?.isSuccess)) {
         throw new Error(response.result?.errorMessage || 'Неверный код — попробуйте ещё раз');

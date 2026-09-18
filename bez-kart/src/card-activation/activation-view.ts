@@ -32,11 +32,92 @@ export function parseBirthdate(value: string): string | null {
 }
 
 export function validateRegistrationForm(form: HTMLFormElement): boolean {
+    clearValidationErrors(form);
     const city = form.elements.namedItem('city') as HTMLInputElement;
     const birthDate = form.elements.namedItem('birthDate') as HTMLInputElement;
-    city.setCustomValidity(knownCities.has(city.value.trim()) ? '' : 'Укажите город из списка');
-    birthDate.setCustomValidity(parseBirthdate(birthDate.value) ? '' : 'Укажите корректную дату рождения');
-    return form.reportValidity();
+    const fields: Array<[HTMLInputElement | null, string]> = [
+        [form.elements.namedItem('familyName') as HTMLInputElement, 'Укажите фамилию'],
+        [form.elements.namedItem('givenName') as HTMLInputElement, 'Укажите имя'],
+        [form.querySelector<HTMLInputElement>('input[name="gender"]:checked'), 'Выберите пол'],
+        [birthDate, 'Укажите дату рождения'],
+        [city, 'Укажите город'],
+        [form.elements.namedItem('email') as HTMLInputElement, 'Укажите электронную почту'],
+        [form.elements.namedItem('mobilePhone') as HTMLInputElement, 'Укажите телефон'],
+        [form.elements.namedItem('personal') as HTMLInputElement, 'Подтвердите согласие на обработку персональных данных'],
+        [form.elements.namedItem('loyalty') as HTMLInputElement, 'Подтвердите согласие с правилами программы'],
+    ];
+
+    for (const [field, message] of fields) {
+        if (!field || (field.type === 'checkbox' ? !field.checked : !field.value.trim())) {
+            const target = field ?? form.querySelector<HTMLInputElement>('input[name="gender"]');
+            if (target) showFieldError(target, message);
+        }
+    }
+    if (birthDate.value && !parseBirthdate(birthDate.value)) showFieldError(birthDate, 'Укажите корректную дату рождения');
+    if (city.value && !knownCities.has(city.value.trim())) showFieldError(city, 'Укажите город из списка');
+    const email = form.elements.namedItem('email') as HTMLInputElement;
+    if (email.value && !email.validity.valid) showFieldError(email, 'Укажите корректную электронную почту');
+
+    const firstInvalid = form.querySelector<HTMLInputElement>('[aria-invalid="true"]');
+    firstInvalid?.focus();
+    return !firstInvalid;
+}
+
+function clearValidationErrors(form: HTMLFormElement): void {
+    form.querySelectorAll('.bez-kart-activation__field-error').forEach((error) => error.remove());
+    form.querySelectorAll('[aria-invalid="true"]').forEach((field) => field.removeAttribute('aria-invalid'));
+}
+
+function showFieldError(field: HTMLInputElement, message: string): void {
+    if (field.getAttribute('aria-invalid') === 'true') return;
+    field.setAttribute('aria-invalid', 'true');
+    const error = document.createElement('span');
+    error.className = 'bez-kart-activation__field-error';
+    error.textContent = message;
+    const container = field.type === 'radio'
+        ? field.closest('fieldset')
+        : field.type === 'checkbox'
+            ? field.closest('label')
+            : field.closest('label') ?? field.parentElement;
+    container?.append(error);
+}
+
+function clearFieldError(field: HTMLInputElement): void {
+    const container = field.type === 'radio'
+        ? field.closest('fieldset')
+        : field.type === 'checkbox'
+            ? field.closest('label')
+            : field.closest('label') ?? field.parentElement;
+    container?.querySelector('.bez-kart-activation__field-error')?.remove();
+
+    if (field.type === 'radio') {
+        field.form?.querySelectorAll<HTMLInputElement>(`input[name="${field.name}"]`)
+            .forEach((radio) => radio.removeAttribute('aria-invalid'));
+        return;
+    }
+    field.removeAttribute('aria-invalid');
+}
+
+function wireValidationReset(form: HTMLFormElement): void {
+    const clearChangedField = (event: Event): void => {
+        if (event.target instanceof HTMLInputElement) clearFieldError(event.target);
+    };
+    form.addEventListener('input', clearChangedField);
+    form.addEventListener('change', clearChangedField);
+}
+
+export function validateVerificationForm(form: HTMLFormElement): boolean {
+    form.querySelector('.bez-kart-activation__field-error')?.remove();
+    const digits = [...form.querySelectorAll<HTMLInputElement>('[data-code-digit]')];
+    digits.forEach((input) => input.removeAttribute('aria-invalid'));
+    if (digits.every((input) => /^\d$/.test(input.value))) return true;
+    digits.forEach((input) => input.setAttribute('aria-invalid', 'true'));
+    const error = document.createElement('span');
+    error.className = 'bez-kart-activation__field-error';
+    error.textContent = 'Введите код из 6 цифр';
+    form.querySelector('.bez-kart-activation__code-input')?.after(error);
+    digits.find((input) => !input.value)?.focus();
+    return false;
 }
 
 function wireCitySuggestions(form: HTMLFormElement): void {
@@ -81,7 +162,25 @@ function wireCitySuggestions(form: HTMLFormElement): void {
         if (event.key === 'Escape') {
             hide();
             input.focus();
+            return;
         }
+
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+
+        const buttons = [...list.querySelectorAll<HTMLButtonElement>('button')];
+        const currentIndex = buttons.indexOf(document.activeElement as HTMLButtonElement);
+        if (currentIndex === -1) return;
+
+        event.preventDefault();
+        if (event.key === 'ArrowUp' && currentIndex === 0) {
+            input.focus();
+            return;
+        }
+
+        const nextIndex = event.key === 'ArrowDown'
+            ? Math.min(currentIndex + 1, buttons.length - 1)
+            : currentIndex - 1;
+        buttons[nextIndex]?.focus();
     });
 }
 
@@ -127,6 +226,9 @@ export function createDialog(): CoralPopupElement {
     dialog.className = 'bez-kart-activation';
     dialog.setAttribute('aria-label', 'Оформление карты');
     dialog.innerHTML = `
+        <coral-button class="bez-kart-activation__close" trait="pale" shape="pill" size="small">
+            <button type="button" style="position: absolute; z-index: 1; top: calc(-31px - 8px); right: 0;">Закрыть</button>
+        </coral-button>
         <div class="bez-kart-activation__body">
             <div class="bez-kart-activation__banner" aria-hidden="true"></div>
             <div class="bez-kart-activation__panel">
@@ -139,6 +241,8 @@ export function createDialog(): CoralPopupElement {
             </div>
         </div>`;
 
+    dialog.querySelector<HTMLButtonElement>('.bez-kart-activation__close button')?.addEventListener('click', () => dialog.hide());
+
     document.body.append(dialog);
     return dialog;
 }
@@ -146,6 +250,7 @@ export function createDialog(): CoralPopupElement {
 export function createRegistrationForm(profile: UserProfile): HTMLFormElement {
     const form = document.createElement('form');
     form.className = 'bez-kart-activation__form';
+    form.noValidate = true;
     form.innerHTML = `
         <h2 id="${DIALOG_ID}-title">Оформление карты</h2>
         <label><span>Фамилия <b>*</b></span><input name="familyName" required autocomplete="family-name"></label>
@@ -185,6 +290,7 @@ export function createRegistrationForm(profile: UserProfile): HTMLFormElement {
 
     wireCitySuggestions(form);
     wireBirthdateMask(form);
+    wireValidationReset(form);
 
     return form;
 }
@@ -192,18 +298,23 @@ export function createRegistrationForm(profile: UserProfile): HTMLFormElement {
 export function createVerificationForm(mobilePhone: string): HTMLFormElement {
     const form = document.createElement('form');
     form.className = 'bez-kart-activation__verify';
+    form.noValidate = true;
     form.innerHTML = `
         <h2 id="${DIALOG_ID}-title">Введите код из SMS</h2>
         <p>Отправили код активации на номер<br><strong data-activation-phone></strong></p>
         <div class="bez-kart-activation__code-input" role="group" aria-label="Код из SMS">
             ${Array.from({length: 6}, (_, index) => `<input data-code-digit inputmode="numeric" pattern="[0-9]" maxlength="1" placeholder=" " autocomplete="${index === 0 ? 'one-time-code' : 'off'}" aria-label="Цифра ${index + 1} из 6" required>`).join('')}
         </div>
-        <button class="bez-kart-activation__submit" type="submit">Активировать</button>`;
+        <button class="bez-kart-activation__submit" type="submit">Активировать</button>
+        <button class="bez-kart-activation__resend" type="button" data-resend-code disabled>Отправить код повторно через <span data-resend-seconds>60</span> сек.</button>
+        `;
     const phone = form.querySelector<HTMLElement>('[data-activation-phone]');
     if (phone) phone.textContent = mobilePhone;
     const digits = [...form.querySelectorAll<HTMLInputElement>('[data-code-digit]')];
     digits.forEach((input, index) => {
         input.addEventListener('input', () => {
+            form.querySelector('.bez-kart-activation__field-error')?.remove();
+            digits.forEach((digit) => digit.removeAttribute('aria-invalid'));
             input.value = input.value.replace(/\D/g, '').slice(0, 1);
             if (input.value) digits[index + 1]?.focus();
         });

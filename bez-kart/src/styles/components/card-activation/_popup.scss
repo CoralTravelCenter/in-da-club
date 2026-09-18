@@ -1,0 +1,37 @@
+@use '../../abstracts/tokens' as tokens;
+
+.bez-kart-activation {
+  &::part(popup-body) {
+    @media (min-width: tokens.$breakpoint-desktop) {
+      align-items: center;
+    }
+  }
+
+  &::part(popup-close) {
+    @media (min-width: tokens.$breakpoint-desktop) {
+      display: none;
+    }
+  }
+
+  &::part(popup-dialog) {
+    max-width: 800px;
+    overflow: visible;
+    background: #fff;
+    border-radius: 16px;
+  }
+
+  &::part(popup-content) {
+    position: relative;
+    gap: 0;
+
+    @media (max-width: tokens.$breakpoint-desktop) {
+      padding: 0;
+    }
+  }
+
+  &__close {
+    @media (max-width: tokens.$breakpoint-desktop) {
+      display: none;
+    }
+  }
+}
