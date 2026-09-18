@@ -1,7 +1,8 @@
 import type {ContentBlockConfig, SegmentConfig, SegmentContentConfig, SegmentId,} from './segment.types';
 import {typographed} from '@/shared/typography';
 
-const CLUB_VIDEO_URL = 'http://localhost:5173/club.mov';
+const CLUB_VIDEO_URL = 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart/club.webm';
+const CLUB_VIDEO_SAFARI_URL = 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart/club.mov';
 
 export const SEGMENT_CONTENT = {
     'new-client': {
@@ -19,6 +20,7 @@ export const SEGMENT_CONTENT = {
             media: {
                 type: 'video',
                 src: CLUB_VIDEO_URL,
+                safariSrc: CLUB_VIDEO_SAFARI_URL,
             },
         },
         cashback: {
@@ -41,6 +43,7 @@ export const SEGMENT_CONTENT = {
             media: {
                 type: 'video',
                 src: CLUB_VIDEO_URL,
+                safariSrc: CLUB_VIDEO_SAFARI_URL,
             },
         },
         cashback: {
@@ -63,6 +66,7 @@ export const SEGMENT_CONTENT = {
             media: {
                 type: 'video',
                 src: CLUB_VIDEO_URL,
+                safariSrc: CLUB_VIDEO_SAFARI_URL,
             },
         },
         cashback: {
@@ -85,6 +89,7 @@ export const SEGMENT_CONTENT = {
             media: {
                 type: 'video',
                 src: CLUB_VIDEO_URL,
+                safariSrc: CLUB_VIDEO_SAFARI_URL,
             },
         },
         cashback: {

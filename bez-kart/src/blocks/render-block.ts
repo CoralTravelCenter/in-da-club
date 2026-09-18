@@ -118,10 +118,12 @@ function createTooltip(config: ContentBlockConfig, block: HTMLElement): {
 function appendVideo(block: HTMLElement, media: NonNullable<ContentBlockConfig['media']>): void {
     const video = document.createElement('video');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isSafari = /safari/i.test(navigator.userAgent)
+        && !/(chrome|chromium|crios|android|edg|opr|fxios)/i.test(navigator.userAgent);
 
     block.classList.add('bez-kart-block--video');
     video.className = 'bez-kart-block__video';
-    video.src = media.src;
+    video.src = isSafari ? media.safariSrc ?? media.src : media.src;
     video.autoplay = !reduceMotion;
     video.muted = true;
     video.loop = true;

@@ -81,4 +81,21 @@ describe('renderBlock', () => {
         expect(video?.muted).toBe(true);
         expect(video?.getAttribute('poster')).toBe('/poster.jpg');
     });
+
+    it('использует MOV в Safari и WebM в остальных браузерах', () => {
+        const config: ContentBlockConfig = {
+            id: 'club',
+            title: 'Клуб',
+            description: 'Описание',
+            media: {type: 'video', src: '/club.webm', safariSrc: '/club.mov'},
+        };
+
+        vi.stubGlobal('navigator', {userAgent: 'Mozilla/5.0 Version/18.0 Safari/605.1.15'});
+        const safariVideo = renderBlock(config, vi.fn()).querySelector('video');
+        expect(safariVideo?.getAttribute('src')).toBe('/club.mov');
+
+        vi.stubGlobal('navigator', {userAgent: 'Mozilla/5.0 Chrome/140.0.0.0 Safari/537.36'});
+        const chromeVideo = renderBlock(config, vi.fn()).querySelector('video');
+        expect(chromeVideo?.getAttribute('src')).toBe('/club.webm');
+    });
 });

@@ -23,6 +23,7 @@ interface ContentBlockBaseConfig {
   media?: {
     type: 'video';
     src: string;
+    safariSrc?: string;
     poster?: string;
   };
 }
@@ -61,6 +62,7 @@ export interface SegmentContentConfig {
     media: {
       type: 'video';
       src: string;
+      safariSrc?: string;
       poster?: string;
     };
   };
