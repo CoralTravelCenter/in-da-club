@@ -1,8 +1,13 @@
 import type {ContentBlockConfig, SegmentConfig, SegmentContentConfig, SegmentId,} from './segment.types';
-import {typographed} from '@/shared/typography';
+import {typographed} from '../shared/typography';
 
 const CLUB_VIDEO_URL = 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart/club.webm';
 const CLUB_VIDEO_SAFARI_URL = 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart/club.mov';
+const REGULAR_CLIENT_REFERRAL_URLS = {
+    'regular-1': 'https://coralbonus.ru/registration?promo=BYWXFE5GG4A2YSHDWVY9RNP525TONI3ANLAB51Q2X4OC4W3DPIKW8S9QWSUCK9F',
+    'regular-2': 'https://coralbonus.ru/registration?promo=ME608I6I76IQCD7ZQ8941G6EPWVC31EOMLSXK46ZJPIXMST9AO4QOWPOWFBD06T',
+    'regular-3': 'https://coralbonus.ru/registration?promo=JN53CKMQHT7RU26B02EW9V7P3SK2LTPNAOT9UE5ZW2S5OXDEAOTSQSNA9WZ68E2',
+} as const;
 
 export const SEGMENT_CONTENT = {
     'new-client': {
@@ -38,7 +43,8 @@ export const SEGMENT_CONTENT = {
             level: 'Silver',
             action: {
                 label: typographed`Оформить карту`,
-                type: 'activate-card',
+                type: 'referral-link',
+                href: REGULAR_CLIENT_REFERRAL_URLS['regular-1'],
             },
             media: {
                 type: 'video',
@@ -61,7 +67,8 @@ export const SEGMENT_CONTENT = {
             level: 'Silver',
             action: {
                 label: typographed`Оформить карту`,
-                type: 'activate-card',
+                type: 'referral-link',
+                href: REGULAR_CLIENT_REFERRAL_URLS['regular-2'],
             },
             media: {
                 type: 'video',
@@ -84,7 +91,8 @@ export const SEGMENT_CONTENT = {
             level: 'Silver',
             action: {
                 label: typographed`Оформить карту`,
-                type: 'activate-card',
+                type: 'referral-link',
+                href: REGULAR_CLIENT_REFERRAL_URLS['regular-3'],
             },
             media: {
                 type: 'video',

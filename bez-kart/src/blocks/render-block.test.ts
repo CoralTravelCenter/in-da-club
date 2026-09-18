@@ -48,6 +48,27 @@ describe('renderBlock', () => {
         expect(onActivateCard).toHaveBeenCalledOnce();
     });
 
+    it('создаёт реферальную ссылку без вызова обработчика формы', () => {
+        const onActivateCard = vi.fn();
+        const href = 'https://coralbonus.ru/registration?promo=test';
+        const config: ContentBlockConfig = {
+            id: 'club',
+            title: 'Клуб',
+            description: '',
+            action: {type: 'referral-link', label: 'Оформить карту', href},
+        };
+
+        const block = renderBlock(config, onActivateCard);
+        const link = block.querySelector<HTMLAnchorElement>('.bez-kart-block__action a');
+        link?.click();
+
+        expect(link?.href).toBe(href);
+        expect(link?.target).toBe('_blank');
+        expect(link?.rel).toBe('noopener');
+        expect(block.querySelector('.bez-kart-block__action button')).toBeNull();
+        expect(onActivateCard).not.toHaveBeenCalled();
+    });
+
     it('оставляет кнопку подсказки вне ссылки', () => {
         const config: ContentBlockConfig = {
             id: 'cashback',

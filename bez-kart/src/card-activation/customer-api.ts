@@ -1,4 +1,5 @@
 import {getProfile, type UserProfile} from './profile';
+import {typographed} from '../shared/typography';
 
 export interface RegistrationData {
     givenName: string;
@@ -26,7 +27,7 @@ function isSuccess(value: unknown): boolean {
     return value === true || value === 'True' || value === 'true';
 }
 
-async function postJson<T>(url: string, body: object, requestError = 'Не удалось выполнить запрос. Попробуйте ещё раз'): Promise<T> {
+async function postJson<T>(url: string, body: object, requestError = typographed`Не удалось выполнить запрос. Попробуйте ещё раз`): Promise<T> {
     let response: Response;
     try {
         response = await fetch(url, {
@@ -55,32 +56,32 @@ export async function registerCard(data: RegistrationData): Promise<void> {
         '/endpoints/Customer/BonusRegister', data,
     );
     if (!isSuccess(response.result?.isSuccess)) {
-        throw new Error(response.result?.errorMessage || 'Не удалось оформить карту');
+        throw new Error(response.result?.errorMessage || typographed`Не удалось оформить карту`);
     }
 }
 
 export async function sendVerificationCode(mobilePhone: string): Promise<void> {
     const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
-        '/endpoints/Customer/BonusSendVerificationCode', {mobilePhone}, 'Не удалось отправить код. Проверьте подключение к интернету и попробуйте ещё раз',
+        '/endpoints/Customer/BonusSendVerificationCode', {mobilePhone}, typographed`Не удалось отправить код. Проверьте подключение к интернету и попробуйте ещё раз`,
     );
     if (!isSuccess(response.result?.isSuccess)) {
-        throw new Error(response.result?.errorMessage || 'Не удалось отправить код');
+        throw new Error(response.result?.errorMessage || typographed`Не удалось отправить код`);
     }
 }
 
 export async function activateCard(mobilePhone: string, activationCode: string): Promise<void> {
     const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
-        '/endpoints/Customer/BonusActivation', {mobilePhone, activationCode}, 'Неверный код или срок его действия истёк. Попробуйте ещё раз',
+        '/endpoints/Customer/BonusActivation', {mobilePhone, activationCode}, typographed`Неверный код или срок его действия истёк. Попробуйте ещё раз`,
     );
     if (!isSuccess(response.result?.isSuccess)) {
-        throw new Error(response.result?.errorMessage || 'Неверный код — попробуйте ещё раз');
+        throw new Error(response.result?.errorMessage || typographed`Неверный код — попробуйте ещё раз`);
     }
 }
 
 export async function getBonusProfile(): Promise<BonusProfile> {
     const response = await postJson<{result?: BonusProfile}>('/endpoints/Customer/BonusProfile', {});
     if (!response.result || typeof response.result !== 'object') {
-        throw new Error('Не удалось загрузить данные карты');
+        throw new Error(typographed`Не удалось загрузить данные карты`);
     }
     return response.result;
 }

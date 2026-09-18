@@ -1,6 +1,7 @@
 import {formatBirthdate, type UserProfile} from './profile';
 import {cities} from './cities';
 import type {BonusProfile} from './customer-api';
+import {typographed} from '../shared/typography';
 
 export interface CoralPopupElement extends HTMLElement {
     show: () => Promise<void> | void;
@@ -36,15 +37,15 @@ export function validateRegistrationForm(form: HTMLFormElement): boolean {
     const city = form.elements.namedItem('city') as HTMLInputElement;
     const birthDate = form.elements.namedItem('birthDate') as HTMLInputElement;
     const fields: Array<[HTMLInputElement | null, string]> = [
-        [form.elements.namedItem('familyName') as HTMLInputElement, 'Укажите фамилию'],
-        [form.elements.namedItem('givenName') as HTMLInputElement, 'Укажите имя'],
-        [form.querySelector<HTMLInputElement>('input[name="gender"]:checked'), 'Выберите пол'],
-        [birthDate, 'Укажите дату рождения'],
-        [city, 'Укажите город'],
-        [form.elements.namedItem('email') as HTMLInputElement, 'Укажите электронную почту'],
-        [form.elements.namedItem('mobilePhone') as HTMLInputElement, 'Укажите телефон'],
-        [form.elements.namedItem('personal') as HTMLInputElement, 'Подтвердите согласие на обработку персональных данных'],
-        [form.elements.namedItem('loyalty') as HTMLInputElement, 'Подтвердите согласие с правилами программы'],
+        [form.elements.namedItem('familyName') as HTMLInputElement, typographed`Укажите фамилию`],
+        [form.elements.namedItem('givenName') as HTMLInputElement, typographed`Укажите имя`],
+        [form.querySelector<HTMLInputElement>('input[name="gender"]:checked'), typographed`Выберите пол`],
+        [birthDate, typographed`Укажите дату рождения`],
+        [city, typographed`Укажите город`],
+        [form.elements.namedItem('email') as HTMLInputElement, typographed`Укажите электронную почту`],
+        [form.elements.namedItem('mobilePhone') as HTMLInputElement, typographed`Укажите телефон`],
+        [form.elements.namedItem('personal') as HTMLInputElement, typographed`Подтвердите согласие на обработку персональных данных`],
+        [form.elements.namedItem('loyalty') as HTMLInputElement, typographed`Подтвердите согласие с правилами программы`],
     ];
 
     for (const [field, message] of fields) {
@@ -53,10 +54,10 @@ export function validateRegistrationForm(form: HTMLFormElement): boolean {
             if (target) showFieldError(target, message);
         }
     }
-    if (birthDate.value && !parseBirthdate(birthDate.value)) showFieldError(birthDate, 'Укажите корректную дату рождения');
-    if (city.value && !knownCities.has(city.value.trim())) showFieldError(city, 'Укажите город из списка');
+    if (birthDate.value && !parseBirthdate(birthDate.value)) showFieldError(birthDate, typographed`Укажите корректную дату рождения`);
+    if (city.value && !knownCities.has(city.value.trim())) showFieldError(city, typographed`Укажите город из списка`);
     const email = form.elements.namedItem('email') as HTMLInputElement;
-    if (email.value && !email.validity.valid) showFieldError(email, 'Укажите корректную электронную почту');
+    if (email.value && !email.validity.valid) showFieldError(email, typographed`Укажите корректную электронную почту`);
 
     const firstInvalid = form.querySelector<HTMLInputElement>('[aria-invalid="true"]');
     firstInvalid?.focus();
@@ -114,7 +115,7 @@ export function validateVerificationForm(form: HTMLFormElement): boolean {
     digits.forEach((input) => input.setAttribute('aria-invalid', 'true'));
     const error = document.createElement('span');
     error.className = 'bez-kart-activation__field-error';
-    error.textContent = 'Введите код из 6 цифр';
+    error.textContent = typographed`Введите код из 6 цифр`;
     form.querySelector('.bez-kart-activation__code-input')?.after(error);
     digits.find((input) => !input.value)?.focus();
     return false;
@@ -224,15 +225,15 @@ export function createDialog(): CoralPopupElement {
     const dialog = document.createElement('coral-popup') as CoralPopupElement;
     dialog.id = DIALOG_ID;
     dialog.className = 'bez-kart-activation';
-    dialog.setAttribute('aria-label', 'Оформление карты');
+    dialog.setAttribute('aria-label', typographed`Оформление карты`);
     dialog.innerHTML = `
         <coral-button class="bez-kart-activation__close" trait="pale" shape="pill" size="small">
-            <button type="button" style="position: absolute; z-index: 1; top: calc(-31px - 8px); right: 0;">Закрыть</button>
+            <button type="button" style="position: absolute; z-index: 1; top: calc(-31px - 8px); right: 0;">${typographed`Закрыть`}</button>
         </coral-button>
         <div class="bez-kart-activation__body">
             <div class="bez-kart-activation__banner" aria-hidden="true"></div>
             <div class="bez-kart-activation__panel">
-                <div class="bez-kart-activation__steps" role="group" aria-label="Шаг 1 из 3">
+                <div class="bez-kart-activation__steps" role="group" aria-label="${typographed`Шаг 1 из 3`}">
                     <span data-step-mark data-state="current" aria-current="step">1</span><i></i>
                     <span data-step-mark data-state="upcoming">2</span><i></i>
                     <span data-step-mark data-state="upcoming">3</span>
@@ -252,28 +253,28 @@ export function createRegistrationForm(profile: UserProfile): HTMLFormElement {
     form.className = 'bez-kart-activation__form';
     form.noValidate = true;
     form.innerHTML = `
-        <h2 id="${DIALOG_ID}-title">Оформление карты</h2>
-        <label><span>Фамилия <b>*</b></span><input name="familyName" required autocomplete="family-name"></label>
-        <label><span>Имя <b>*</b></span><input name="givenName" required autocomplete="given-name"></label>
+        <h2 id="${DIALOG_ID}-title">${typographed`Оформление карты`}</h2>
+        <label><span>${typographed`Фамилия`} <b>*</b></span><input name="familyName" required autocomplete="family-name"></label>
+        <label><span>${typographed`Имя`} <b>*</b></span><input name="givenName" required autocomplete="given-name"></label>
         <div class="bez-kart-activation__row">
             <fieldset>
-                <legend>Пол <b>*</b></legend>
+                <legend>${typographed`Пол`} <b>*</b></legend>
                 <div class="bez-kart-activation__gender-options">
                     <label><input type="radio" name="gender" value="0" required><span>М</span></label>
                     <label><input type="radio" name="gender" value="1"><span>Ж</span></label>
                 </div>
             </fieldset>
-            <label><span>Дата рождения <b>*</b></span><input name="birthDate" required inputmode="numeric" placeholder="ДД / ММ / ГГГГ" autocomplete="bday"></label>
+            <label><span>${typographed`Дата рождения`} <b>*</b></span><input name="birthDate" required inputmode="numeric" placeholder="ДД / ММ / ГГГГ" autocomplete="bday"></label>
         </div>
-        <div class="bez-kart-activation__city"><label for="bez-kart-city"><span>Город <b>*</b></span></label><input id="bez-kart-city" name="city" required autocomplete="address-level2" aria-autocomplete="list" aria-controls="bez-kart-city-options" aria-expanded="false"><ul id="bez-kart-city-options" class="bez-kart-activation__city-options" role="listbox" hidden></ul></div>
-        <label><span>Электронная почта <b>*</b></span><input type="email" name="email" required readonly autocomplete="email"></label>
-        <label><span>Телефон <b>*</b></span><input type="tel" name="mobilePhone" required readonly autocomplete="tel"></label>
+        <div class="bez-kart-activation__city"><label for="bez-kart-city"><span>${typographed`Город`} <b>*</b></span></label><input id="bez-kart-city" name="city" required autocomplete="address-level2" aria-autocomplete="list" aria-controls="bez-kart-city-options" aria-expanded="false"><ul id="bez-kart-city-options" class="bez-kart-activation__city-options" role="listbox" hidden></ul></div>
+        <label><span>${typographed`Электронная почта`} <b>*</b></span><input type="email" name="email" required readonly autocomplete="email"></label>
+        <label><span>${typographed`Телефон`} <b>*</b></span><input type="tel" name="mobilePhone" required readonly autocomplete="tel"></label>
         <div class="bez-kart-activation__consents">
-            <label><input class="visually-hidden" type="checkbox" name="personal" required><span class="bez-kart-activation__checkbox" aria-hidden="true"></span><span><b>*</b> Даю согласие на обработку персональных данных. <a href="https://cdn.coral.ru/content/doc/legal/privacy_policy_coral.pdf" target="_blank" rel="noopener">Политика обработки персональных данных</a></span></label>
-            <label><input class="visually-hidden" type="checkbox" name="loyalty" required><span class="bez-kart-activation__checkbox" aria-hidden="true"></span><span><b>*</b> Ознакомлен и согласен с <a href="https://b2ccdn.coral.ru/content/doc/legal/pravila-loyalty-program-22062026.pdf" target="_blank" rel="noopener">Правилами Программы лояльности</a></span></label>
-            <label><input class="visually-hidden" type="checkbox" name="offers"><span class="bez-kart-activation__checkbox" aria-hidden="true"></span><span>Даю согласие на получение новостей, акций, специальных предложений, в том числе по турам.</span></label>
+            <label><input class="visually-hidden" type="checkbox" name="personal" required><span class="bez-kart-activation__checkbox" aria-hidden="true"></span><span><b>*</b> ${typographed`Даю согласие на обработку персональных данных.`} <a href="https://cdn.coral.ru/content/doc/legal/privacy_policy_coral.pdf" target="_blank" rel="noopener">${typographed`Политика обработки персональных данных`}</a></span></label>
+            <label><input class="visually-hidden" type="checkbox" name="loyalty" required><span class="bez-kart-activation__checkbox" aria-hidden="true"></span><span><b>*</b> ${typographed`Ознакомлен и согласен с`} <a href="https://b2ccdn.coral.ru/content/doc/legal/pravila-loyalty-program-22062026.pdf" target="_blank" rel="noopener">${typographed`Правилами Программы лояльности`}</a></span></label>
+            <label><input class="visually-hidden" type="checkbox" name="offers"><span class="bez-kart-activation__checkbox" aria-hidden="true"></span><span>${typographed`Даю согласие на получение новостей, акций, специальных предложений, в том числе по турам.`}</span></label>
         </div>
-        <button class="bez-kart-activation__submit" type="submit">Получить код по SMS</button>`;
+        <button class="bez-kart-activation__submit" type="submit">${typographed`Получить код по SMS`}</button>`;
 
     const setValue = (name: string, value: string): void => {
         const input = form.elements.namedItem(name);
@@ -300,13 +301,13 @@ export function createVerificationForm(mobilePhone: string): HTMLFormElement {
     form.className = 'bez-kart-activation__verify';
     form.noValidate = true;
     form.innerHTML = `
-        <h2 id="${DIALOG_ID}-title">Введите код из SMS</h2>
-        <p>Отправили код активации на номер<br><strong data-activation-phone></strong></p>
-        <div class="bez-kart-activation__code-input" role="group" aria-label="Код из SMS">
+        <h2 id="${DIALOG_ID}-title">${typographed`Введите код из SMS`}</h2>
+        <p>${typographed`Отправили код активации на номер`}<br><strong data-activation-phone></strong></p>
+        <div class="bez-kart-activation__code-input" role="group" aria-label="${typographed`Код из SMS`}">
             ${Array.from({length: 6}, (_, index) => `<input data-code-digit inputmode="numeric" pattern="[0-9]" maxlength="1" placeholder=" " autocomplete="${index === 0 ? 'one-time-code' : 'off'}" aria-label="Цифра ${index + 1} из 6" required>`).join('')}
         </div>
-        <button class="bez-kart-activation__submit" type="submit">Активировать</button>
-        <button class="bez-kart-activation__resend" type="button" data-resend-code disabled>Отправить код повторно через <span data-resend-seconds>60</span> сек.</button>
+        <button class="bez-kart-activation__submit" type="submit">${typographed`Активировать`}</button>
+        <button class="bez-kart-activation__resend" type="button" data-resend-code disabled>${typographed`Отправить код повторно через`} <span data-resend-seconds>60</span> ${typographed`сек.`}</button>
         `;
     const phone = form.querySelector<HTMLElement>('[data-activation-phone]');
     if (phone) phone.textContent = mobilePhone;
@@ -359,10 +360,10 @@ export function showSuccessResult(stage: HTMLElement, bonus: BonusProfile, profi
     stage.innerHTML = `
         <div class="bez-kart-activation__result">
             <img class="bez-kart-activation__result-icon" src="${assetUrl('success-mark.svg')}" alt="">
-            <h2 id="${DIALOG_ID}-title">Карта активирована!</h2>
-            <p>Ваш уровень — <strong data-card-level></strong>, кешбэк <strong data-card-cashback></strong> с каждой покупки</p>
+            <h2 id="${DIALOG_ID}-title">${typographed`Карта активирована!`}</h2>
+            <p>${typographed`Ваш уровень —`} <strong data-card-level></strong>, ${typographed`кешбэк`} <strong data-card-cashback></strong> ${typographed`с каждой покупки`}</p>
             <div class="bez-kart-activation__card"></div>
-            <a class="bez-kart-activation__submit" href="/">Подобрать тур</a>
+            <a class="bez-kart-activation__submit" href="/">${typographed`Подобрать тур`}</a>
         </div>`;
     const level = bonus.cardType ?? 'Silver';
     stage.querySelector<HTMLElement>('[data-card-level]')!.textContent = level;
@@ -374,8 +375,8 @@ export function showRefreshRequiredResult(stage: HTMLElement): void {
     stage.innerHTML = `
         <div class="bez-kart-activation__result">
             <img class="bez-kart-activation__result-icon" src="${assetUrl('fail-mark.svg')}" alt="">
-            <h2 id="${DIALOG_ID}-title">Что-то пошло не так...</h2>
-            <p>Пожалуйста, попробуйте обновить страницу</p>
+            <h2 id="${DIALOG_ID}-title">${typographed`Что-то пошло не так…`}</h2>
+            <p>${typographed`Пожалуйста, попробуйте обновить страницу`}</p>
         </div>`;
 }
 
@@ -383,10 +384,10 @@ export function showExistingCardResult(stage: HTMLElement, bonus: BonusProfile, 
     stage.innerHTML = `
         <div class="bez-kart-activation__result">
             <img class="bez-kart-activation__result-icon" src="${assetUrl('success-mark.svg')}" alt="">
-            <h2 id="${DIALOG_ID}-title">У вас уже есть карта CoralBonus</h2>
+            <h2 id="${DIALOG_ID}-title">${typographed`У вас уже есть карта CoralBonus`}</h2>
             <div class="bez-kart-activation__card"></div>
-            <p>Бонусы за поездки: <strong data-trip-balance></strong></p>
-            <p>Акционные бонусы: <strong data-promo-balance></strong></p>
+            <p>${typographed`Бонусы за поездки:`} <strong data-trip-balance></strong></p>
+            <p>${typographed`Акционные бонусы:`} <strong data-promo-balance></strong></p>
         </div>`;
     stage.querySelector<HTMLElement>('[data-trip-balance]')!.textContent = String(bonus.accumulatedBalance ?? 0);
     stage.querySelector<HTMLElement>('[data-promo-balance]')!.textContent = String(bonus.promoBalance ?? 0);

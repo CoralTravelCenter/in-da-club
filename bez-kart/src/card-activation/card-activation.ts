@@ -1,6 +1,7 @@
 import {getProfile, waitForLogin, type UserProfile} from './profile';
 import {activateCard, getBonusProfile, normalizePhone, refreshUser, registerCard, sendVerificationCode, type RegistrationData} from './customer-api';
 import {applyConsents} from './consents';
+import {typographed} from '../shared/typography';
 import {
     createDialog,
     createRegistrationForm,
@@ -65,7 +66,7 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
         try {
             if (submit) {
                 submit.disabled = true;
-                submit.textContent = 'Отправляем код…';
+                submit.textContent = typographed`Отправляем код…`;
             }
             form.dataset.state = 'sending';
             form.setAttribute('aria-busy', 'true');
@@ -82,12 +83,12 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
             }
             await renderVerification(dialog, registration);
         } catch (error) {
-            showMessage(form, error instanceof Error ? error.message : 'Не удалось оформить карту');
+            showMessage(form, error instanceof Error ? error.message : typographed`Не удалось оформить карту`);
             delete form.dataset.state;
             form.removeAttribute('aria-busy');
             if (submit) {
                 submit.disabled = false;
-                submit.textContent = 'Получить код по SMS';
+                submit.textContent = typographed`Получить код по SMS`;
             }
         }
     });
@@ -95,11 +96,11 @@ function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): vo
 
 async function renderVerification(dialog: CoralPopupElement, data: RegistrationData): Promise<void> {
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
-    if (!stage) throw new Error('Не удалось открыть шаг подтверждения');
+    if (!stage) throw new Error(typographed`Не удалось открыть шаг подтверждения`);
 
     await sendVerificationCode(data.mobilePhone);
     setStep(dialog, 1);
-    dialog.setAttribute('aria-label', 'Введите код из SMS');
+    dialog.setAttribute('aria-label', typographed`Введите код из SMS`);
     const form = createVerificationForm(data.mobilePhone);
     stage.replaceChildren(form);
     const resend = form.querySelector<HTMLButtonElement>('[data-resend-code]')!;
@@ -109,7 +110,7 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
         resend.disabled = true;
         resend.dataset.state = 'cooldown';
         resend.removeAttribute('aria-busy');
-        resend.innerHTML = 'Отправить код повторно через <span data-resend-seconds>60</span> сек.';
+        resend.innerHTML = `${typographed`Отправить код повторно через`} <span data-resend-seconds>60</span> ${typographed`сек.`}`;
         window.clearInterval(timer);
         timer = window.setInterval(() => {
             remaining -= 1;
@@ -119,7 +120,7 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
             window.clearInterval(timer);
             resend.disabled = false;
             resend.dataset.state = 'ready';
-            resend.textContent = 'Отправить код повторно';
+            resend.textContent = typographed`Отправить код повторно`;
         }, 1000);
     };
     startResendCooldown();
@@ -128,17 +129,17 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
         resend.disabled = true;
         resend.dataset.state = 'sending';
         resend.setAttribute('aria-busy', 'true');
-        resend.textContent = 'Отправляем код…';
+        resend.textContent = typographed`Отправляем код…`;
         form.querySelector('.bez-kart-activation__error')?.remove();
         try {
             await sendVerificationCode(data.mobilePhone);
             startResendCooldown();
         } catch (error) {
-            showMessage(form, error instanceof Error ? error.message : 'Не удалось отправить код повторно');
+            showMessage(form, error instanceof Error ? error.message : typographed`Не удалось отправить код повторно`);
             resend.disabled = false;
             resend.dataset.state = 'ready';
             resend.removeAttribute('aria-busy');
-            resend.textContent = 'Отправить код повторно';
+            resend.textContent = typographed`Отправить код повторно`;
         }
     });
     form.addEventListener('submit', async (event) => {
@@ -150,7 +151,7 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
         try {
             if (submit) {
                 submit.disabled = true;
-                submit.textContent = 'Активируем карту…';
+                submit.textContent = typographed`Активируем карту…`;
             }
             form.dataset.state = 'activating';
             form.setAttribute('aria-busy', 'true');
@@ -159,12 +160,12 @@ async function renderVerification(dialog: CoralPopupElement, data: RegistrationD
             window.clearInterval(timer);
             await renderSuccess(dialog);
         } catch (error) {
-            showMessage(form, error instanceof Error ? error.message : 'Не удалось активировать карту');
+            showMessage(form, error instanceof Error ? error.message : typographed`Не удалось активировать карту`);
             delete form.dataset.state;
             form.removeAttribute('aria-busy');
             if (submit) {
                 submit.disabled = false;
-                submit.textContent = 'Активировать';
+                submit.textContent = typographed`Активировать`;
             }
         }
     });
@@ -175,29 +176,29 @@ async function renderSuccess(dialog: CoralPopupElement): Promise<void> {
     if (!stage) return;
     try {
         if (!await refreshUser()) {
-            throw new Error('Не удалось обновить данные карты');
+            throw new Error(typographed`Не удалось обновить данные карты`);
         }
         const bonus = await getBonusProfile();
         const profile = getProfile();
-        if (!profile) throw new Error('Не удалось обновить данные карты');
+        if (!profile) throw new Error(typographed`Не удалось обновить данные карты`);
         setStep(dialog, 2);
-        dialog.setAttribute('aria-label', 'Карта активирована');
+        dialog.setAttribute('aria-label', typographed`Карта активирована`);
         showSuccessResult(stage, bonus, profile);
     } catch {
         setStep(dialog, 2);
-        dialog.setAttribute('aria-label', 'Не удалось обновить данные карты');
+        dialog.setAttribute('aria-label', typographed`Не удалось обновить данные карты`);
         showRefreshRequiredResult(stage);
     }
 }
 
 async function showExistingCard(profile: UserProfile): Promise<void> {
     const dialog = createDialog();
-    dialog.setAttribute('aria-label', 'У вас уже есть карта CoralBonus');
+    dialog.setAttribute('aria-label', typographed`У вас уже есть карта CoralBonus`);
     dialog.querySelector('.bez-kart-activation__banner')?.remove();
     dialog.querySelector('.bez-kart-activation__steps')?.remove();
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
     if (stage) {
-        stage.innerHTML = '<div class="bez-kart-activation__status" role="status">Загружаем данные карты…</div>';
+        stage.innerHTML = `<div class="bez-kart-activation__status" role="status">${typographed`Загружаем данные карты…`}</div>`;
     }
     await openPopup(dialog);
     if (stage) {

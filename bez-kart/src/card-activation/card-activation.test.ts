@@ -70,7 +70,7 @@ describe('card activation markup and flow', () => {
         const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation');
         const form = dialog?.querySelector<HTMLFormElement>('form');
         expect(dialog?.getAttribute('aria-label')).toBe('Оформление карты');
-        expect(dialog?.querySelector('.bez-kart-activation__steps')?.getAttribute('aria-label')).toBe('Шаг 1 из 3');
+        expect(dialog?.querySelector('.bez-kart-activation__steps')?.getAttribute('aria-label')).toBe('Шаг 1 из\u00a03');
         expect((form?.elements.namedItem('givenName') as HTMLInputElement).value).toBe('Анна');
         expect((form?.elements.namedItem('birthDate') as HTMLInputElement).value).toBe('02 / 01 / 1990');
     });
@@ -119,7 +119,7 @@ describe('card activation markup and flow', () => {
         submit(form);
         expect(registerCard).not.toHaveBeenCalled();
         expect(city.getAttribute('aria-invalid')).toBe('true');
-        expect(form.textContent).toContain('Укажите город из списка');
+        expect(form.textContent).toContain('Укажите город из\u00a0списка');
     });
 
     it('перемещает фокус по вариантам городов стрелками', async () => {
@@ -165,7 +165,7 @@ describe('card activation markup and flow', () => {
         expect(form.noValidate).toBe(true);
         expect(form.textContent).toContain('Укажите фамилию');
         expect(form.textContent).toContain('Укажите город');
-        expect(form.textContent).toContain('Подтвердите согласие на обработку персональных данных');
+        expect(form.textContent).toContain('Подтвердите согласие на\u00a0обработку персональных данных');
     });
 
     it('убирает ошибку поля сразу после его заполнения', async () => {
@@ -187,7 +187,7 @@ describe('card activation markup and flow', () => {
         expect(familyName.hasAttribute('aria-invalid')).toBe(false);
         expect(personal.hasAttribute('aria-invalid')).toBe(false);
         expect(form.textContent).not.toContain('Укажите фамилию');
-        expect(form.textContent).not.toContain('Подтвердите согласие на обработку персональных данных');
+        expect(form.textContent).not.toContain('Подтвердите согласие на\u00a0обработку персональных данных');
     });
 
     it('показывает существующую карту без формы регистрации', async () => {
@@ -196,8 +196,8 @@ describe('card activation markup and flow', () => {
         await requestCardActivation();
 
         const dialog = document.querySelector('#bez-kart-card-activation');
-        expect(dialog?.textContent).toContain('У вас уже есть карта CoralBonus');
-        expect(dialog?.textContent).toContain('Бонусы за поездки: 100');
+        expect(dialog?.textContent).toContain('У\u00a0вас уже есть карта CoralBonus');
+        expect(dialog?.textContent).toContain('Бонусы за\u00a0поездки: 100');
         expect(dialog?.textContent).toContain('123 4567 8901');
         expect(dialog?.querySelector<HTMLImageElement>('.bez-kart-activation__card img')?.src).toBe('http://localhost:5173/card-au-comp.webp');
         expect(dialog?.querySelector<HTMLImageElement>('.bez-kart-activation__result-icon')?.src).toBe('http://localhost:5173/success-mark.svg');
@@ -211,7 +211,7 @@ describe('card activation markup and flow', () => {
         await requestCardActivation();
 
         const dialog = document.querySelector('#bez-kart-card-activation');
-        expect(dialog?.textContent).toContain('Что-то пошло не так');
+        expect(dialog?.textContent).toContain('Что-то пошло не\u00a0так');
         expect(dialog?.textContent).toContain('обновить страницу');
     });
 
@@ -239,7 +239,7 @@ describe('card activation markup and flow', () => {
         await vi.waitFor(() => expect(dialog.textContent).toContain('Карта активирована!'));
         expect(activateCard).toHaveBeenCalledWith('79990000000', '123456');
         expect(getBonusProfile).toHaveBeenCalledOnce();
-        expect(dialog.textContent).toContain('Ваш уровень — Gold, кешбэк 2%');
+        expect(dialog.textContent).toContain('Ваш уровень\u00a0— Gold, кешбэк 2%');
         expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('3');
     });
 
@@ -278,7 +278,7 @@ describe('card activation markup and flow', () => {
 
         await vi.waitFor(() => expect(dialog.querySelector('[role="alert"]')?.textContent).toBe('Сервис SMS недоступен'));
         expect(dialog.querySelector('.bez-kart-activation__form')).toBeTruthy();
-        expect(dialog.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.textContent).toBe('Получить код по SMS');
+        expect(dialog.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.textContent).toBe('Получить код по\u00a0SMS');
         expect(dialog.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.disabled).toBe(false);
     });
 
@@ -291,7 +291,7 @@ describe('card activation markup and flow', () => {
         fillRequiredFields(form);
         submit(form);
 
-        await vi.waitFor(() => expect(form.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.textContent).toBe('Отправляем код…'));
+        await vi.waitFor(() => expect(form.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.textContent).toBe('Отправляем\u00a0код…'));
         await vi.waitFor(() => expect(sendVerificationCode).toHaveBeenCalledOnce());
         expect(form.getAttribute('aria-busy')).toBe('true');
         expect(form.dataset.state).toBe('sending');
@@ -334,7 +334,7 @@ describe('card activation markup and flow', () => {
         await vi.advanceTimersByTimeAsync(0);
 
         expect(sendVerificationCode).toHaveBeenCalledTimes(2);
-        expect(resend.textContent).toBe('Отправляем код…');
+        expect(resend.textContent).toBe('Отправляем\u00a0код…');
         expect(resend.dataset.state).toBe('sending');
         expect(resend.getAttribute('aria-busy')).toBe('true');
         resolveResend();

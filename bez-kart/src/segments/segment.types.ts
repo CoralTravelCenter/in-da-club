@@ -16,10 +16,16 @@ interface ContentBlockBaseConfig {
   };
   href?: string;
   badge?: string;
-  action?: {
-    label: string;
-    type: 'activate-card';
-  };
+  action?:
+    | {
+        label: string;
+        type: 'activate-card';
+      }
+    | {
+        label: string;
+        type: 'referral-link';
+        href: string;
+      };
   media?: {
     type: 'video';
     src: string;
@@ -55,10 +61,7 @@ export interface SegmentContentConfig {
   };
   club: {
     level: string;
-    action: {
-      label: string;
-      type: 'activate-card';
-    };
+    action: NonNullable<ContentBlockConfig['action']>;
     media: {
       type: 'video';
       src: string;

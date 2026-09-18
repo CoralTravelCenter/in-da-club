@@ -1,8 +1,9 @@
 import type {RegistrationData} from './customer-api';
+import {typographed} from '../shared/typography';
 
 export async function applyConsents(data: RegistrationData, acceptedDocuments: Set<string>): Promise<void> {
     const response = await fetch('https://apishar.coral.school/consents/api/documentlist/coral.ru');
-    if (!response.ok) throw new Error('Не удалось загрузить документы согласий');
+    if (!response.ok) throw new Error(typographed`Не удалось загрузить документы согласий`);
     const documents = await response.json() as Array<{
         docId: number;
         project_id: number;
@@ -39,7 +40,6 @@ export async function applyConsents(data: RegistrationData, acceptedDocuments: S
         }
     });
     if (results.some((result) => result.status === 'rejected' || !result.value.ok)) {
-        throw new Error('Не удалось сохранить согласия');
+        throw new Error(typographed`Не удалось сохранить согласия`);
     }
 }
-

@@ -179,18 +179,29 @@ function appendDescription(content: HTMLElement, description: string): void {
     content.append(element);
 }
 
-function appendAction(content: HTMLElement, label: string, onActivateCard: () => void | Promise<void>): void {
+function appendAction(
+    content: HTMLElement,
+    action: NonNullable<ContentBlockConfig['action']>,
+    onActivateCard: () => void | Promise<void>,
+): void {
     const button = document.createElement('coral-button');
     button.className = 'bez-kart-block__action';
     button.setAttribute('trait', 'vivid');
     button.setAttribute('shape', 'pill');
 
-    const link = document.createElement('button');
-    link.type = 'button';
-    link.textContent = label;
-    link.addEventListener('click', () => {
-        void onActivateCard();
-    });
+    const link = document.createElement(action.type === 'referral-link' ? 'a' : 'button');
+    link.textContent = action.label;
+
+    if (link instanceof HTMLAnchorElement && action.type === 'referral-link') {
+        link.href = action.href;
+        link.target = '_blank';
+        link.rel = 'noopener';
+    } else if (link instanceof HTMLButtonElement) {
+        link.type = 'button';
+        link.addEventListener('click', () => {
+            void onActivateCard();
+        });
+    }
 
     button.append(link);
     content.append(button);
@@ -234,7 +245,7 @@ export function renderBlock(
     }
 
     if (config.action && !config.href) {
-        appendAction(content, config.action.label, onActivateCard);
+        appendAction(content, config.action, onActivateCard);
     }
 
     if (config.href && config.tooltip) {

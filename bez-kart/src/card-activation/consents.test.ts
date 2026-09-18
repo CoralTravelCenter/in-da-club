@@ -69,7 +69,7 @@ describe('consents API', () => {
         });
         const accepted = new Set<string>();
 
-        await expect(applyConsents(registration, accepted)).rejects.toThrow('Не удалось сохранить согласия');
+        await expect(applyConsents(registration, accepted)).rejects.toThrow('Не\u00a0удалось сохранить согласия');
         expect(accepted).toEqual(new Set(['7:101']));
 
         await applyConsents(registration, accepted);
@@ -82,7 +82,7 @@ describe('consents API', () => {
 
     it('останавливается при ошибке загрузки документов', async () => {
         fetchMock.mockResolvedValueOnce(response({}, false));
-        await expect(applyConsents(registration, new Set())).rejects.toThrow('Не удалось загрузить документы согласий');
+        await expect(applyConsents(registration, new Set())).rejects.toThrow('Не\u00a0удалось загрузить документы согласий');
         expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 });

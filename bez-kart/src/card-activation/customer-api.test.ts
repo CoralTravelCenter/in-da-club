@@ -81,17 +81,17 @@ describe('Customer API', () => {
         await expect(registerCard(registration)).rejects.toThrow('Отказ регистрации');
 
         fetchMock.mockResolvedValueOnce(response({}, false, 503));
-        await expect(sendVerificationCode(registration.mobilePhone)).rejects.toThrow('Не удалось отправить код. Проверьте подключение к интернету и попробуйте ещё раз');
+        await expect(sendVerificationCode(registration.mobilePhone)).rejects.toThrow('Не\u00a0удалось отправить\u00a0код. Проверьте подключение к\u00a0интернету и\u00a0попробуйте ещё раз');
 
         fetchMock.mockResolvedValueOnce(response({}, false, 400));
-        await expect(activateCard(registration.mobilePhone, '000000')).rejects.toThrow('Неверный код или срок его действия истёк. Попробуйте ещё раз');
+        await expect(activateCard(registration.mobilePhone, '000000')).rejects.toThrow('Неверный код или\u00a0срок его действия истёк. Попробуйте ещё раз');
     });
 
     it('показывает понятную ошибку при сбое сети во время отправки кода', async () => {
         fetchMock.mockRejectedValueOnce(new TypeError('Failed to fetch'));
 
         await expect(sendVerificationCode(registration.mobilePhone)).rejects.toThrow(
-            'Не удалось отправить код. Проверьте подключение к интернету и попробуйте ещё раз',
+            'Не\u00a0удалось отправить\u00a0код. Проверьте подключение к\u00a0интернету и\u00a0попробуйте ещё раз',
         );
     });
 
