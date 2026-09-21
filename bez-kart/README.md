@@ -4,6 +4,9 @@
 Сегмент подставляется автоматически во время сборки, поэтому вручную менять вызов
 `bootstrap` не нужно.
 
+Зависимости устанавливаются один раз в корне репозитория. Все команды ниже
+запускайте из корня.
+
 ## Контракт с Mindbox
 
 На целевой странице разместите пустой контейнер:
@@ -12,31 +15,34 @@
 <div data-bez-kart-root></div>
 ```
 
-Команда `npm run build` создаёт четыре варианта:
+Команда `npm run build:bez-kart` создаёт четыре варианта:
 
 ```text
-dist/new-client/bez-kart.user.js
-dist/regular-1/bez-kart.user.js
-dist/regular-2/bez-kart.user.js
-dist/regular-3/bez-kart.user.js
+bez-kart/dist/new-client/bez-kart.html
+bez-kart/dist/regular-1/bez-kart.html
+bez-kart/dist/regular-2/bez-kart.html
+bez-kart/dist/regular-3/bez-kart.html
 ```
 
 В каждый встроенный блок Mindbox поместите файл соответствующего сегмента.
 Mindbox отвечает за таргетинг, а запущенный скрипт уже содержит правильный
 `segmentId` и рендерит конфигурацию в первый найденный `data-bez-kart-root`.
 
-Отдельный вариант можно собрать, например, командой `npm run build:regular-2`.
+Отдельный вариант можно собрать, например, командой
+`npm run build:bez-kart:regular-2`. Для локальной разработки используйте
+`npm run dev:bez-kart`, для тестов — `npm run test:bez-kart`.
 
 ## Типографика
 
 Весь пользовательский текст перед вставкой в DOM обрабатывается пакетом
-`typograf` с локалями `ru` и `en-US`. Используйте `typographText` из
-`src/shared/typography.ts` для новых текстовых узлов и accessibility-атрибутов.
-Обработка работает одинаково при `npm run dev` и `npm run build`.
+`typograf` с локалью `ru`. Используйте тег `typographed` из
+`../shared/typography.ts` для новых текстовых узлов и accessibility-атрибутов.
+Обработка работает одинаково при `npm run dev:bez-kart` и
+`npm run build:bez-kart`.
 
 ## Локальные изображения
 
-Изображения и видео храните непосредственно в папке `public`. После запуска `npm run dev`
+Изображения и видео храните непосредственно в папке `public`. После запуска `npm run dev:bez-kart`
 они доступны, например, по адресу
 `http://localhost:5173/cashback.png`.
 

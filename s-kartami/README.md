@@ -7,6 +7,10 @@
 - `two-trips` — клиенты с 2 поездками;
 - `three-plus` — клиенты с 3 и более поездками.
 
+Зависимости устанавливаются один раз в корне репозитория. Все команды ниже
+запускайте из корня. Для локальной разработки используйте
+`npm run dev:s-kartami`, для тестов — `npm run test:s-kartami`.
+
 Имя читается из профиля `user` в `localStorage`. При наличии `BonusUserId`
 актуальный уровень карты запрашивается через `POST /endpoints/Customer/BonusProfile`
 из поля `result.cardType`. Поле `BonusLevel` из локального профиля используется как
@@ -18,7 +22,8 @@
 <div data-bez-kart-root></div>
 ```
 
-`npm run build` создаёт HTML-скрипт для каждого сегмента в `dist/<segment>/s-kartami.html`.
+`npm run build:s-kartami` создаёт HTML-скрипт для каждого сегмента в
+`s-kartami/dist/<segment>/s-kartami.html`.
 Для локального просмотра количество поездок можно задать параметром `?ride=0..3`:
 
 - `?ride=0` — неактивный клиент;
@@ -38,6 +43,3 @@
 - `one-trip` — одна поездка;
 - `two-trips` — две поездки;
 - `three-plus` — три и более поездки.
-
-Изображения сценария активации карты находятся отдельно в
-`public/media/card-activation`.

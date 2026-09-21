@@ -1,4 +1,4 @@
-@use '../abstracts/mixins' as mixins;
+@use 'abstracts/mixins' as mixins;
 @use '../abstracts/tokens' as tokens;
 
 #section-row-21:has(.s-kartami-segment[data-client='active']:is([data-ride='1'], [data-ride='2'])) {

@@ -1,7 +1,7 @@
 import {formatBirthdate, type UserProfile} from './profile';
 import {cities} from './cities';
 import type {BonusProfile} from './customer-api';
-import {typographed} from '@/shared/typography';
+import {typographed} from '../../../shared/typography';
 
 export interface CoralPopupElement extends HTMLElement {
     show: () => Promise<void> | void;

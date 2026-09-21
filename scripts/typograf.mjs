@@ -1,9 +1,13 @@
 import {readdir, readFile, writeFile} from 'node:fs/promises';
-import {extname, join} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {extname, join, resolve} from 'node:path';
 import Typograf from 'typograf';
 
-const sourceRoot = fileURLToPath(new URL('../src/', import.meta.url));
+const sourceDirectory = process.argv[2];
+if (!sourceDirectory) {
+    throw new Error('Укажите каталог исходников: node scripts/typograf.mjs <src-directory>');
+}
+
+const sourceRoot = resolve(sourceDirectory);
 const tagPattern = /typographed`((?:\\.|[^`])*)`/g;
 const typograf = new Typograf({locale: ['ru']});
 

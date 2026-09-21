@@ -1,7 +1,7 @@
 import {getProfile, waitForLogin, type UserProfile} from './profile';
 import {activateCard, getBonusProfile, normalizePhone, refreshUser, registerCard, sendVerificationCode, type RegistrationData} from './customer-api';
 import {applyConsents} from './consents';
-import {typographed} from '@/shared/typography';
+import {typographed} from '../../../shared/typography';
 import {
     createDialog,
     createRegistrationForm,

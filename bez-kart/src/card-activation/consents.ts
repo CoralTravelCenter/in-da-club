@@ -1,6 +1,6 @@
 import type {RegistrationData} from './customer-api';
 import {request, requestJson} from './http';
-import {typographed} from '@/shared/typography';
+import {typographed} from '../../../shared/typography';
 
 interface ConsentDocument {
     docId: number;

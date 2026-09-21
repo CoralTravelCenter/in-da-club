@@ -1,6 +1,6 @@
 import {getProfile, type UserProfile} from './profile';
 import {requestJson} from './http';
-import {typographed} from '@/shared/typography';
+import {typographed} from '../../../shared/typography';
 
 export interface RegistrationData {
     givenName: string;
