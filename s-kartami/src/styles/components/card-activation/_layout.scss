@@ -32,7 +32,7 @@
   &__banner {
     width: 100%;
     aspect-ratio: 736 / 360;
-    background: url('#{config.$public-assets-base}/5000-for-activation-landscape.webp') center / cover no-repeat;
+    background: url('#{config.$public-assets-base}/media/card-activation/5000-for-activation-landscape.webp') center / cover no-repeat;
     border-top-right-radius: 12px;
     border-top-left-radius: 12px;
 
@@ -40,7 +40,7 @@
       aspect-ratio: unset;
       height: 100%;
       border-radius: 12px;
-      background-image: url('#{config.$public-assets-base}/5000-for-activation-portrait.webp');
+      background-image: url('#{config.$public-assets-base}/media/card-activation/5000-for-activation-portrait.webp');
     }
   }
 
@@ -77,8 +77,8 @@
       font-weight: 700;
       font-family: inherit;
       border: 0;
-      -webkit-mask: url('#{config.$public-assets-base}/step-market-shape.svg') center / contain no-repeat;
-      mask: url('#{config.$public-assets-base}/step-market-shape.svg') center / contain no-repeat;
+      -webkit-mask: url('#{config.$public-assets-base}/media/card-activation/step-market-shape.svg') center / contain no-repeat;
+      mask: url('#{config.$public-assets-base}/media/card-activation/step-market-shape.svg') center / contain no-repeat;
     }
 
     [data-step-mark][data-state='current'] {
@@ -99,7 +99,7 @@
     i {
       flex: 1;
       height: 2px;
-      background: url('#{config.$public-assets-base}/steps-divider.svg') center no-repeat;
+      background: url('#{config.$public-assets-base}/media/card-activation/steps-divider.svg') center no-repeat;
     }
   }
 

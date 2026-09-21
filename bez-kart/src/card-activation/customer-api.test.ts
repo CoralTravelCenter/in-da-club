@@ -38,18 +38,18 @@ describe('Customer API', () => {
 
     afterEach(() => vi.unstubAllGlobals());
 
-    it('регистрирует карту с полным телом запроса и принимает оба строковых формата успеха', async () => {
-        for (const success of ['True', 'true']) {
+    it('регистрирует карту с полным телом запроса и принимает строковые fallback успеха', async () => {
+        for (const success of [true, 'True', 'true']) {
             fetchMock.mockResolvedValueOnce(response({result: {isSuccess: success}}));
             await registerCard(registration);
         }
 
-        expect(fetchMock).toHaveBeenCalledTimes(2);
-        expect(fetchMock).toHaveBeenCalledWith('/endpoints/Customer/BonusRegister', {
+        expect(fetchMock).toHaveBeenCalledTimes(3);
+        expect(fetchMock).toHaveBeenCalledWith('/endpoints/Customer/BonusRegister', expect.objectContaining({
             method: 'POST',
             headers: {'content-type': 'application/json'},
             body: JSON.stringify(registration),
-        });
+        }));
     });
 
     it('передаёт номер и код в соответствующие операции', async () => {
@@ -69,11 +69,11 @@ describe('Customer API', () => {
         fetchMock.mockResolvedValueOnce(response({result: bonus}));
 
         await expect(getBonusProfile()).resolves.toEqual(bonus);
-        expect(fetchMock).toHaveBeenCalledWith('/endpoints/Customer/BonusProfile', {
+        expect(fetchMock).toHaveBeenCalledWith('/endpoints/Customer/BonusProfile', expect.objectContaining({
             method: 'POST',
             headers: {'content-type': 'application/json'},
             body: '{}',
-        });
+        }));
     });
 
     it('сообщает об отказе API и HTTP-ошибке', async () => {
@@ -95,6 +95,17 @@ describe('Customer API', () => {
         );
     });
 
+    it('показывает понятную ошибку при некорректном JSON', async () => {
+        fetchMock.mockResolvedValueOnce({
+            ok: true,
+            json: vi.fn().mockRejectedValue(new SyntaxError('invalid JSON')),
+        });
+
+        await expect(sendVerificationCode(registration.mobilePhone)).rejects.toThrow(
+            'Не\u00a0удалось отправить\u00a0код. Проверьте подключение к\u00a0интернету и\u00a0попробуйте ещё раз',
+        );
+    });
+
     it('обновляет только Bonus-поля профиля из нового токена', async () => {
         storage.set('user', JSON.stringify({name: 'Анна', BonusUserId: 1}));
         const payload = btoa(JSON.stringify({name: 'Other name', BonusUserId: 42, BonusLevel: 'Gold'}));
@@ -108,6 +119,14 @@ describe('Customer API', () => {
         fetchMock.mockResolvedValueOnce(response({result: {}}));
         await expect(refreshUser()).resolves.toBe(false);
         expect(storage.has('user')).toBe(false);
+    });
+
+    it('не записывает профиль при повреждённом JWT', async () => {
+        storage.set('user', JSON.stringify({name: 'Анна'}));
+        fetchMock.mockResolvedValueOnce(response({result: {token: 'invalid-token'}}));
+
+        await expect(refreshUser()).resolves.toBe(false);
+        expect(JSON.parse(storage.get('user') ?? '{}')).toEqual({name: 'Анна'});
     });
 
     it('нормализует десятизначный номер', () => {

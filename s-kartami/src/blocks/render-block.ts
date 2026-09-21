@@ -6,18 +6,6 @@ const TOOLTIP_CLOSE_ICON_URL = 'https://b2ccdn.coral.ru/content/cross.svg';
 
 addLockableTarget(document.documentElement);
 
-function appendTextWithLineBreaks(element: HTMLElement, text: string): void {
-    const lines = text.split(/(?:<br\s*\/?>|\r?\n)/gi);
-
-    lines.forEach((line, index) => {
-        if (index > 0) {
-            element.append(document.createElement('br'));
-        }
-
-        element.append(document.createTextNode(line));
-    });
-}
-
 function createTooltip(config: ContentBlockConfig, block: HTMLElement): {
     trigger: HTMLButtonElement;
     content: HTMLDivElement;
@@ -30,10 +18,10 @@ function createTooltip(config: ContentBlockConfig, block: HTMLElement): {
     const body = document.createElement('div');
     const title = document.createElement('strong');
     const text = document.createElement('div');
-    const tooltipId = `bez-kart-tooltip-${config.id}`;
+    const tooltipId = `s-kartami-tooltip-${config.id}`;
     const tooltipTitleId = `${tooltipId}-title`;
 
-    trigger.className = 'bez-kart-tooltip-trigger';
+    trigger.className = 's-kartami-tooltip-trigger';
     trigger.type = 'button';
     trigger.setAttribute('aria-label', 'Показать дополнительную информацию');
     trigger.setAttribute('aria-controls', tooltipId);
@@ -46,12 +34,12 @@ function createTooltip(config: ContentBlockConfig, block: HTMLElement): {
     trigger.append(triggerIcon);
 
     content.id = tooltipId;
-    content.className = 'bez-kart-tooltip__content';
+    content.className = 's-kartami-tooltip__content';
     content.setAttribute('popover', '');
     content.setAttribute('role', 'dialog');
     content.setAttribute('aria-modal', 'false');
     content.setAttribute('aria-labelledby', tooltipTitleId);
-    closeButton.className = 'bez-kart-tooltip__close';
+    closeButton.className = 's-kartami-tooltip__close';
     closeButton.type = 'button';
     closeButton.setAttribute('aria-label', 'Закрыть подсказку');
     closeButton.setAttribute('popovertarget', tooltipId);
@@ -61,11 +49,11 @@ function createTooltip(config: ContentBlockConfig, block: HTMLElement): {
     closeIcon.width = 24;
     closeIcon.height = 24;
     closeButton.append(closeIcon);
-    body.className = 'bez-kart-tooltip__body';
-    title.className = 'bez-kart-tooltip__title';
+    body.className = 's-kartami-tooltip__body';
+    title.className = 's-kartami-tooltip__title';
     title.id = tooltipTitleId;
     title.textContent = config.tooltip?.title ?? '';
-    text.className = 'bez-kart-tooltip__text';
+    text.className = 's-kartami-tooltip__text';
 
     for (const line of config.tooltip?.content ?? []) {
         const paragraph = document.createElement('span');
@@ -91,18 +79,18 @@ function createTooltip(config: ContentBlockConfig, block: HTMLElement): {
     };
 
     content.addEventListener('toggle', () => {
-        const snapList = block.closest<HTMLElement>('.bez-kart-segment__list');
+        const snapList = block.closest<HTMLElement>('.s-kartami-segment__list');
 
         if (content.matches(':popover-open')) {
             positionContent();
             trigger.setAttribute('aria-expanded', 'true');
-            snapList?.classList.add('bez-kart-segment__list--scroll-locked');
+            snapList?.classList.add('s-kartami-segment__list--scroll-locked');
             disablePageScroll(content);
             return;
         }
 
         enablePageScroll(content);
-        snapList?.classList.remove('bez-kart-segment__list--scroll-locked');
+        snapList?.classList.remove('s-kartami-segment__list--scroll-locked');
         trigger.setAttribute('aria-expanded', 'false');
     });
 
@@ -121,8 +109,8 @@ function appendVideo(block: HTMLElement, media: NonNullable<ContentBlockConfig['
     const isSafari = /safari/i.test(navigator.userAgent)
         && !/(chrome|chromium|crios|android|edg|opr|fxios)/i.test(navigator.userAgent);
 
-    block.classList.add('bez-kart-block--video');
-    video.className = 'bez-kart-block__video';
+    block.classList.add('s-kartami-block--video');
+    video.className = 's-kartami-block__video';
     video.src = isSafari ? media.safariSrc ?? media.src : media.src;
     video.autoplay = !reduceMotion;
     video.muted = true;
@@ -131,134 +119,98 @@ function appendVideo(block: HTMLElement, media: NonNullable<ContentBlockConfig['
     video.preload = 'metadata';
     video.tabIndex = -1;
     video.setAttribute('aria-hidden', 'true');
-
-    if (media.poster) {
-        video.poster = media.poster;
-    }
-
+    if (media.poster) video.poster = media.poster;
     block.append(video);
 }
 
-function appendBadge(content: HTMLElement, badge: string): void {
-    const element = document.createElement('span');
-    element.className = 'bez-kart-block__badge';
-    element.textContent = badge;
-    content.append(element);
+function appendTextWithBreaks(element: HTMLElement, text: string): void {
+    text.split(/<br\s*\/?>/i).forEach((part, index) => {
+        if (index > 0) element.append(document.createElement('br'));
+        element.append(document.createTextNode(part));
+    });
 }
 
-function appendHeadingOrValue(content: HTMLElement, config: ContentBlockConfig): void {
-    if (config.title !== undefined) {
-        const title = document.createElement('h3');
-        title.className = 'bez-kart-block__title';
-        title.textContent = config.title;
-        content.append(title);
-        return;
-    }
-
-    const value = document.createElement('span');
-    const quantity = document.createElement('span');
-    value.className = 'bez-kart-block__value';
-    quantity.className = 'bez-kart-block__quantity';
-    quantity.textContent = config.value;
-
-    if (config.valuePrefix) {
-        const prefix = document.createElement('span');
-        prefix.className = 'bez-kart-block__value-prefix';
-        prefix.textContent = config.valuePrefix;
-        value.append(prefix);
-    }
-
-    value.append(quantity);
-    content.append(value);
-}
-
-function appendDescription(content: HTMLElement, description: string): void {
-    const element = document.createElement('p');
-    element.className = 'bez-kart-block__description';
-    appendTextWithLineBreaks(element, description);
-    content.append(element);
-}
-
-function appendAction(
-    content: HTMLElement,
-    action: NonNullable<ContentBlockConfig['action']>,
-    onActivateCard: () => void | Promise<void>,
-): void {
-    const button = document.createElement('coral-button');
-    button.className = 'bez-kart-block__action';
-    button.setAttribute('trait', 'vivid');
-    button.setAttribute('shape', 'pill');
-
-    const link = document.createElement(action.type === 'referral-link' ? 'a' : 'button');
-    link.textContent = action.label;
-
-    if (link instanceof HTMLAnchorElement && action.type === 'referral-link') {
-        link.href = action.href;
-        link.target = '_blank';
-        link.rel = 'noopener';
-    } else if (link instanceof HTMLButtonElement) {
-        link.type = 'button';
-        link.addEventListener('click', () => {
-            void onActivateCard();
-        });
-    }
-
-    button.append(link);
-    content.append(button);
-}
-
-function wrapContentInLink(content: HTMLElement, href: string): void {
-    const link = document.createElement('a');
-    link.className = 'bez-kart-block__link';
-    link.href = href;
-    link.append(...Array.from(content.childNodes));
-    content.append(link);
-}
-
-export function renderBlock(
-    config: ContentBlockConfig,
-    onActivateCard: () => void | Promise<void>,
-): HTMLElement {
-    const block = document.createElement(config.href && !config.tooltip ? 'a' : 'article');
-    block.className = 'bez-kart-block';
-    block.dataset.blockId = config.id;
-
-    if (block instanceof HTMLAnchorElement && config.href) {
-        block.href = config.href;
-    }
-
-    if (config.media?.type === 'video') {
-        appendVideo(block, config.media);
-    }
-
+export function renderBlock(config: ContentBlockConfig): HTMLElement {
+    const block = document.createElement('article');
     const content = document.createElement('div');
-    content.className = 'bez-kart-block__content';
-
-    if (config.badge) {
-        appendBadge(content, config.badge);
-    }
-
-    appendHeadingOrValue(content, config);
-
-    if (config.description) {
-        appendDescription(content, config.description);
-    }
-
-    if (config.action && !config.href) {
-        appendAction(content, config.action, onActivateCard);
-    }
-
-    if (config.href && config.tooltip) {
-        wrapContentInLink(content, config.href);
-    }
-
-    if (config.tooltip) {
-        const tooltip = createTooltip(config, block);
-
-        content.append(tooltip.trigger);
-        block.append(content, tooltip.content);
-    } else {
+    block.className = 's-kartami-block';
+    block.dataset.blockId = config.id;
+    content.className = 's-kartami-block__content';
+    if (config.isLoading) {
+        const heading = document.createElement('span');
+        const text = document.createElement('span');
+        block.classList.add('s-kartami-block--loading');
+        block.setAttribute('aria-busy', 'true');
+        heading.className = 's-kartami-block__skeleton s-kartami-block__skeleton--heading';
+        text.className = 's-kartami-block__skeleton s-kartami-block__skeleton--text';
+        content.append(heading, text);
         block.append(content);
+        return block;
     }
+    if (config.media?.type === 'video') appendVideo(block, config.media);
+    if (config.badge) {
+        const badge = document.createElement('span');
+        badge.className = 's-kartami-block__badge';
+        badge.textContent = config.badge;
+        block.dataset.cardLevel = config.badge.toLowerCase();
+        content.append(badge);
+    }
+    if (config.title) {
+        const title = document.createElement('h3');
+        title.className = 's-kartami-block__title';
+        const appendAccent = (): void => {
+            if (!config.titleAccent) return;
+            const accent = document.createElement('span');
+            accent.className = 's-kartami-block__title-accent';
+            accent.textContent = config.titleAccent;
+            title.append(accent);
+        };
+        if (!config.titleAccentAfter) appendAccent();
+        appendTextWithBreaks(title, config.title);
+        if (config.titleAccentAfter) appendAccent();
+        content.append(title);
+    } else if (config.value) {
+        const value = document.createElement('span');
+        const quantity = document.createElement('span');
+        value.className = 's-kartami-block__value';
+        quantity.className = 's-kartami-block__quantity';
+        quantity.textContent = config.value;
+        if (config.valuePrefix) {
+            const prefix = document.createElement('span');
+            prefix.className = 's-kartami-block__value-prefix';
+            prefix.textContent = config.valuePrefix;
+            value.append(prefix);
+        }
+        value.append(quantity);
+        content.append(value);
+    }
+    if (config.description) {
+        const description = document.createElement('p');
+        description.className = 's-kartami-block__description';
+        appendTextWithBreaks(description, config.description);
+        content.append(description);
+    }
+    if (config.image) {
+        const image = document.createElement('img');
+        image.className = 's-kartami-block__image';
+        image.src = config.image.src;
+        image.alt = config.image.alt;
+        content.append(image);
+    }
+    if (config.action) {
+        const action = document.createElement('coral-button');
+        const link = document.createElement('a');
+        action.className = 's-kartami-block__action';
+        action.setAttribute('trait', 'vivid');
+        action.setAttribute('shape', 'pill');
+        link.href = config.action.href;
+        link.textContent = config.action.label;
+        action.append(link);
+        content.append(action);
+    }
+    const tooltip = config.tooltip ? createTooltip(config, block) : null;
+    if (tooltip) content.append(tooltip.trigger);
+    block.append(content);
+    if (tooltip) block.append(tooltip.content);
     return block;
 }

@@ -1,74 +1,43 @@
-# bez-kart
+# s-kartami
 
-Общее ядро собирается в четыре скрипта для четырёх встроенных блоков Mindbox.
-Сегмент подставляется автоматически во время сборки, поэтому вручную менять вызов
-`bootstrap` не нужно.
+Четыре Mindbox-скрипта для клиентов с картой CoralBonus:
+
+- `inactive` — неактивные клиенты с 0 поездок;
+- `one-trip` — клиенты с 1 поездкой;
+- `two-trips` — клиенты с 2 поездками;
+- `three-plus` — клиенты с 3 и более поездками.
+
+Имя читается из профиля `user` в `localStorage`. При наличии `BonusUserId`
+актуальный уровень карты запрашивается через `POST /endpoints/Customer/BonusProfile`
+из поля `result.cardType`. Поле `BonusLevel` из локального профиля используется как
+резерв, если запрос недоступен. Поддерживаются уровни Silver, Gold и Platinum.
 
 ## Контракт с Mindbox
-
-На целевой странице разместите пустой контейнер:
 
 ```html
 <div data-bez-kart-root></div>
 ```
 
-Команда `npm run build` создаёт четыре варианта:
+`npm run build` создаёт HTML-скрипт для каждого сегмента в `dist/<segment>/s-kartami.html`.
+Для локального просмотра количество поездок можно задать параметром `?ride=0..3`:
 
-```text
-dist/new-client/bez-kart.user.js
-dist/regular-1/bez-kart.user.js
-dist/regular-2/bez-kart.user.js
-dist/regular-3/bez-kart.user.js
-```
+- `?ride=0` — неактивный клиент;
+- `?ride=1` — одна поездка;
+- `?ride=2` — две поездки;
+- `?ride=3` — три и более поездки.
 
-В каждый встроенный блок Mindbox поместите файл соответствующего сегмента.
-Mindbox отвечает за таргетинг, а запущенный скрипт уже содержит правильный
-`segmentId` и рендерит конфигурацию в первый найденный `data-bez-kart-root`.
+Параметр работает только в dev-режиме. Старый `?cb_client=0..3` поддерживается
+для совместимости.
 
-Отдельный вариант можно собрать, например, командой `npm run build:regular-2`.
+## Медиа
 
-## Типографика
+Медиа клиентских блоков разделены по сегментам в `public/media/clients`:
 
-Весь пользовательский текст перед вставкой в DOM обрабатывается пакетом
-`typograf` с локалями `ru` и `en-US`. Используйте `typographText` из
-`src/shared/typography.ts` для новых текстовых узлов и accessibility-атрибутов.
-Обработка работает одинаково при `npm run dev` и `npm run build`.
+- `shared` — общие изображения;
+- `inactive` — клиент без поездок;
+- `one-trip` — одна поездка;
+- `two-trips` — две поездки;
+- `three-plus` — три и более поездки.
 
-## Локальные изображения
-
-Изображения и видео храните непосредственно в папке `public`. После запуска `npm run dev`
-они доступны, например, по адресу
-`http://localhost:5173/cashback.png`.
-
-Для фона используйте SCSS-миксин:
-
-```scss
-@use 'abstracts/mixins' as mixins;
-
-.bez-kart-block--bonus {
-  @include mixins.public-background('cashback.png', contain, right center);
-}
-```
-
-Базовый адрес находится в `src/styles/abstracts/_config.scss`. Для production его
-нужно заменить на адрес CDN или статического хоста, доступного пользователям.
-
-## Scroll snap
-
-Миксин `scroll-snap` настраивает контейнер и его непосредственных потомков:
-
-```scss
-@use 'abstracts/mixins' as mixins;
-
-.bez-kart-slider {
-  @include mixins.scroll-snap(
-    $gap: 8px,
-    $padding: 0 16px,
-    $hide-scrollbar: true
-  );
-}
-```
-
-Для вертикальной прокрутки передайте `$direction: y`. Если snap-элементы не
-являются непосредственными потомками, задайте `$item-selector`, например
-`$item-selector: '.bez-kart-slide'`.
+Изображения сценария активации карты находятся отдельно в
+`public/media/card-activation`.

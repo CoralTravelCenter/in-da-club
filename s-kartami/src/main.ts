@@ -11,12 +11,15 @@ function mount(): boolean {
     return false;
   }
 
-  const clientGroup = import.meta.env.DEV ? new URLSearchParams(window.location.search).get('cb_client') : null;
-  const segmentId = clientGroup !== null && /^[0-3]$/.test(clientGroup)
-    ? SEGMENT_IDS[Number(clientGroup)]
+  const searchParams = new URLSearchParams(window.location.search);
+  const rideCount = import.meta.env.DEV
+    ? searchParams.get('ride') ?? searchParams.get('cb_client')
+    : null;
+  const segmentId = rideCount !== null && /^[0-3]$/.test(rideCount)
+    ? SEGMENT_IDS[Number(rideCount)]
     : __MINDBOX_SEGMENT__;
 
-  bootstrap({
+  void bootstrap({
     container,
     segmentId,
   });

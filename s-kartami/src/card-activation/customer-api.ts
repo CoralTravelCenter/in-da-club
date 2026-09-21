@@ -52,7 +52,7 @@ export function normalizePhone(value: string): string {
 }
 
 export async function registerCard(data: RegistrationData): Promise<void> {
-    const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
+    const response = await postJson<{ result?: { isSuccess?: boolean | 'True' | 'true'; errorMessage?: string } }>(
         '/endpoints/Customer/BonusRegister', data,
     );
     if (!isSuccess(response.result?.isSuccess)) {
@@ -61,7 +61,7 @@ export async function registerCard(data: RegistrationData): Promise<void> {
 }
 
 export async function sendVerificationCode(mobilePhone: string): Promise<void> {
-    const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
+    const response = await postJson<{ result?: { isSuccess?: boolean | 'True' | 'true'; errorMessage?: string } }>(
         '/endpoints/Customer/BonusSendVerificationCode', {mobilePhone}, typographed`Не удалось отправить код. Проверьте подключение к интернету и попробуйте ещё раз`,
     );
     if (!isSuccess(response.result?.isSuccess)) {
@@ -70,7 +70,7 @@ export async function sendVerificationCode(mobilePhone: string): Promise<void> {
 }
 
 export async function activateCard(mobilePhone: string, activationCode: string): Promise<void> {
-    const response = await postJson<{ result?: { isSuccess?: unknown; errorMessage?: string } }>(
+    const response = await postJson<{ result?: { isSuccess?: boolean | 'True' | 'true'; errorMessage?: string } }>(
         '/endpoints/Customer/BonusActivation', {mobilePhone, activationCode}, typographed`Неверный код или срок его действия истёк. Попробуйте ещё раз`,
     );
     if (!isSuccess(response.result?.isSuccess)) {

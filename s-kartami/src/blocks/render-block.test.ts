@@ -1,122 +1,89 @@
 // @vitest-environment jsdom
-
-import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
-import type {ContentBlockConfig} from '@/segments/segment.types';
+import {describe, expect, it} from 'vitest';
 import {renderBlock} from './render-block';
 
 describe('renderBlock', () => {
-    beforeEach(() => {
-        document.body.replaceChildren();
-        vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({matches: false}));
-    });
-
-    afterEach(() => vi.unstubAllGlobals());
-
-    it('создаёт ссылку с заголовком и переносами в описании', () => {
-        const config: ContentBlockConfig = {
-            id: 'manager',
-            title: 'Личный менеджер',
-            description: 'Первая строка<br>Вторая строка',
-            href: '/account/',
-        };
-
-        const block = renderBlock(config, vi.fn());
-
-        expect(block).toBeInstanceOf(HTMLAnchorElement);
-        expect((block as HTMLAnchorElement).getAttribute('href')).toBe('/account/');
-        expect(block.querySelectorAll('a')).toHaveLength(0);
-        expect(block.querySelector('.bez-kart-block__title')?.textContent).toContain('Личный менеджер');
-        expect(block.querySelector('.bez-kart-block__description')?.innerHTML).toContain('<br>');
-    });
-
-    it('создаёт кнопку действия и вызывает переданный обработчик', () => {
-        const onActivateCard = vi.fn();
-        const config: ContentBlockConfig = {
-            id: 'club',
-            value: '5000',
-            valuePrefix: 'до',
-            description: 'Баллы',
-            action: {type: 'activate-card', label: 'Оформить карту'},
-        };
-
-        const block = renderBlock(config, onActivateCard);
-        const button = block.querySelector<HTMLButtonElement>('button');
-        button?.click();
-
-        expect(block.tagName).toBe('ARTICLE');
-        expect(block.querySelector('.bez-kart-block__value-prefix')?.textContent).toContain('до');
-        expect(onActivateCard).toHaveBeenCalledOnce();
-    });
-
-    it('создаёт реферальную ссылку без вызова обработчика формы', () => {
-        const onActivateCard = vi.fn();
-        const href = 'https://coralbonus.ru/registration?promo=test';
-        const config: ContentBlockConfig = {
-            id: 'club',
-            title: 'Клуб',
-            description: '',
-            action: {type: 'referral-link', label: 'Оформить карту', href},
-        };
-
-        const block = renderBlock(config, onActivateCard);
-        const link = block.querySelector<HTMLAnchorElement>('.bez-kart-block__action a');
-        link?.click();
-
-        expect(link?.href).toBe(href);
-        expect(link?.target).toBe('_blank');
-        expect(link?.rel).toBe('noopener');
-        expect(block.querySelector('.bez-kart-block__action button')).toBeNull();
-        expect(onActivateCard).not.toHaveBeenCalled();
-    });
-
-    it('оставляет кнопку подсказки вне ссылки', () => {
-        const config: ContentBlockConfig = {
+    it('renders a skeleton instead of API-dependent content while loading', () => {
+        const block = renderBlock({
             id: 'cashback',
-            title: 'Кешбэк',
-            description: 'Описание',
-            href: '/bonus/',
-            tooltip: {title: 'Подробнее', content: ['Условие']},
-        };
+            isLoading: true,
+            value: '3%',
+            description: 'Кешбэк',
+        });
 
-        const block = renderBlock(config, vi.fn());
-
-        expect(block.tagName).toBe('ARTICLE');
-        expect(block.querySelector('.bez-kart-block__link')).toBeTruthy();
-        expect(block.querySelector('.bez-kart-block__link button')).toBeNull();
-        expect(block.querySelector('.bez-kart-tooltip-trigger')).toBeTruthy();
-        expect(block.querySelector('[role="dialog"]')).toBeTruthy();
+        expect(block.classList.contains('s-kartami-block--loading')).toBe(true);
+        expect(block.getAttribute('aria-busy')).toBe('true');
+        expect(block.querySelectorAll('.s-kartami-block__skeleton')).toHaveLength(2);
+        expect(block.textContent).toBe('');
     });
 
-    it('отключает автозапуск видео при запросе уменьшенного движения', () => {
-        vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({matches: true}));
-        const config: ContentBlockConfig = {
-            id: 'club',
-            title: 'Клуб',
-            description: 'Описание',
-            media: {type: 'video', src: '/club.mp4', poster: '/poster.jpg'},
-        };
-
-        const video = renderBlock(config, vi.fn()).querySelector('video');
-
-        expect(video?.autoplay).toBe(false);
-        expect(video?.muted).toBe(true);
-        expect(video?.getAttribute('poster')).toBe('/poster.jpg');
+    it('renders card level and image', () => {
+        const block = renderBlock({id: 'card-level', badge: 'Gold', description: 'Уровень карты', image: {src: '/gold.webp', alt: 'Gold card'}});
+        expect(block.dataset.cardLevel).toBe('gold');
+        expect(block.querySelector('.s-kartami-block__badge')?.textContent).toBe('Gold');
+        expect(block.querySelector<HTMLImageElement>('img')?.alt).toBe('Gold card');
     });
 
-    it('использует MOV в Safari и WebM в остальных браузерах', () => {
-        const config: ContentBlockConfig = {
-            id: 'club',
-            title: 'Клуб',
-            description: 'Описание',
-            media: {type: 'video', src: '/club.webm', safariSrc: '/club.mov'},
-        };
+    it('renders value prefix without HTML interpolation', () => {
+        const block = renderBlock({id: 'cashback', value: '3%', valuePrefix: 'до', description: 'Кешбэк'});
+        expect(block.querySelector('.s-kartami-block__value')?.textContent).toBe('до3%');
+    });
 
-        vi.stubGlobal('navigator', {userAgent: 'Mozilla/5.0 Version/18.0 Safari/605.1.15'});
-        const safariVideo = renderBlock(config, vi.fn()).querySelector('video');
-        expect(safariVideo?.getAttribute('src')).toBe('/club.mov');
+    it('renders explicit line breaks without interpreting other HTML', () => {
+        const block = renderBlock({
+            id: 'greeting',
+            title: 'Первая строка<br>Вторая строка',
+            description: 'Описание<br><strong>текст</strong>',
+        });
 
-        vi.stubGlobal('navigator', {userAgent: 'Mozilla/5.0 Chrome/140.0.0.0 Safari/537.36'});
-        const chromeVideo = renderBlock(config, vi.fn()).querySelector('video');
-        expect(chromeVideo?.getAttribute('src')).toBe('/club.webm');
+        expect(block.querySelectorAll('.s-kartami-block__title br')).toHaveLength(1);
+        expect(block.querySelectorAll('.s-kartami-block__description br')).toHaveLength(1);
+        expect(block.querySelector('.s-kartami-block__description strong')).toBeNull();
+        expect(block.querySelector('.s-kartami-block__description')?.textContent).toBe('Описание<strong>текст</strong>');
+    });
+
+    it('renders a trailing title accent after an explicit line break', () => {
+        const block = renderBlock({
+            id: 'greeting',
+            title: 'Поздравляем,<br>',
+            titleAccent: 'Анна!',
+            titleAccentAfter: true,
+            description: '',
+        });
+        const title = block.querySelector('.s-kartami-block__title');
+
+        expect(title?.innerHTML).toBe('Поздравляем,<br><span class="s-kartami-block__title-accent">Анна!</span>');
+    });
+
+    it('renders an action with the Coral custom element', () => {
+        const block = renderBlock({
+            id: 'greeting',
+            title: 'Скучаем по вам',
+            description: '',
+            action: {label: 'Выбрать тур', href: '/'},
+        });
+        const action = block.querySelector('coral-button');
+        const link = action?.querySelector<HTMLAnchorElement>('a');
+
+        expect(action?.getAttribute('trait')).toBe('vivid');
+        expect(action?.getAttribute('shape')).toBe('pill');
+        expect(link?.getAttribute('href')).toBe('/');
+    });
+
+    it('renders promotion details as an accessible popover', () => {
+        const block = renderBlock({
+            id: 'birthday-bonus',
+            value: '10 000',
+            description: 'Бонусов на день рождения',
+            tooltip: {title: 'Условия акции', content: ['Срок действия: 104 дня']},
+        });
+        const trigger = block.querySelector<HTMLButtonElement>('.s-kartami-tooltip-trigger');
+        const tooltip = block.querySelector<HTMLElement>('.s-kartami-tooltip__content');
+
+        expect(trigger?.getAttribute('popovertarget')).toBe('s-kartami-tooltip-birthday-bonus');
+        expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+        expect(tooltip?.hasAttribute('popover')).toBe(true);
+        expect(tooltip?.getAttribute('role')).toBe('dialog');
+        expect(tooltip?.textContent).toContain('Срок действия: 104 дня');
     });
 });

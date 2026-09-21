@@ -1,76 +1,21 @@
-export const SEGMENT_IDS = [
-  'new-client',
-  'regular-1',
-  'regular-2',
-  'regular-3',
-] as const;
-
+export const SEGMENT_IDS = ['inactive', 'one-trip', 'two-trips', 'three-plus'] as const;
 export type SegmentId = (typeof SEGMENT_IDS)[number];
+export type CardLevel = 'Silver' | 'Gold' | 'Platinum';
 
-interface ContentBlockBaseConfig {
-  id: string;
-  description: string;
-  tooltip?: {
-    title: string;
-    content: string[];
-  };
-  href?: string;
-  badge?: string;
-  action?:
-    | {
-        label: string;
-        type: 'activate-card';
-      }
-    | {
-        label: string;
-        type: 'referral-link';
-        href: string;
-      };
-  media?: {
-    type: 'video';
-    src: string;
-    safariSrc?: string;
-    poster?: string;
-  };
-}
-
-type ContentBlockTextConfig =
-  | {
-      title: string;
-      value?: never;
-    }
-  | {
-      title?: never;
-      value: string;
-      valuePrefix?: string;
-    };
-
-export type ContentBlockConfig = ContentBlockBaseConfig & ContentBlockTextConfig;
-
-export interface SegmentConfig {
-  id: SegmentId;
-  ariaLabel: string;
-  blocks: ContentBlockConfig[];
-}
-
-export interface SegmentContentConfig {
-  ariaLabel: string;
-  bonus: {
-    title: string;
+export interface CustomerContext { displayName: string; cardLevel: CardLevel; }
+export interface ContentBlockConfig {
+    id: string;
+    isLoading?: boolean;
+    title?: string;
+    titleAccent?: string;
+    titleAccentAfter?: boolean;
+    value?: string;
+    valuePrefix?: string;
     description: string;
-  };
-  club: {
-    level: string;
-    action: NonNullable<ContentBlockConfig['action']>;
-    media: {
-      type: 'video';
-      src: string;
-      safariSrc?: string;
-      poster?: string;
-    };
-  };
-  cashback: {
-    percent: number;
-    description: string;
-  };
+    badge?: string;
+    image?: { src: string; alt: string };
+    media?: {type: 'video'; src: string; safariSrc?: string; poster?: string};
+    action?: {label: string; href: string};
+    tooltip?: { title: string; content: string[] };
 }
+export interface SegmentConfig { id: SegmentId; ariaLabel: string; blocks: ContentBlockConfig[]; }

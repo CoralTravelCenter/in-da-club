@@ -12,7 +12,11 @@ const DIALOG_ID = 'bez-kart-card-activation';
 const knownCities = new Set<string>(cities);
 
 function assetUrl(path: string): string {
-    return `${__PUBLIC_ASSETS_BASE__}/${path}`;
+    return `${__PUBLIC_ASSETS_BASE__}/media/card-activation/${path}`;
+}
+
+function clientAssetUrl(path: string): string {
+    return `${__PUBLIC_ASSETS_BASE__}/media/clients/shared/${path}`;
 }
 
 function displayBirthdate(value?: string): string {
@@ -348,7 +352,7 @@ function appendCard(stage: HTMLElement, bonus: BonusProfile, profile: UserProfil
         'card-pt-comp.webp',
     ][Number.isInteger(level) && level >= 1 && level <= 3 ? level - 1 : Math.max(0, ['Silver', 'Gold', 'Platinum'].indexOf(cardType))];
     const image = document.createElement('img');
-    image.src = assetUrl(visual);
+    image.src = clientAssetUrl(visual);
     image.alt = `Карта CoralBonus ${cardType}`;
     const number = document.createElement('span');
     const digits = (bonus.cardNumber ?? '').replace(/\D/g, '');

@@ -1,7 +1,7 @@
 @use '../abstracts/mixins' as mixins;
 @use '../abstracts/tokens' as tokens;
 
-.bez-kart-block {
+.s-kartami-block {
   position: relative;
   display: block;
   height: 100%;
@@ -15,156 +15,462 @@
   @media (min-width: tokens.$breakpoint-desktop) {
     padding: tokens.$space-xl;
   }
+}
 
-  &--video {
-    overflow: hidden;
-    padding: 0;
+.s-kartami-segment[data-client='active'][data-ride='1'] .s-kartami-block {
+  background-color: tokens.$color-client-ride-1-background;
+}
 
-    > .bez-kart-block__content {
-      position: relative;
-      z-index: 1;
-      align-items: flex-start;
-      padding: tokens.$space-md;
+.s-kartami-segment[data-client='active'][data-ride='2'] .s-kartami-block {
+  background-color: tokens.$color-client-ride-2-background;
+}
 
-      @media (min-width: tokens.$breakpoint-desktop) {
-        padding: tokens.$space-xl;
-      }
-    }
+.s-kartami-segment[data-client='active'][data-ride='3'] .s-kartami-block {
+  background-color: tokens.$color-client-ride-3-plus-background;
+}
+
+.s-kartami-block--video {
+  overflow: hidden;
+  padding: 0;
+}
+
+.s-kartami-block--video > .s-kartami-block__content {
+  position: relative;
+  z-index: 1;
+  align-items: flex-start;
+  padding: tokens.$space-md;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    padding: tokens.$space-xl;
   }
+}
 
-  &__video {
-    position: absolute;
-    right: 0;
-    bottom: -4%;
-    width: min(55%, 300px);
-    height: min(55%, 300px);
-    object-fit: cover;
+.s-kartami-block__video {
+  position: absolute;
+  right: 0;
+  bottom: -4%;
+  width: min(55%, 300px);
+  height: min(55%, 300px);
+  object-fit: cover;
 
-    @media (min-width: tokens.$breakpoint-desktop) {
-      bottom: 0;
-      width: min(55%, 200px);
-      height: min(55%, 200px);
-    }
+  @media (min-width: tokens.$breakpoint-desktop) {
+    bottom: 0;
   }
+}
 
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: tokens.$space-md;
-    height: 100%;
-  }
+.s-kartami-block__content {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-md;
+  height: 100%;
+}
 
-  &__link {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: tokens.$space-md;
-    min-width: 0;
-    color: inherit;
-    text-decoration: none;
-  }
+.s-kartami-block__link {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: tokens.$space-md;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
 
-  &__title,
-  &__value {
-    color: var(--Text-color_Text_Dark, #000);
-    font-size: 24px;
-    font-weight: var(--font-font_Weight_Semibold, 600);
-    line-height: 28px;
-  }
+.s-kartami-block__title,
+.s-kartami-block__value {
+  color: var(--Text-color_Text_Dark, #000);
+  font-size: 24px;
+  font-weight: var(--font-font_Weight_Semibold, 600);
+  line-height: 28px;
+}
 
-  &__value {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    width: fit-content;
-    padding: 9px 12px;
-    background: rgba(210, 233, 251, 0.8);
-    border-radius: 16px;
-    color: #E84E0F;
-  }
+.s-kartami-block__value,
+.s-kartami-block__badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  padding: 9px 12px;
+  background: rgba(210, 233, 251, 0.8);
+  border-radius: 16px;
+  color: #E84E0F;
+}
 
-  &__value-prefix {
-    font-size: 24px;
+.s-kartami-segment[data-client='active'] .s-kartami-block__value,
+.s-kartami-segment[data-client='active'] .s-kartami-block__badge {
+  background: tokens.$color-surface;
+}
+
+.s-kartami-segment[data-client='active'] .s-kartami-block__value {
+  color: tokens.$color-client-accent;
+}
+
+.s-kartami-block__value-prefix {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.s-kartami-block__quantity {
+  font-size: 38px;
+  line-height: 1;
+}
+
+.s-kartami-segment[data-client='active'][data-ride='3'] {
+  .s-kartami-block__title,
+  .s-kartami-block__quantity {
+    font-family: 'Trajan Pro 3', serif;
     font-weight: 400;
-    line-height: 1;
   }
 
-  &__quantity {
-    font-size: 38px;
-    line-height: 1;
+  .s-kartami-block__value {
+    background: linear-gradient(329deg, #fff -60.42%, #e1e1e1 -3.11%, #fff 58.41%, #e1e1e1 108.13%);
   }
 
-  &__description {
-    font-size: 16px;
-    line-height: 20px;
+  .s-kartami-block__badge {
+    background:
+      linear-gradient(
+        145deg,
+        rgb(158 137 118 / 0.12) 26.53%,
+        rgb(246 208 171 / 0.12) 54.11%,
+        rgb(196 152 111 / 0.12) 72.91%,
+        rgb(157 119 78 / 0.12) 79.56%,
+        rgb(78 38 0 / 0.12) 96.06%
+      ),
+      var(--Base-color_Base_Light, #fff);
+  }
+}
+
+.s-kartami-block__description {
+  font-size: 16px;
+  line-height: 20px;
+  max-width: 60%;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    max-width: 80%;
+  }
+}
+
+.s-kartami-block__badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+[data-card-level='silver'] .s-kartami-block__badge {
+  color: #72777b;
+}
+
+[data-card-level='gold'] .s-kartami-block__badge {
+  color: #bd7d24;
+}
+
+[data-card-level='platinum'] .s-kartami-block__badge {
+  color: #a58b72;
+}
+
+[data-card-level] .s-kartami-block__content {
+  display: grid;
+  grid-template-areas:
+    'badge image'
+    'description image';
+  grid-template-columns: minmax(0, 1fr) minmax(0, 44%);
+  grid-template-rows: auto auto;
+  column-gap: tokens.$space-md;
+}
+
+[data-card-level] .s-kartami-block__badge {
+  position: static;
+  grid-area: badge;
+  align-self: start;
+}
+
+[data-card-level] .s-kartami-block__description {
+  grid-area: description;
+  align-self: start;
+  max-width: none;
+}
+
+[data-card-level] .s-kartami-block__image {
+  grid-area: image;
+  align-self: center;
+  justify-self: end;
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.s-kartami-block__title-accent {
+  color: tokens.$color-client-accent;
+}
+
+.s-kartami-block--loading {
+  background-image: none;
+}
+
+.s-kartami-block__skeleton {
+  display: block;
+  overflow: hidden;
+  background: linear-gradient(90deg, #e6eef4 25%, #f4f8fb 50%, #e6eef4 75%);
+  background-size: 200% 100%;
+  border-radius: 12px;
+  animation: s-kartami-skeleton 1.4s ease-in-out infinite;
+}
+
+.s-kartami-block__skeleton--heading {
+  width: min(55%, 180px);
+  height: 56px;
+}
+
+.s-kartami-block__skeleton--text {
+  width: min(70%, 240px);
+  height: 20px;
+}
+
+@keyframes s-kartami-skeleton {
+  from {
+    background-position: 200% 0;
   }
 
-  &__badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
+  to {
+    background-position: -200% 0;
   }
+}
 
-  &[data-block-id='cashback'] {
+.s-kartami-block[data-block-id='cashback'] {
+  @include mixins.public-background(
+          'media/clients/shared/cashback.webp',
+          min(45%, 180px) auto,
+          right bottom
+  );
+}
+
+@media (min-width: tokens.$breakpoint-desktop) {
+  .s-kartami-block[data-block-id='cashback'] {
     @include mixins.public-background(
-            'cashback.webp',
-            min(45%, 180px) auto,
-            right bottom
+            'media/clients/shared/cashback.webp',
+            min(30%, 180px) auto,
+            calc(100% - 32px) 0%
     );
-
-    @media (min-width: tokens.$breakpoint-desktop) {
-      @include mixins.public-background(
-              'cashback.webp',
-              min(30%, 180px) auto,
-              calc(100% - 32px) 30%
-      );
-    }
   }
+}
 
-  &[data-block-id='birthday-bonus'] {
+.s-kartami-block[data-block-id='birthday-bonus'] {
+  @include mixins.public-background(
+          'media/clients/shared/birthday.webp',
+          auto 100%,
+          right bottom
+  );
+
+  @media (min-width: tokens.$breakpoint-desktop) {
     @include mixins.public-background(
-            'birthday.webp',
+            'media/clients/shared/birthday-d.webp',
             auto 100%,
             right bottom
     );
-
-    @media (min-width: tokens.$breakpoint-desktop) {
-      @include mixins.public-background(
-              'birthday-d.webp',
-              auto 100%,
-              right bottom
-      );
-    }
   }
+}
 
-  &[data-block-id='welcome-bonus'] {
+.s-kartami-block[data-block-id='welcome-bonus'] {
+  @include mixins.public-background(
+          'media/clients/inactive/hello-bonus.webp',
+          auto 100%,
+          right bottom
+  );
+}
+
+.s-kartami-block[data-block-id='private-sales'] {
+  @include mixins.public-background(
+          'media/clients/shared/closed-promo.webp',
+          auto 70%,
+          right bottom
+  );
+
+  @media (min-width: tokens.$breakpoint-desktop) {
     @include mixins.public-background(
-            'hello-bonus.webp',
+            'media/clients/shared/closed-promo-d.webp',
+            auto 60%,
+            right bottom
+    );
+  }
+}
+
+.s-kartami-block[data-block-id='manager'] {
+  @include mixins.public-background(
+          'media/clients/shared/manager.webp',
+          auto 65%,
+          right bottom
+  );
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    @include mixins.public-background(
+            'media/clients/shared/manager.webp',
+            auto 80%,
+            right bottom
+    );
+  }
+}
+
+.s-kartami-segment[data-client='active'][data-ride='1'] {
+  .s-kartami-block[data-block-id='birthday-bonus'] {
+    @include mixins.public-background(
+            'media/clients/one-trip/present.png',
             auto 100%,
             right bottom
     );
   }
 
-  &[data-block-id='private-sales'] {
+  .s-kartami-block[data-block-id='cashback'] {
     @include mixins.public-background(
-            'closed-promo.webp',
+            'media/clients/one-trip/cashback.png',
+            auto 85%,
+            right bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='club-launch'] {
+    @include mixins.public-background(
+            'media/clients/one-trip/launch.png',
             auto 70%,
             right bottom
     );
-
-    @media (min-width: tokens.$breakpoint-desktop) {
-      @include mixins.public-background(
-              'closed-promo-d.webp',
-              auto 60%,
-              right bottom
-      );
-    }
   }
 
-  &[data-block-id='manager'] {
+  .s-kartami-block[data-block-id='travel-more'] {
     @include mixins.public-background(
-            'manager.webp',
-            auto 65%,
+            'media/clients/one-trip/stars.png',
+            80% auto,
+            right bottom
+    );
+  }
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    .s-kartami-block[data-block-id='club-launch'] {
+      background-size: auto 100%;
+    }
+
+    .s-kartami-block[data-block-id='travel-more'] {
+      background-position: center bottom;
+      background-size: 100% auto;
+    }
+  }
+}
+
+.s-kartami-segment[data-client='active'][data-ride='2'] {
+  .s-kartami-block[data-block-id='balance'] {
+    @include mixins.public-background(
+            'media/clients/two-trips/balance.png',
+            cover,
+            center bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='cashback'] {
+    @include mixins.public-background(
+            'media/clients/two-trips/cashback.png',
+            auto 75%,
+            right center
+    );
+  }
+
+  .s-kartami-block[data-block-id='club-launch'] {
+    @include mixins.public-background(
+            'media/clients/two-trips/club-launch.png',
+            auto 90%,
+            right bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='birthday-bonus'] {
+    @include mixins.public-background(
+            'media/clients/two-trips/birthday-bonus.png',
+            auto 95%,
+            right bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='manager'] {
+    @include mixins.public-background(
+            'media/clients/two-trips/manager.png',
+            auto 90%,
+            right bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='private-sales'] {
+    @include mixins.public-background(
+            'media/clients/two-trips/private-sales.png',
+            auto 95%,
+            right bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='travel-more'] {
+    @include mixins.public-background(
+            'media/clients/two-trips/travel-more.png',
+            auto 90%,
+            right bottom
+    );
+  }
+}
+
+.s-kartami-segment[data-client='active'][data-ride='3'] {
+  .s-kartami-block[data-block-id='balance'] {
+    @include mixins.public-background(
+            'media/clients/three-plus/balance.png',
+            100% auto,
+            center bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='cashback'] {
+    @include mixins.public-background(
+            'media/clients/three-plus/cashback.png',
+            auto 75%,
+            right center
+    );
+  }
+
+  .s-kartami-block[data-block-id='club-launch'] {
+    @include mixins.public-background(
+            'media/clients/three-plus/club-launch.png',
+            auto 90%,
+            right bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='birthday-bonus'] {
+    @include mixins.public-background(
+            'media/clients/three-plus/birthday-bonus.png',
+            auto 95%,
+            right bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='manager'] {
+    @include mixins.public-background(
+            'media/clients/three-plus/manager.png',
+            auto 90%,
+            right bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='private-sales'] {
+    @include mixins.public-background(
+            'media/clients/three-plus/private-sales.png',
+            auto 95%,
+            right bottom
+    );
+  }
+
+  .s-kartami-block[data-block-id='travel-more'] {
+    @include mixins.public-background(
+            'media/clients/three-plus/travel-more.png',
+            auto 90%,
             right bottom
     );
   }

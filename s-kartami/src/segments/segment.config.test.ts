@@ -1,22 +1,46 @@
 import {describe, expect, it} from 'vitest';
-import {SEGMENT_CONTENT} from './segment.config';
+import {getSegmentConfig} from './segment.config';
 
-describe('SEGMENT_CONTENT', () => {
-    it('открывает форму только для новых клиентов', () => {
-        expect(SEGMENT_CONTENT['new-client'].club.action).toMatchObject({
-            type: 'activate-card',
-        });
+describe('getSegmentConfig', () => {
+    it('показывает имя без скобок и убирает fallback из приветствия', () => {
+        const namedGreeting = getSegmentConfig('inactive', {displayName: 'Анна Иванова', cardLevel: 'Silver'}).blocks[0];
+        const fallbackGreeting = getSegmentConfig('inactive', {displayName: 'Имя, фамилия', cardLevel: 'Silver'}).blocks[0];
+
+        expect(namedGreeting).toMatchObject({titleAccent: 'Анна Иванова', title: ', скучаем по\u00a0вам!'});
+        expect(fallbackGreeting).toMatchObject({titleAccent: undefined, title: 'Скучаем по\u00a0вам'});
     });
 
-    it.each([
-        ['regular-1', 'BYWXFE5GG4A2YSHDWVY9RNP525TONI3ANLAB51Q2X4OC4W3DPIKW8S9QWSUCK9F'],
-        ['regular-2', 'ME608I6I76IQCD7ZQ8941G6EPWVC31EOMLSXK46ZJPIXMST9AO4QOWPOWFBD06T'],
-        ['regular-3', 'JN53CKMQHT7RU26B02EW9V7P3SK2LTPNAOT9UE5ZW2S5OXDEAOTSQSNA9WZ68E2'],
-    ] as const)('использует реферальную ссылку для %s', (segmentId, promo) => {
-        expect(SEGMENT_CONTENT[segmentId].club.action).toEqual({
-            label: 'Оформить карту',
-            type: 'referral-link',
-            href: `https://coralbonus.ru/registration?promo=${promo}`,
-        });
+    it('содержит полные условия акций', () => {
+        const blocks = getSegmentConfig('inactive', {displayName: 'Анна', cardLevel: 'Silver'}).blocks;
+
+        expect(blocks.find(({id}) => id === 'birthday-bonus')?.tooltip?.content).toHaveLength(7);
+        expect(blocks.find(({id}) => id === 'welcome-bonus')?.tooltip?.content).toHaveLength(6);
+    });
+
+    it.each([['Silver', '1%'], ['Gold', '2%'], ['Platinum', '3%']] as const)('uses cashback for %s', (cardLevel, cashback) => {
+        const config = getSegmentConfig('one-trip', {displayName: 'Анна', cardLevel});
+        expect(config.blocks.find(({id}) => id === 'cashback')?.value).toBe(cashback);
+    });
+
+    it('uses the three-plus copy for loyal clients', () => {
+        const config = getSegmentConfig('three-plus', {displayName: 'Анна', cardLevel: 'Platinum'});
+        expect(config.blocks.find(({id}) => id === 'greeting')?.title).toContain('исключительный<br>клиент');
+    });
+
+    it('always uses Platinum for clients with three or more trips', () => {
+        const config = getSegmentConfig('three-plus', {displayName: 'Анна', cardLevel: 'Silver'});
+
+        expect(config.blocks.find(({id}) => id === 'cashback')?.value).toBe('3%');
+        expect(config.blocks.find(({id}) => id === 'card-level')?.badge).toBe('Platinum');
+        expect(config.blocks.find(({id}) => id === 'card-level')?.image?.src).toContain('card-pt-comp.webp');
+    });
+
+    it('uses Gold as the minimum card level for clients with two trips', () => {
+        const config = getSegmentConfig('two-trips', {displayName: 'Анна', cardLevel: 'Silver'});
+
+        expect(config.blocks.find(({id}) => id === 'greeting')?.description).toContain('Gold');
+        expect(config.blocks.find(({id}) => id === 'cashback')?.value).toBe('2%');
+        expect(config.blocks.find(({id}) => id === 'card-level')?.badge).toBe('Gold');
+        expect(config.blocks.find(({id}) => id === 'card-level')?.image?.src).toContain('card-au-comp.webp');
     });
 });

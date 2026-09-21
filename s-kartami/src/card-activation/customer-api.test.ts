@@ -38,13 +38,13 @@ describe('Customer API', () => {
 
     afterEach(() => vi.unstubAllGlobals());
 
-    it('регистрирует карту с полным телом запроса и принимает оба строковых формата успеха', async () => {
-        for (const success of ['True', 'true']) {
+    it('регистрирует карту с полным телом запроса и принимает строковые fallback успеха', async () => {
+        for (const success of [true, 'True', 'true']) {
             fetchMock.mockResolvedValueOnce(response({result: {isSuccess: success}}));
             await registerCard(registration);
         }
 
-        expect(fetchMock).toHaveBeenCalledTimes(2);
+        expect(fetchMock).toHaveBeenCalledTimes(3);
         expect(fetchMock).toHaveBeenCalledWith('/endpoints/Customer/BonusRegister', {
             method: 'POST',
             headers: {'content-type': 'application/json'},

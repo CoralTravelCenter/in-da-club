@@ -1,79 +1,79 @@
 @use '../abstracts/tokens' as tokens;
 
-.bez-kart-tooltip {
+.s-kartami-tooltip {
   margin: 0;
-
-  &__title {
-    margin: 0;
-    font-size: 14px;
-  }
-
-  &__text {
-    margin: 0;
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    &__title,
-    &__text {
-      font-size: 16px;
-    }
-  }
-
-  &__content[popover] {
-    position: fixed;
-    inset: auto;
-    display: flex;
-    width: auto;
-    height: auto;
-    margin: 0;
-    padding: 24px 32px 20px 16px;
-    overflow-y: auto;
-    align-items: flex-start;
-    gap: 4px;
-    border: none;
-    border-radius: 18px;
-    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.10);
-  }
-
-  &__close {
-    position: absolute;
-    right: 8px;
-    top: 8px;
-    width: 24px;
-    height: 24px;
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
 }
 
-.bez-kart-tooltip-trigger {
+.s-kartami-tooltip__title {
+  margin: 0;
+  font-size: 14px;
+}
+
+.s-kartami-tooltip__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.s-kartami-tooltip__content[popover] {
+  position: fixed;
+  inset: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 24px 32px 20px 16px;
+  overflow-y: auto;
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.10);
+}
+
+.s-kartami-tooltip__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
   width: 24px;
   height: 24px;
+  padding: 0;
+  cursor: pointer;
   background: transparent;
-  display: flex;
   border: none;
+}
+
+.s-kartami-tooltip-trigger {
+  display: flex;
+  width: 24px;
+  height: 24px;
   margin-top: auto;
   padding: 0;
   cursor: pointer;
+  background: transparent;
+  border: none;
+}
 
-  @media (min-width: tokens.$breakpoint-desktop) {
+.s-kartami-tooltip__content[popover]::backdrop {
+  background-color: rgb(0 0 0 / 0.3);
+}
+
+.s-kartami-tooltip__content[popover]:not(:popover-open) {
+  display: none;
+}
+
+@media (min-width: tokens.$breakpoint-desktop) {
+  .s-kartami-tooltip__title,
+  .s-kartami-tooltip__text {
+    font-size: 16px;
+  }
+
+  .s-kartami-tooltip-trigger {
     position: absolute;
     top: 12px;
     right: 12px;
     margin-top: 0;
   }
-}
-
-.bez-kart-tooltip__content[popover]::backdrop {
-  background-color: rgb(0 0 0 / 0.3);
-}
-
-.bez-kart-tooltip__content[popover]:not(:popover-open) {
-  display: none;
 }

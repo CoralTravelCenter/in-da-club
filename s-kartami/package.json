@@ -1,5 +1,5 @@
 {
-  "name": "bez-kart",
+  "name": "s-kartami",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,11 +7,11 @@
     "predev": "npm run typograf",
     "dev": "vite",
     "prebuild": "npm run typograf",
-    "build": "tsc && npm run build:new-client && npm run build:regular-1 && npm run build:regular-2 && npm run build:regular-3",
-    "build:new-client": "vite build --mode new-client",
-    "build:regular-1": "vite build --mode regular-1",
-    "build:regular-2": "vite build --mode regular-2",
-    "build:regular-3": "vite build --mode regular-3",
+    "build": "tsc && npm run build:inactive && npm run build:one-trip && npm run build:two-trips && npm run build:three-plus",
+    "build:inactive": "vite build --mode inactive",
+    "build:one-trip": "vite build --mode one-trip",
+    "build:two-trips": "vite build --mode two-trips",
+    "build:three-plus": "vite build --mode three-plus",
     "typograf": "node scripts/typograf.mjs",
     "test": "vitest run --config vitest.config.ts",
     "preview": "vite preview"
