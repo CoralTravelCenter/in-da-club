@@ -6,6 +6,18 @@ import {SEGMENT_IDS as BEZ_KART_SEGMENT_IDS} from '../bez-kart/src/segments/segm
 import {SEGMENT_IDS as S_KARTAMI_SEGMENT_IDS} from '../s-kartami/src/segments/segment.types';
 
 const scripts: Record<string, string> = packageJson.scripts;
+const EXPECTED_SCRIPT_NAMES = [
+    'dev:bez-kart',
+    'dev:s-kartami',
+    'build',
+    'build:bez-kart',
+    ...BEZ_KART_SEGMENT_IDS.map((segmentId) => `build:bez-kart:${segmentId}`),
+    'build:s-kartami',
+    ...S_KARTAMI_SEGMENT_IDS.map((segmentId) => `build:s-kartami:${segmentId}`),
+    'typograf',
+    'typecheck',
+    'test',
+];
 
 function expectSegmentBuildScripts(appName: string, segmentIds: readonly string[]): void {
     const prefix = `build:${appName}:`;
@@ -26,6 +38,10 @@ function expectSegmentBuildScripts(appName: string, segmentIds: readonly string[
 }
 
 describe('segment build scripts', () => {
+    it('exposes only supported project commands', () => {
+        expect(Object.keys(scripts).sort()).toEqual(EXPECTED_SCRIPT_NAMES.sort());
+    });
+
     it('matches bez-kart segment ids', () => {
         expectSegmentBuildScripts('bez-kart', BEZ_KART_SEGMENT_IDS);
     });

@@ -1,9 +1,14 @@
 export interface MountWhenAvailableOptions {
     selector: string;
     start: (container: HTMLElement) => void | Promise<void>;
+    onError?: (error: unknown) => void;
 }
 
-export function mountWhenAvailable({selector, start}: MountWhenAvailableOptions): void {
+export function mountWhenAvailable({selector, start, onError}: MountWhenAvailableOptions): void {
+    const handleError = onError ?? ((error: unknown): void => {
+        console.error('Failed to mount application', error);
+    });
+
     const tryMount = (): boolean => {
         const container = document.querySelector(selector);
 
@@ -11,7 +16,11 @@ export function mountWhenAvailable({selector, start}: MountWhenAvailableOptions)
             return false;
         }
 
-        void start(container);
+        try {
+            void Promise.resolve(start(container)).catch(handleError);
+        } catch (error) {
+            handleError(error);
+        }
         return true;
     };
 

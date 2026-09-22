@@ -36,4 +36,20 @@ describe('mountWhenAvailable', () => {
         expect(start).toHaveBeenCalledWith(container);
         expect(start).toHaveBeenCalledTimes(1);
     });
+
+    it('reports an asynchronous start error', async () => {
+        const container = document.createElement('div');
+        container.dataset.bezKartRoot = '';
+        document.body.append(container);
+        const error = new Error('Bootstrap failed');
+        const onError = vi.fn();
+
+        mountWhenAvailable({
+            selector: ROOT_SELECTOR,
+            start: () => Promise.reject(error),
+            onError,
+        });
+
+        await vi.waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+    });
 });

@@ -9,7 +9,7 @@
 
 Зависимости устанавливаются один раз в корне репозитория. Все команды ниже
 запускайте из корня. Для локальной разработки используйте
-`npm run dev:s-kartami`, для тестов — `npm run test:s-kartami`.
+`npm run dev:s-kartami`, для тестов — общую команду `npm test`.
 
 Имя читается из профиля `user` в `localStorage`. При наличии `BonusUserId`
 актуальный уровень карты запрашивается через `POST /endpoints/Customer/BonusProfile`

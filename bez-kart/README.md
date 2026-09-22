@@ -30,7 +30,7 @@ Mindbox отвечает за таргетинг, а запущенный скр
 
 Отдельный вариант можно собрать, например, командой
 `npm run build:bez-kart:regular-2`. Для локальной разработки используйте
-`npm run dev:bez-kart`, для тестов — `npm run test:bez-kart`.
+`npm run dev:bez-kart`, для тестов — общую команду `npm test`.
 
 ## Типографика
 

@@ -70,7 +70,12 @@ describe('card activation markup and flow', () => {
         const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation');
         const form = dialog?.querySelector<HTMLFormElement>('form');
         expect(dialog?.getAttribute('aria-label')).toBe('Оформление карты');
+        expect(dialog?.classList.contains('bez-kart-activation')).toBe(true);
+        expect(dialog?.querySelector('.bez-kart-activation__body')).toBeTruthy();
+        expect(dialog?.querySelector('.bez-kart-activation__panel')).toBeTruthy();
+        expect(dialog?.querySelector('.bez-kart-activation__stage')).toBeTruthy();
         expect(dialog?.querySelector('.bez-kart-activation__steps')?.getAttribute('aria-label')).toBe('Шаг 1 из\u00a03');
+        expect(form?.classList.contains('bez-kart-activation__form')).toBe(true);
         expect((form?.elements.namedItem('givenName') as HTMLInputElement).value).toBe('Анна');
         expect((form?.elements.namedItem('birthDate') as HTMLInputElement).value).toBe('02 / 01 / 1990');
     });
@@ -90,6 +95,7 @@ describe('card activation markup and flow', () => {
         await requestCardActivation();
         const dialog = document.querySelector<TestPopup>('#bez-kart-card-activation')!;
         const hide = vi.spyOn(dialog, 'hide');
+        const show = vi.spyOn(dialog, 'show');
         const control = dialog.querySelector<HTMLElement>('.bez-kart-activation__close')!;
         const close = control.querySelector<HTMLButtonElement>('button')!;
 
@@ -102,6 +108,40 @@ describe('card activation markup and flow', () => {
         close.click();
 
         expect(hide).toHaveBeenCalledOnce();
+
+        await requestCardActivation();
+
+        expect(show).toHaveBeenCalledOnce();
+        expect(document.querySelectorAll('#bez-kart-card-activation')).toHaveLength(1);
+        expect(document.querySelector('#bez-kart-card-activation')).toBe(dialog);
+    });
+
+    it('не создаёт второй попап при повторном запросе активации', async () => {
+        await requestCardActivation();
+        const dialog = document.querySelector<TestPopup>('#bez-kart-card-activation')!;
+        const show = vi.spyOn(dialog, 'show');
+
+        await requestCardActivation();
+
+        expect(show).toHaveBeenCalledOnce();
+        expect(document.querySelectorAll('#bez-kart-card-activation')).toHaveLength(1);
+        expect(document.querySelector('#bez-kart-card-activation')).toBe(dialog);
+    });
+
+    it('удаляет неоткрывшийся попап и позволяет повторить попытку', async () => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        const show = vi.spyOn(TestPopup.prototype, 'show').mockRejectedValueOnce(new Error('Popup failed'));
+
+        await requestCardActivation();
+
+        expect(document.querySelector('#bez-kart-card-activation')).toBeNull();
+
+        await requestCardActivation();
+
+        expect(document.querySelector('#bez-kart-card-activation')).not.toBeNull();
+        expect(show).toHaveBeenCalledTimes(2);
+        consoleError.mockRestore();
+        show.mockRestore();
     });
 
     it('предлагает города из исходного списка и не отправляет неизвестный город', async () => {
@@ -239,6 +279,8 @@ describe('card activation markup and flow', () => {
         await vi.waitFor(() => expect(dialog.textContent).toContain('Карта активирована!'));
         expect(activateCard).toHaveBeenCalledWith('79990000000', '123456');
         expect(getBonusProfile).toHaveBeenCalledOnce();
+        expect(dialog.querySelector('.bez-kart-activation__result')).toBeTruthy();
+        expect(dialog.querySelector('.bez-kart-activation__card')).toBeTruthy();
         expect(dialog.textContent).toContain('Ваш уровень\u00a0— Gold, кешбэк 2%');
         expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('3');
     });

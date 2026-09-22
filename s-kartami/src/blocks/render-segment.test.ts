@@ -1,7 +1,16 @@
 // @vitest-environment jsdom
 import {describe, expect, it} from 'vitest';
-import type {SegmentConfig} from '@/segments/segment.types';
+import type {BlockPresentation, SegmentConfig} from '@/segments/segment.types';
 import {renderSegment} from './render-segment';
+
+function presentation(mobile: BlockPresentation['placement']['mobile']): BlockPresentation {
+    return {
+        placement: {
+            mobile,
+            desktop: {column: '1', row: '1'},
+        },
+    };
+}
 
 describe('renderSegment', () => {
     it('выносит видеоблок из мобильного слайдера', () => {
@@ -18,9 +27,10 @@ describe('renderSegment', () => {
                     title: 'Добро пожаловать',
                     description: '',
                     media: {type: 'video', src: '/club.webm'},
+                    presentation: presentation('featured'),
                 },
-                {id: 'card-level', badge: 'Silver', description: 'Уровень карты'},
-                {id: 'cashback', value: '3%', description: 'Кешбэк'},
+                {id: 'card-level', badge: 'Silver', description: 'Уровень карты', presentation: presentation('featured')},
+                {id: 'cashback', value: '3%', description: 'Кешбэк', presentation: presentation('list')},
             ],
         };
 
@@ -40,10 +50,10 @@ describe('renderSegment', () => {
             id: 'one-trip',
             ariaLabel: 'Клубные преимущества',
             blocks: [
-                {id: 'birthday-bonus', value: '10 000', description: 'Бонусов'},
-                {id: 'greeting', title: 'Добро пожаловать', description: ''},
-                {id: 'card-level', badge: 'Silver', description: 'Уровень карты'},
-                {id: 'travel-more', title: 'Путешествуйте больше', description: ''},
+                {id: 'birthday-bonus', value: '10 000', description: 'Бонусов', presentation: presentation('list')},
+                {id: 'greeting', title: 'Добро пожаловать', description: '', presentation: presentation('featured')},
+                {id: 'card-level', badge: 'Silver', description: 'Уровень карты', presentation: presentation('featured')},
+                {id: 'travel-more', title: 'Путешествуйте больше', description: '', presentation: presentation('list')},
             ],
         });
 
