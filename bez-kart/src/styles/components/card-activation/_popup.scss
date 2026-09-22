@@ -19,6 +19,10 @@
   border-radius: 16px;
 }
 
+.bez-kart-activation:has(.bez-kart-activation__body--single)::part(popup-dialog) {
+  max-width: 500px;
+}
+
 .bez-kart-activation::part(popup-content) {
   position: relative;
   gap: 0;

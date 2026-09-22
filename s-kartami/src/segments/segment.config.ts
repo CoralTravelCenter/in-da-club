@@ -49,23 +49,36 @@ const BIRTHDAY_TOOLTIP = {
     title: typographed`Условия акции «Бонусы на день рождения»:`,
     content: [
         typographed`Дата начисления: за 90 дней до дня рождения`,
+        typographed`Карта должна быть выпущена за 90 дней до дня рождения`,
         typographed`Дата бронирования: до 31.12.2026`,
         typographed`Дата начала тура: нет ограничений`,
         typographed`Минимальная стоимость тура: 200 000 ₽`,
         typographed`Страны: Все, кроме РФ, СНГ, Абхазии и Грузии`,
         typographed`Срок действия бонусов: 104 дня`,
-        typographed`Интервал между датой бронирования и датой начала тура: 3+ дня`,
+        typographed`Интервал между датой бронирования и датой начала тура: 3 дня`,
+    ],
+};
+const CLUB_LAUNCH_TOOLTIP = {
+    title: typographed`Условия акции «Бонусы в честь запуска клуба»:`,
+    content: [
+        typographed`Дата активации карты: до 31.12.2026`,
+        typographed`Дата бронирования: до 31.12.2026`,
+        typographed`Дата начала тура: нет ограничений`,
+        typographed`Страны: Все, кроме РФ, СНГ, Абхазии и Грузии`,
+        typographed`Срок действия бонусов: 180 дней`,
+        typographed`Интервал между датой бронирования и датой начала тура: 3 дня`,
+        typographed`Условие списания: не больше 2% от стоимости тура`,
     ],
 };
 const WELCOME_TOOLTIP = {
     title: typographed`Условия акции «Приветственные бонусы»:`,
     content: [
-        typographed`Дата бронирования: до 31.12.2026`,
-        typographed`Дата начала тура: нет ограничений`,
+        typographed`Дата активации карты: с 01.07.2026 по 31.12.2026`,
+        typographed`Дата бронирования: с 01.07.2026 по 31.12.2026`,
+        typographed`Дата начала тура: с 03.07.2026, без ограничений`,
         typographed`Страны: Все, кроме РФ, СНГ, Абхазии и Грузии`,
         typographed`Срок действия бонусов: 90 дней`,
-        typographed`Интервал между датой бронирования и датой начала тура: 3+ дня`,
-        typographed`Условие списания: не больше 2% от стоимости тура`,
+        typographed`Интервал между датой бронирования и датой начала тура: 3 дня`,
     ],
 };
 
@@ -75,11 +88,19 @@ function cardBlock(level: CardLevel): ContentBlockDefinition {
 function birthdayBlock(): ContentBlockDefinition {
     return {id: 'birthday-bonus', value: typographed`10 000`, description: typographed`Бонусов на День рождения`, tooltip: BIRTHDAY_TOOLTIP};
 }
+function clubLaunchBlock(description: string): ContentBlockDefinition {
+    return {id: 'club-launch', value: typographed`10 000`, description, tooltip: CLUB_LAUNCH_TOOLTIP};
+}
 function cashbackBlock(level: CardLevel, inactive = false): ContentBlockDefinition {
     return {id: 'cashback', value: `${inactive ? 3 : CASHBACK[level]}%`, valuePrefix: inactive ? typographed`до` : undefined, description: inactive ? typographed`Кешбэк бонусами за каждое бронирование` : level === 'Platinum' ? typographed`Повышенный кешбэк бонусами` : typographed`Кешбэк бонусами за каждое бронирование`};
 }
 const managerBlock: ContentBlockDefinition = {id: 'manager', title: typographed`Персональный менеджер`, description: typographed`Всегда на связи с вами`};
-const privateSalesBlock: ContentBlockDefinition = {id: 'private-sales', title: typographed`Закрытые акции`, description: typographed`Досрочный доступ к предложениям`};
+const privateSalesBlock: ContentBlockDefinition = {
+    id: 'private-sales',
+    title: typographed`Закрытые акции`,
+    description: typographed`Досрочный доступ к предложениям`,
+    action: {label: typographed`Смотреть`, href: '/poleznaya-informatsiya/offers/more-vozmozhnostej/'},
+};
 
 function inactiveBlocks(customer: CustomerContext): ContentBlockDefinition[] {
     const hasDisplayName = customer.displayName !== 'Имя, фамилия';
@@ -87,12 +108,13 @@ function inactiveBlocks(customer: CustomerContext): ContentBlockDefinition[] {
     return [
         {
             id: 'greeting',
-            title: hasDisplayName ? typographed`, скучаем по вам!` : typographed`Скучаем по вам`,
+            title: hasDisplayName ? typographed`,<br>скучаем по вам!` : typographed`Скучаем по вам`,
             titleAccent: hasDisplayName ? customer.displayName : undefined,
-            description: typographed`Как насчёт отправиться в путешествие?`,
+            description: typographed`Как насчёт отправиться<br>в путешествие?`,
             action: {label: typographed`Выбрать тур`, href: '/'},
             media: {
                 type: 'video',
+                variant: 'diamond',
                 src: `${INACTIVE_CLIENT_MEDIA}/club.webm`,
                 safariSrc: `${INACTIVE_CLIENT_MEDIA}/club.mov`,
             },
@@ -109,10 +131,18 @@ function oneTripBlocks(customer: CustomerContext): ContentBlockDefinition[] {
             titleAccent: `${customer.displayName},`,
             title: typographed`<br>теперь вы в клубе<br>«Море возможностей»!`,
             description: customer.cardLevel === 'Platinum'
-                ? typographed`Вам доступны<br>все привилегии`
+                ? typographed`Вам доступны<br>`
                 : typographed`Ваши привилегии готовы<br>к использованию`,
+            descriptionAccent: customer.cardLevel === 'Platinum' ? typographed`все` : undefined,
+            descriptionSuffix: customer.cardLevel === 'Platinum' ? '\u00a0привилегии' : undefined,
+            media: {
+                type: 'video',
+                variant: 'shell',
+                src: segmentMedia('one-trip', 'shell.webm'),
+                safariSrc: segmentMedia('one-trip', 'shell.mov'),
+            },
         },
-        {id: 'club-launch', value: typographed`10 000`, description: typographed`Бонусов<br>в честь запуска клуба`},
+        clubLaunchBlock(typographed`Бонусов<br>в честь запуска клуба`),
         {...cashbackBlock(customer.cardLevel), description: typographed`Кешбэк бонусами<br>за каждое бронирование`},
         {...cardBlock(customer.cardLevel), description: typographed`Уровень карты<br>CoralBonus`},
         {
@@ -135,15 +165,26 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
                 title: typographed`Поздравляем,<br>`,
                 titleAccent: `${customer.displayName}!`,
                 titleAccentAfter: true,
-                description: `Вы достигли уровня карты ${cardLevel}`,
+                description: typographed`Вы достигли уровня карты`,
+                descriptionStrong: cardLevel,
+                media: {
+                    type: 'video',
+                    variant: 'wave',
+                    src: segmentMedia('two-trips', 'wave.webm'),
+                    safariSrc: segmentMedia('two-trips', 'wave.mov'),
+                },
             },
             {...cashbackBlock(cardLevel), description: typographed`Кешбэк бонусами<br>за каждое бронирование`},
-            {id: 'club-launch', value: typographed`10 000`, description: typographed`Бонусов в честь<br>запуска Клуба`},
+            clubLaunchBlock(typographed`Бонусов в честь<br>запуска Клуба`),
             {...cardBlock(cardLevel), description: typographed`Уровень карты<br>CoralBonus`},
             birthdayBlock(),
             {...managerBlock, title: typographed`Персональный<br>менеджер`, description: typographed`Всегда на связи<br>с вами`},
             {...privateSalesBlock, description: typographed`Досрочный доступ<br>к предложениям`},
-            {
+            cardLevel === 'Platinum' ? {
+                id: 'travel-more',
+                title: typographed`Путешествуйте чаще —`,
+                description: typographed`сохраняйте уровень карты<br>и привилегии`,
+            } : {
                 id: 'travel-more',
                 title: typographed`Больше путешествий —`,
                 description: typographed`выше уровень карты. Откройте<br>расширенные привилегии клуба<br>«Море возможностей»`,
@@ -160,9 +201,16 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
             titleAccent: `${customer.displayName},`,
             title: typographed`<br>вы — исключительный<br>клиент для нас!`,
             description: typographed`Вам доступны все привилегии<br>клуба «Море возможностей»`,
+            action: {label: typographed`Войти в личный кабинет`, href: '/account/', target: '_blank'},
+            media: {
+                type: 'video',
+                variant: 'pearl-shell',
+                src: segmentMedia('three-plus', 'pearl-shell.webm'),
+                safariSrc: segmentMedia('three-plus', 'pearl-shell.mov'),
+            },
         },
-        {...cashbackBlock(cardLevel), description: typographed`Кешбэк бонусами<br>за каждое бронирование`},
-        {id: 'club-launch', value: typographed`10 000`, description: typographed`Бонусов в честь<br>запуска клуба`},
+        cashbackBlock(cardLevel),
+        clubLaunchBlock(typographed`Бонусов в честь<br>запуска клуба`),
         {...cardBlock(cardLevel), description: typographed`Уровень карты<br>CoralBonus`},
         birthdayBlock(),
         {...managerBlock, title: typographed`Персональный<br>менеджер`, description: typographed`Всегда на связи<br>с вами`},

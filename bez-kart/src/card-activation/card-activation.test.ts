@@ -81,6 +81,20 @@ describe('card activation markup and flow', () => {
         expect((form?.elements.namedItem('mobilePhone') as HTMLInputElement).readOnly).toBe(true);
     });
 
+    it('использует актуальные ссылки на согласия и правила программы', async () => {
+        await requestCardActivation();
+
+        const links = [...document.querySelectorAll<HTMLAnchorElement>('.bez-kart-activation__consents a')];
+
+        expect(links.map(({href}) => href)).toEqual([
+            'https://b2ccdn.coral.ru/content/doc/cb/soglasie_na_obrabotku_personalynyh_dannyh_coralbonus.pdf',
+            'https://b2ccdn.coral.ru/content/doc/cb/politika-obrabotki-persdannyh-coralbonus-24-09-25.pdf',
+            'https://b2ccdn.coral.ru/content/doc/legal/pravila-loyalty-program-22062026.pdf',
+            'https://b2ccdn.coral.ru/content/doc/cb/soglasie-na-rassylku-coralbonus-24-09-2025.pdf',
+        ]);
+        expect(links.every(({target, rel}) => target === '_blank' && rel === 'noopener')).toBe(true);
+    });
+
     it('позволяет заполнить телефон, если профиль не вернул корректный номер', async () => {
         vi.mocked(getProfile).mockReturnValue({...profile, mobilePhone: 'некорректный номер'});
         await requestCardActivation();
@@ -266,6 +280,7 @@ describe('card activation markup and flow', () => {
         expect(dialog?.textContent).toContain('123 4567 8901');
         expect(dialog?.querySelector<HTMLImageElement>('.bez-kart-activation__card img')?.src).toBe('http://localhost:5173/card-au-comp.webp');
         expect(dialog?.querySelector<HTMLImageElement>('.bez-kart-activation__result-icon')?.src).toBe('http://localhost:5173/success-mark.svg');
+        expect(dialog?.querySelector('.bez-kart-activation__body')?.classList.contains('bez-kart-activation__body--single')).toBe(true);
         expect(dialog?.querySelector('form')).toBeNull();
     });
 

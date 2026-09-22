@@ -110,7 +110,7 @@ function appendVideo(block: HTMLElement, media: NonNullable<ContentBlockConfig['
         && !/(chrome|chromium|crios|android|edg|opr|fxios)/i.test(navigator.userAgent);
 
     block.classList.add('s-kartami-block--video');
-    video.className = 's-kartami-block__video';
+    video.className = `s-kartami-block__video s-kartami-block__video--${media.variant}`;
     video.src = isSafari ? media.safariSrc ?? media.src : media.src;
     video.autoplay = !reduceMotion;
     video.muted = true;
@@ -130,6 +130,13 @@ function appendTextWithBreaks(element: HTMLElement, text: string): void {
     });
 }
 
+function createSkeleton(part: 'name' | 'value' | 'badge' | 'image'): HTMLSpanElement {
+    const skeleton = document.createElement('span');
+    skeleton.className = `s-kartami-block__skeleton s-kartami-block__skeleton--${part}`;
+    skeleton.setAttribute('aria-hidden', 'true');
+    return skeleton;
+}
+
 export function renderBlock(config: ContentBlockConfig): HTMLElement {
     const block = document.createElement('article');
     const content = document.createElement('div');
@@ -147,28 +154,30 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
     }
     content.className = 's-kartami-block__content';
     if (config.isLoading) {
-        const heading = document.createElement('span');
-        const text = document.createElement('span');
         block.classList.add('s-kartami-block--loading');
         block.setAttribute('aria-busy', 'true');
-        heading.className = 's-kartami-block__skeleton s-kartami-block__skeleton--heading';
-        text.className = 's-kartami-block__skeleton s-kartami-block__skeleton--text';
-        content.append(heading, text);
-        block.append(content);
-        return block;
     }
     if (config.media?.type === 'video') appendVideo(block, config.media);
     if (config.badge) {
         const badge = document.createElement('span');
         badge.className = 's-kartami-block__badge';
-        badge.textContent = config.badge;
         block.dataset.cardLevel = config.badge.toLowerCase();
+        if (config.isLoading && config.id === 'card-level') {
+            badge.classList.add('s-kartami-block__skeleton', 's-kartami-block__skeleton--badge');
+            badge.setAttribute('aria-hidden', 'true');
+        } else {
+            badge.textContent = config.badge;
+        }
         content.append(badge);
     }
     if (config.title) {
         const title = document.createElement('h3');
         title.className = 's-kartami-block__title';
         const appendAccent = (): void => {
+            if (config.isLoading && config.id === 'greeting') {
+                title.append(createSkeleton('name'));
+                return;
+            }
             if (!config.titleAccent) return;
             const accent = document.createElement('span');
             accent.className = 's-kartami-block__title-accent';
@@ -181,31 +190,55 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
         content.append(title);
     } else if (config.value) {
         const value = document.createElement('span');
-        const quantity = document.createElement('span');
         value.className = 's-kartami-block__value';
-        quantity.className = 's-kartami-block__quantity';
-        quantity.textContent = config.value;
-        if (config.valuePrefix) {
-            const prefix = document.createElement('span');
-            prefix.className = 's-kartami-block__value-prefix';
-            prefix.textContent = config.valuePrefix;
-            value.append(prefix);
+        if (config.isLoading && config.id === 'cashback') {
+            value.classList.add('s-kartami-block__skeleton', 's-kartami-block__skeleton--value');
+            if (config.valuePrefix) value.classList.add('s-kartami-block__skeleton--value-wide');
+            value.setAttribute('aria-hidden', 'true');
+        } else {
+            const quantity = document.createElement('span');
+            quantity.className = 's-kartami-block__quantity';
+            if (config.valuePrefix) {
+                const prefix = document.createElement('span');
+                prefix.className = 's-kartami-block__value-prefix';
+                prefix.textContent = config.valuePrefix;
+                value.append(prefix);
+            }
+            quantity.textContent = config.value;
+            value.append(quantity);
         }
-        value.append(quantity);
         content.append(value);
     }
     if (config.description) {
         const description = document.createElement('p');
         description.className = 's-kartami-block__description';
         appendTextWithBreaks(description, config.description);
+        if (config.descriptionAccent) {
+            const accent = document.createElement('span');
+            accent.className = 's-kartami-block__description-accent';
+            accent.textContent = config.descriptionAccent;
+            description.append(accent);
+        }
+        if (config.descriptionStrong) {
+            const strong = document.createElement('strong');
+            strong.textContent = config.descriptionStrong;
+            description.append(document.createTextNode('\u00a0'), strong);
+        }
+        if (config.descriptionSuffix) {
+            description.append(document.createTextNode(config.descriptionSuffix));
+        }
         content.append(description);
     }
     if (config.image) {
-        const image = document.createElement('img');
-        image.className = 's-kartami-block__image';
-        image.src = config.image.src;
-        image.alt = config.image.alt;
-        content.append(image);
+        if (config.isLoading && config.id === 'card-level') {
+            content.append(createSkeleton('image'));
+        } else {
+            const image = document.createElement('img');
+            image.className = 's-kartami-block__image';
+            image.src = config.image.src;
+            image.alt = config.image.alt;
+            content.append(image);
+        }
     }
     if (config.action) {
         const action = document.createElement('coral-button');
@@ -215,6 +248,10 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
         action.setAttribute('shape', 'pill');
         link.href = config.action.href;
         link.textContent = config.action.label;
+        if (config.action.target) {
+            link.target = config.action.target;
+            link.rel = 'noopener';
+        }
         action.append(link);
         content.append(action);
     }

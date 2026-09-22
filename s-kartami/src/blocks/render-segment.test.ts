@@ -26,7 +26,7 @@ describe('renderSegment', () => {
                     id: 'greeting',
                     title: 'Добро пожаловать',
                     description: '',
-                    media: {type: 'video', src: '/club.webm'},
+                    media: {type: 'video', variant: 'diamond', src: '/club.webm'},
                     presentation: presentation('featured'),
                 },
                 {id: 'card-level', badge: 'Silver', description: 'Уровень карты', presentation: presentation('featured')},

@@ -12,7 +12,7 @@
   border-radius: tokens.$radius-card;
 
   @media (min-width: tokens.$breakpoint-desktop) {
-    padding: tokens.$space-xl;
+    padding: tokens.$space-lg;
   }
 }
 
@@ -28,7 +28,7 @@
   padding: tokens.$space-md;
 
   @media (min-width: tokens.$breakpoint-desktop) {
-    padding: tokens.$space-xl;
+    padding: tokens.$space-lg;
   }
 }
 
@@ -50,7 +50,7 @@
 .bez-kart-block__content {
   display: flex;
   flex-direction: column;
-  gap: tokens.$space-md;
+  gap: 12px;
   height: 100%;
 }
 
@@ -58,7 +58,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: tokens.$space-md;
+  gap: 12px;
   min-width: 0;
   color: inherit;
   text-decoration: none;
@@ -69,7 +69,7 @@
   color: var(--Text-color_Text_Dark, #000);
   font-size: 24px;
   font-weight: var(--font-font_Weight_Semibold, 600);
-  line-height: 28px;
+  line-height: 27px;
 }
 
 .bez-kart-block__value {
@@ -96,7 +96,16 @@
 
 .bez-kart-block__description {
   font-size: 16px;
-  line-height: 20px;
+  line-height: 22px;
+}
+
+.bez-kart-block__description + .bez-kart-block__action {
+  margin-top: 8px;
+}
+
+.bez-kart-block__title + .bez-kart-block__action,
+.bez-kart-block__value + .bez-kart-block__action {
+  margin-top: 4px;
 }
 
 .bez-kart-block__badge {

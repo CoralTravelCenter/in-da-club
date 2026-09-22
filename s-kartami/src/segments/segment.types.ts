@@ -24,10 +24,19 @@ export interface ContentBlockDefinition {
     value?: string;
     valuePrefix?: string;
     description: string;
+    descriptionAccent?: string;
+    descriptionStrong?: string;
+    descriptionSuffix?: string;
     badge?: string;
     image?: { src: string; alt: string };
-    media?: {type: 'video'; src: string; safariSrc?: string; poster?: string};
-    action?: {label: string; href: string};
+    media?: {
+        type: 'video';
+        variant: 'diamond' | 'shell' | 'wave' | 'pearl-shell';
+        src: string;
+        safariSrc?: string;
+        poster?: string;
+    };
+    action?: {label: string; href: string; target?: '_blank'};
     tooltip?: { title: string; content: string[] };
 }
 export type ContentBlockConfig = ContentBlockDefinition & {presentation: BlockPresentation};

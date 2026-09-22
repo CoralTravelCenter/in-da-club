@@ -27,6 +27,7 @@ async function showExistingCard(profile: UserProfile): Promise<void> {
     const dialog = createDialog();
     activeDialog = dialog;
     dialog.setAttribute('aria-label', typographed`У вас уже есть карта CoralBonus`);
+    dialog.querySelector('.bez-kart-activation__body')?.classList.add('bez-kart-activation__body--single');
     dialog.querySelector('.bez-kart-activation__banner')?.remove();
     dialog.querySelector('.bez-kart-activation__steps')?.remove();
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');

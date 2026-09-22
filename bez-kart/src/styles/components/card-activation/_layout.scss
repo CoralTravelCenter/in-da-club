@@ -30,6 +30,12 @@
   }
 }
 
+.bez-kart-activation__body--single {
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .bez-kart-activation__banner {
   width: 100%;
   aspect-ratio: 736 / 360;

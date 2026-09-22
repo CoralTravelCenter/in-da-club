@@ -40,7 +40,7 @@ interface ContentBlockBaseConfig {
         label: string;
         type: 'activate-card';
       }
-    | {
+      | {
         label: string;
         type: 'referral-link';
         href: string;

@@ -34,11 +34,6 @@
 
 .s-kartami-segment__featured--card-level {
   min-height: 0;
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    grid-column: 3;
-    grid-row: 1;
-  }
 }
 
 .s-kartami-segment__featured--card-level > .s-kartami-block {
@@ -103,7 +98,6 @@
     grid-template-rows: repeat(4, minmax(165px, auto));
   }
 }
-
 
 
 

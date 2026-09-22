@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import {describe, expect, it} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import type {BlockPresentation} from '@/segments/segment.types';
 import {renderBlock} from './render-block';
 
@@ -11,7 +11,10 @@ const presentation: BlockPresentation = {
 };
 
 describe('renderBlock', () => {
-    it('renders a skeleton instead of API-dependent content while loading', () => {
+    beforeEach(() => vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({matches: false})));
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('renders a cashback skeleton only in place of the API value', () => {
         const block = renderBlock({
             id: 'cashback',
             isLoading: true,
@@ -22,8 +25,42 @@ describe('renderBlock', () => {
 
         expect(block.classList.contains('s-kartami-block--loading')).toBe(true);
         expect(block.getAttribute('aria-busy')).toBe('true');
-        expect(block.querySelectorAll('.s-kartami-block__skeleton')).toHaveLength(2);
-        expect(block.textContent).toBe('');
+        expect(block.querySelectorAll('.s-kartami-block__skeleton')).toHaveLength(1);
+        expect(block.querySelector('.s-kartami-block__value.s-kartami-block__skeleton--value')).not.toBeNull();
+        expect(block.querySelector('.s-kartami-block__quantity')).toBeNull();
+        expect(block.textContent).toBe('Кешбэк');
+    });
+
+    it('keeps the card-level layout while its API data is loading', () => {
+        const block = renderBlock({
+            id: 'card-level',
+            isLoading: true,
+            badge: 'Gold',
+            description: 'Уровень карты',
+            image: {src: '/gold.webp', alt: 'Gold card'},
+            presentation,
+        });
+
+        expect(block.dataset.cardLevel).toBe('gold');
+        expect(block.querySelector('.s-kartami-block__badge.s-kartami-block__skeleton--badge')).not.toBeNull();
+        expect(block.querySelector('.s-kartami-block__badge')?.children).toHaveLength(0);
+        expect(block.querySelector('.s-kartami-block__skeleton--image')).not.toBeNull();
+        expect(block.querySelector('img')).toBeNull();
+        expect(block.textContent).toBe('Уровень карты');
+    });
+
+    it('renders the name skeleton inline with the greeting copy', () => {
+        const block = renderBlock({
+            id: 'greeting',
+            isLoading: true,
+            titleAccent: 'Имя, фамилия,',
+            title: '<br>теперь вы в клубе',
+            description: 'Ваши привилегии готовы',
+            presentation,
+        });
+
+        expect(block.querySelector('.s-kartami-block__title .s-kartami-block__skeleton--name')).not.toBeNull();
+        expect(block.textContent).toBe('теперь вы в клубеВаши привилегии готовы');
     });
 
     it('renders card level and image', () => {
@@ -50,6 +87,31 @@ describe('renderBlock', () => {
         expect(block.querySelectorAll('.s-kartami-block__description br')).toHaveLength(1);
         expect(block.querySelector('.s-kartami-block__description strong')).toBeNull();
         expect(block.querySelector('.s-kartami-block__description')?.textContent).toBe('Описание<strong>текст</strong>');
+    });
+
+    it('renders an accent inside the description', () => {
+        const block = renderBlock({
+            id: 'greeting',
+            description: 'Вам доступны<br>',
+            descriptionAccent: 'все',
+            descriptionSuffix: ' привилегии',
+            presentation,
+        });
+
+        expect(block.querySelector('.s-kartami-block__description-accent')?.textContent).toBe('все');
+        expect(block.querySelector('.s-kartami-block__description')?.textContent).toBe('Вам доступнывсе привилегии');
+    });
+
+    it('renders strong text inside the description', () => {
+        const block = renderBlock({
+            id: 'greeting',
+            description: 'Вы достигли уровня карты',
+            descriptionStrong: 'Platinum',
+            presentation,
+        });
+
+        expect(block.querySelector('.s-kartami-block__description strong')?.textContent).toBe('Platinum');
+        expect(block.querySelector('.s-kartami-block__description')?.textContent).toBe('Вы достигли уровня карты Platinum');
     });
 
     it('renders a trailing title accent after an explicit line break', () => {
@@ -80,6 +142,34 @@ describe('renderBlock', () => {
         expect(action?.getAttribute('trait')).toBe('vivid');
         expect(action?.getAttribute('shape')).toBe('pill');
         expect(link?.getAttribute('href')).toBe('/');
+    });
+
+    it('opens an external-context action safely in a new tab', () => {
+        const block = renderBlock({
+            id: 'greeting',
+            title: 'Добро пожаловать',
+            description: '',
+            action: {label: 'Войти в личный кабинет', href: '/account/', target: '_blank'},
+            presentation,
+        });
+        const link = block.querySelector<HTMLAnchorElement>('.s-kartami-block__action a');
+
+        expect(link?.getAttribute('href')).toBe('/account/');
+        expect(link?.target).toBe('_blank');
+        expect(link?.rel).toBe('noopener');
+    });
+
+    it.each(['diamond', 'shell', 'wave', 'pearl-shell'] as const)('adds the %s modifier to the video', (variant) => {
+        const block = renderBlock({
+            id: 'greeting',
+            description: '',
+            media: {type: 'video', variant, src: `/${variant}.webm`},
+            presentation,
+        });
+
+        expect(block.classList.contains('s-kartami-block--video')).toBe(true);
+        expect(block.classList.contains(`s-kartami-block--video-${variant}`)).toBe(false);
+        expect(block.querySelector('video')?.classList.contains(`s-kartami-block__video--${variant}`)).toBe(true);
     });
 
     it('renders promotion details as an accessible popover', () => {
