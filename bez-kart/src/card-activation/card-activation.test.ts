@@ -78,6 +78,31 @@ describe('card activation markup and flow', () => {
         expect(form?.classList.contains('bez-kart-activation__form')).toBe(true);
         expect((form?.elements.namedItem('givenName') as HTMLInputElement).value).toBe('Анна');
         expect((form?.elements.namedItem('birthDate') as HTMLInputElement).value).toBe('02 / 01 / 1990');
+        expect((form?.elements.namedItem('mobilePhone') as HTMLInputElement).readOnly).toBe(true);
+    });
+
+    it('позволяет заполнить телефон, если профиль не вернул корректный номер', async () => {
+        vi.mocked(getProfile).mockReturnValue({...profile, mobilePhone: 'некорректный номер'});
+        await requestCardActivation();
+
+        const form = document.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        const mobilePhone = form.elements.namedItem('mobilePhone') as HTMLInputElement;
+        expect(mobilePhone.readOnly).toBe(false);
+        expect(mobilePhone.value).toBe('');
+        expect(mobilePhone.placeholder).toBe('+7 (___) ___-__-__');
+
+        fillRequiredFields(form);
+        mobilePhone.value = '123';
+        submit(form);
+        expect(registerCard).not.toHaveBeenCalled();
+        expect(mobilePhone.getAttribute('aria-invalid')).toBe('true');
+        expect(form.textContent).toContain('Укажите корректный номер телефона');
+
+        mobilePhone.value = '8 (999) 000-00-00';
+        mobilePhone.dispatchEvent(new Event('input', {bubbles: true}));
+        submit(form);
+        await vi.waitFor(() => expect(registerCard).toHaveBeenCalledOnce());
+        expect(normalizePhone).toHaveBeenCalledWith('8 (999) 000-00-00');
     });
 
     it('сохраняет высоту первого шага для следующих экранов', async () => {

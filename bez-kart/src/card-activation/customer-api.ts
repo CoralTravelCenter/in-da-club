@@ -103,7 +103,8 @@ function decodeJwtPayload(token: string): UserProfile | null {
 
 export function normalizePhone(value: string): string {
     const digits = value.replace(/\D/g, '');
-    return digits.length === 10 ? `7${digits}` : digits;
+    if (digits.length === 10) return `7${digits}`;
+    return digits.length === 11 && digits.startsWith('8') ? `7${digits.slice(1)}` : digits;
 }
 
 export async function registerCard(data: RegistrationData): Promise<void> {

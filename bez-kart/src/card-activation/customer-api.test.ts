@@ -129,7 +129,9 @@ describe('Customer API', () => {
         expect(JSON.parse(storage.get('user') ?? '{}')).toEqual({name: 'Анна'});
     });
 
-    it('нормализует десятизначный номер', () => {
+    it('нормализует российские номера', () => {
         expect(normalizePhone('(999) 000-00-00')).toBe('79990000000');
+        expect(normalizePhone('8 (999) 000-00-00')).toBe('79990000000');
+        expect(normalizePhone('+7 (999) 000-00-00')).toBe('79990000000');
     });
 });

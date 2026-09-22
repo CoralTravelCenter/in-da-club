@@ -5,6 +5,11 @@ import {typographed} from '../../../shared/typography';
 
 const knownCities = new Set<string>(cities);
 
+function isValidPhone(value: string): boolean {
+    const digits = value.replace(/\D/g, '');
+    return digits.length === 10 || (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8')));
+}
+
 function displayBirthdate(value?: string): string {
     const isoDate = formatBirthdate(value);
     const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -86,6 +91,8 @@ export function validateRegistrationForm(form: HTMLFormElement): boolean {
     if (city.value && !knownCities.has(city.value.trim())) showFieldError(city, typographed`Укажите город из списка`);
     const email = form.elements.namedItem('email') as HTMLInputElement;
     if (email.value && !email.validity.valid) showFieldError(email, typographed`Укажите корректную электронную почту`);
+    const mobilePhone = form.elements.namedItem('mobilePhone') as HTMLInputElement;
+    if (mobilePhone.value && !isValidPhone(mobilePhone.value)) showFieldError(mobilePhone, typographed`Укажите корректный номер телефона`);
     const firstInvalid = form.querySelector<HTMLInputElement>('[aria-invalid="true"]');
     firstInvalid?.focus();
     return !firstInvalid;
@@ -169,7 +176,7 @@ export function createRegistrationForm(profile: UserProfile): HTMLFormElement {
         <div class="bez-kart-activation__row"><fieldset><legend>${typographed`Пол`} <b>*</b></legend><div class="bez-kart-activation__gender-options"><label><input type="radio" name="gender" value="0" required><span>М</span></label><label><input type="radio" name="gender" value="1"><span>Ж</span></label></div></fieldset><label><span>${typographed`Дата рождения`} <b>*</b></span><input name="birthDate" required inputmode="numeric" placeholder="ДД / ММ / ГГГГ" autocomplete="bday"></label></div>
         <div class="bez-kart-activation__city"><label for="bez-kart-city"><span>${typographed`Город`} <b>*</b></span></label><input id="bez-kart-city" name="city" required autocomplete="address-level2" aria-autocomplete="list" aria-controls="bez-kart-city-options" aria-expanded="false"><ul id="bez-kart-city-options" class="bez-kart-activation__city-options" role="listbox" hidden></ul></div>
         <label><span>${typographed`Электронная почта`} <b>*</b></span><input type="email" name="email" required readonly autocomplete="email"></label>
-        <label><span>${typographed`Телефон`} <b>*</b></span><input type="tel" name="mobilePhone" required readonly autocomplete="tel"></label>
+        <label><span>${typographed`Телефон`} <b>*</b></span><input type="tel" name="mobilePhone" required readonly inputmode="tel" autocomplete="tel"></label>
         <div class="bez-kart-activation__consents">
             <label><input class="visually-hidden" type="checkbox" name="personal" required><span class="bez-kart-activation__checkbox" aria-hidden="true"></span><span><b>*</b> ${typographed`Даю согласие на обработку персональных данных.`} <a href="https://cdn.coral.ru/content/doc/legal/privacy_policy_coral.pdf" target="_blank" rel="noopener">${typographed`Политика обработки персональных данных`}</a></span></label>
             <label><input class="visually-hidden" type="checkbox" name="loyalty" required><span class="bez-kart-activation__checkbox" aria-hidden="true"></span><span><b>*</b> ${typographed`Ознакомлен и согласен с`} <a href="https://b2ccdn.coral.ru/content/doc/legal/pravila-loyalty-program-22062026.pdf" target="_blank" rel="noopener">${typographed`Правилами Программы лояльности`}</a></span></label>
@@ -184,7 +191,14 @@ export function createRegistrationForm(profile: UserProfile): HTMLFormElement {
     setValue('givenName', profile.name ?? '');
     setValue('birthDate', displayBirthdate(profile.birthdate));
     setValue('email', profile.email ?? '');
-    setValue('mobilePhone', profile.mobilePhone ?? '');
+    const mobilePhone = form.elements.namedItem('mobilePhone') as HTMLInputElement;
+    const profilePhone = profile.mobilePhone ?? '';
+    if (isValidPhone(profilePhone)) {
+        mobilePhone.value = profilePhone;
+    } else {
+        mobilePhone.readOnly = false;
+        mobilePhone.placeholder = '+7 (___) ___-__-__';
+    }
     const gender = String(profile.gender ?? '').toUpperCase();
     const genderInput = form.querySelector<HTMLInputElement>(`input[name="gender"][value="${gender === 'F' || gender === '1' ? '1' : '0'}"]`);
     if (genderInput) genderInput.checked = true;
