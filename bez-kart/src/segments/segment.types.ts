@@ -7,8 +7,27 @@ export const SEGMENT_IDS = [
 
 export type SegmentId = (typeof SEGMENT_IDS)[number];
 
+export type BlockId =
+  | 'club'
+  | 'cashback'
+  | 'birthday-bonus'
+  | 'welcome-bonus'
+  | 'private-sales'
+  | 'manager';
+
+export interface BlockPresentation {
+  placement: {
+    mobile: 'featured' | 'list';
+    desktop: { column: string; row: string };
+  };
+  background?: {
+    mobile: { src: string; size: string; position: string };
+    desktop?: { src: string; size: string; position: string };
+  };
+}
+
 interface ContentBlockBaseConfig {
-  id: string;
+  id: BlockId;
   description: string;
   tooltip?: {
     title: string;
@@ -45,7 +64,8 @@ type ContentBlockTextConfig =
       valuePrefix?: string;
     };
 
-export type ContentBlockConfig = ContentBlockBaseConfig & ContentBlockTextConfig;
+export type ContentBlockDefinition = ContentBlockBaseConfig & ContentBlockTextConfig;
+export type ContentBlockConfig = ContentBlockDefinition & { presentation: BlockPresentation };
 
 export interface SegmentConfig {
   id: SegmentId;

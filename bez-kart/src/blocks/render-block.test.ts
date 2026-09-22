@@ -4,6 +4,10 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import type {ContentBlockConfig} from '@/segments/segment.types';
 import {renderBlock} from './render-block';
 
+const presentation: ContentBlockConfig['presentation'] = {
+    placement: {mobile: 'list', desktop: {column: '1', row: '1'}},
+};
+
 describe('renderBlock', () => {
     beforeEach(() => {
         document.body.replaceChildren();
@@ -14,6 +18,7 @@ describe('renderBlock', () => {
 
     it('создаёт ссылку с заголовком и переносами в описании', () => {
         const config: ContentBlockConfig = {
+            presentation,
             id: 'manager',
             title: 'Личный менеджер',
             description: 'Первая строка<br>Вторая строка',
@@ -32,6 +37,7 @@ describe('renderBlock', () => {
     it('создаёт кнопку действия и вызывает переданный обработчик', () => {
         const onActivateCard = vi.fn();
         const config: ContentBlockConfig = {
+            presentation,
             id: 'club',
             value: '5000',
             valuePrefix: 'до',
@@ -52,6 +58,7 @@ describe('renderBlock', () => {
         const onActivateCard = vi.fn();
         const href = 'https://coralbonus.ru/registration?promo=test';
         const config: ContentBlockConfig = {
+            presentation,
             id: 'club',
             title: 'Клуб',
             description: '',
@@ -71,6 +78,7 @@ describe('renderBlock', () => {
 
     it('оставляет кнопку подсказки вне ссылки', () => {
         const config: ContentBlockConfig = {
+            presentation,
             id: 'cashback',
             title: 'Кешбэк',
             description: 'Описание',
@@ -90,6 +98,7 @@ describe('renderBlock', () => {
     it('отключает автозапуск видео при запросе уменьшенного движения', () => {
         vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({matches: true}));
         const config: ContentBlockConfig = {
+            presentation,
             id: 'club',
             title: 'Клуб',
             description: 'Описание',
@@ -105,6 +114,7 @@ describe('renderBlock', () => {
 
     it('использует MOV в Safari и WebM в остальных браузерах', () => {
         const config: ContentBlockConfig = {
+            presentation,
             id: 'club',
             title: 'Клуб',
             description: 'Описание',

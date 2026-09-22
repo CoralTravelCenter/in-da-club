@@ -3,121 +3,120 @@
 
 .bez-kart-activation {
   color: #111;
+}
 
-  .visually-hidden {
-    position: absolute;
-    overflow: hidden;
-    width: 1px;
-    height: 1px;
+.bez-kart-activation .visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  white-space: nowrap;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+.bez-kart-activation__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  width: 100%;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}
+
+.bez-kart-activation__banner {
+  width: 100%;
+  aspect-ratio: 736 / 360;
+  background: url('#{config.$public-assets-base}/5000-for-activation-landscape.webp') center / cover no-repeat;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    aspect-ratio: unset;
+    height: 100%;
+    border-radius: 12px;
+    background-image: url('#{config.$public-assets-base}/5000-for-activation-portrait.webp');
+  }
+}
+
+.bez-kart-activation__panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.2;
+  padding-inline: 16px;
+  padding-bottom: 16px;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
     padding: 0;
-    margin: -1px;
-    white-space: nowrap;
-    border: 0;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
   }
+}
 
-  &__body {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-    width: 100%;
+.bez-kart-activation__steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 16px 0;
+}
 
-    @media (min-width: tokens.$breakpoint-desktop) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      align-items: stretch;
-    }
-  }
+.bez-kart-activation__steps [data-step-mark] {
+  display: grid;
+  flex: 0 0 36px;
+  place-content: center;
+  width: 36px;
+  height: 36px;
+  line-height: 1;
+  font-weight: 700;
+  font-family: inherit;
+  border: 0;
+  -webkit-mask: url('#{config.$public-assets-base}/step-market-shape.svg') center / contain no-repeat;
+  mask: url('#{config.$public-assets-base}/step-market-shape.svg') center / contain no-repeat;
+}
 
-  &__banner {
-    width: 100%;
-    aspect-ratio: 736 / 360;
-    background: url('#{config.$public-assets-base}/5000-for-activation-landscape.webp') center / cover no-repeat;
-    border-top-right-radius: 12px;
-    border-top-left-radius: 12px;
+.bez-kart-activation__steps [data-step-mark][data-state='current'] {
+  color: #0092d0;
+  background: #e6f4ff;
+}
 
-    @media (min-width: tokens.$breakpoint-desktop) {
-      aspect-ratio: unset;
-      height: 100%;
-      border-radius: 12px;
-      background-image: url('#{config.$public-assets-base}/5000-for-activation-portrait.webp');
-    }
-  }
+.bez-kart-activation__steps [data-step-mark][data-state='complete'] {
+  color: #fff;
+  background: rgba(27, 138, 76, 0.6);
+}
 
-  &__panel {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    font-family: inherit;
-    font-size: 14px;
-    line-height: 1.2;
-    padding-inline: 16px;
-    padding-bottom: 16px;
+.bez-kart-activation__steps [data-step-mark][data-state='upcoming'] {
+  color: #b2b2b2;
+  background: #f5f5f5;
+}
 
-    @media (min-width: tokens.$breakpoint-desktop) {
-      padding: 0;
-    }
-  }
+.bez-kart-activation__steps i {
+  flex: 1;
+  height: 2px;
+  background: url('#{config.$public-assets-base}/steps-divider.svg') center no-repeat;
+}
 
-  &__steps {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    margin: 0 0 16px 0;
+.bez-kart-activation__stage h2 {
+  margin: 0 0 12px;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1;
+}
 
+.bez-kart-activation__stage {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
 
-    [data-step-mark] {
-      display: grid;
-      flex: 0 0 36px;
-      place-content: center;
-      width: 36px;
-      height: 36px;
-      line-height: 1;
-      font-weight: 700;
-      font-family: inherit;
-      border: 0;
-      -webkit-mask: url('#{config.$public-assets-base}/step-market-shape.svg') center / contain no-repeat;
-      mask: url('#{config.$public-assets-base}/step-market-shape.svg') center / contain no-repeat;
-    }
-
-    [data-step-mark][data-state='current'] {
-      color: #0092d0;
-      background: #e6f4ff;
-    }
-
-    [data-step-mark][data-state='complete'] {
-      color: #fff;
-      background: rgba(27, 138, 76, 0.6);
-    }
-
-    [data-step-mark][data-state='upcoming'] {
-      color: #b2b2b2;
-      background: #f5f5f5;
-    }
-
-    i {
-      flex: 1;
-      height: 2px;
-      background: url('#{config.$public-assets-base}/steps-divider.svg') center no-repeat;
-    }
-  }
-
-  &__stage h2 {
-    margin: 0 0 12px;
-    font-size: 26px;
-    font-weight: 500;
-    line-height: 1;
-  }
-
-  &__stage {
-    display: flex;
-    flex: 1;
-    min-height: 0;
-    flex-direction: column;
-
-    @media (min-width: tokens.$breakpoint-desktop) {
-      min-height: var(--bez-kart-activation-step-height, 0);
-    }
+  @media (min-width: tokens.$breakpoint-desktop) {
+    min-height: var(--bez-kart-activation-step-height, 0);
   }
 }

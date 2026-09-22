@@ -135,6 +135,16 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
     const content = document.createElement('div');
     block.className = 's-kartami-block';
     block.dataset.blockId = config.id;
+    if (config.presentation.background) {
+        const {mobile, desktop = mobile} = config.presentation.background;
+        block.dataset.hasBackground = '';
+        block.style.setProperty('--block-background-mobile', `url("${mobile.src}")`);
+        block.style.setProperty('--block-background-size-mobile', mobile.size);
+        block.style.setProperty('--block-background-position-mobile', mobile.position);
+        block.style.setProperty('--block-background-desktop', `url("${desktop.src}")`);
+        block.style.setProperty('--block-background-size-desktop', desktop.size);
+        block.style.setProperty('--block-background-position-desktop', desktop.position);
+    }
     content.className = 's-kartami-block__content';
     if (config.isLoading) {
         const heading = document.createElement('span');

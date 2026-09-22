@@ -13,20 +13,41 @@
   display: grid;
   gap: tokens.$layout-gap;
   min-width: 0;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(165px, auto));
+  }
 }
 
 .s-kartami-segment__featured {
   min-height: 340px;
   padding-inline: tokens.$space-md;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-column: var(--block-grid-column);
+    grid-row: var(--block-grid-row);
+    min-height: 0;
+    padding: 0;
+  }
 }
 
 .s-kartami-segment__featured--card-level {
   min-height: 0;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-column: 3;
+    grid-row: 1;
+  }
 }
 
 .s-kartami-segment__featured--card-level > .s-kartami-block {
   height: auto;
   min-height: 0;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    height: 100%;
+  }
 }
 
 .s-kartami-segment__list {
@@ -42,6 +63,12 @@
           $item-size: 90%,
           $hide-scrollbar: true
   );
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    display: contents;
+    min-height: 0;
+    padding: 0;
+  }
 }
 
 .s-kartami-segment__list--scroll-locked {
@@ -52,141 +79,35 @@
 
 .s-kartami-segment__item {
   min-width: 0;
-}
 
-@media (min-width: tokens.$breakpoint-desktop) {
-  .s-kartami-segment__content {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: repeat(3, minmax(165px, auto));
-  }
-
-  .s-kartami-segment__featured {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    min-height: 0;
-    padding: 0;
-  }
-
-  .s-kartami-segment__featured--card-level {
-    grid-column: 3;
-    grid-row: 1;
-  }
-
-  .s-kartami-segment__featured--card-level > .s-kartami-block {
-    height: 100%;
-  }
-
-  .s-kartami-segment__list {
-    display: contents;
-    min-height: 0;
-    padding: 0;
-  }
-
-  .s-kartami-segment__item {
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-column: var(--block-grid-column);
+    grid-row: var(--block-grid-row);
     scroll-snap-align: none;
   }
+}
 
-  .s-kartami-segment[data-segment-id='inactive'] .s-kartami-segment__item[data-block-id='cashback'] {
-    grid-column: 1;
-    grid-row: 3;
-  }
 
-  .s-kartami-segment[data-segment-id='inactive'] .s-kartami-segment__item[data-block-id='welcome-bonus'] {
-    grid-column: 2;
-    grid-row: 1;
-  }
 
-  .s-kartami-segment[data-segment-id='inactive'] .s-kartami-segment__item[data-block-id='manager'] {
-    grid-column: 2;
-    grid-row: 2;
-  }
 
-  .s-kartami-segment[data-segment-id='inactive'] .s-kartami-segment__item[data-block-id='birthday-bonus'] {
-    grid-column: 2;
-    grid-row: 3;
-  }
 
-  .s-kartami-segment[data-segment-id='inactive'] .s-kartami-segment__item[data-block-id='private-sales'] {
-    grid-column: 3;
-    grid-row: 2 / span 2;
-  }
 
-  .s-kartami-segment[data-client='active'][data-ride='1'] .s-kartami-segment__item[data-block-id='birthday-bonus'] {
-    grid-column: 1;
-    grid-row: 1;
-  }
 
-  .s-kartami-segment[data-client='active'][data-ride='1'] .s-kartami-segment__item[data-block-id='cashback'] {
-    grid-column: 1;
-    grid-row: 2 / span 2;
-  }
 
-  .s-kartami-segment[data-client='active'][data-ride='1'] .s-kartami-segment__featured[data-block-id='greeting'] {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-  }
 
-  .s-kartami-segment[data-client='active'][data-ride='1'] .s-kartami-segment__featured[data-block-id='card-level'] {
-    grid-column: 2;
-    grid-row: 3;
-  }
 
-  .s-kartami-segment[data-client='active'][data-ride='1'] .s-kartami-segment__item[data-block-id='club-launch'] {
-    grid-column: 3;
-    grid-row: 1;
-  }
 
-  .s-kartami-segment[data-client='active'][data-ride='1'] .s-kartami-segment__item[data-block-id='travel-more'] {
-    grid-column: 3;
-    grid-row: 2 / span 2;
-  }
 
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__content {
+.s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__content {
+  @media (min-width: tokens.$breakpoint-desktop) {
     grid-template-rows: repeat(4, minmax(165px, auto));
   }
-
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__item[data-block-id='balance'] {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-  }
-
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__featured[data-block-id='greeting'] {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-  }
-
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__item[data-block-id='cashback'] {
-    grid-column: 3;
-    grid-row: 1;
-  }
-
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__item[data-block-id='club-launch'] {
-    grid-column: 1;
-    grid-row: 3;
-  }
-
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__featured[data-block-id='card-level'] {
-    grid-column: 2;
-    grid-row: 3;
-  }
-
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__item[data-block-id='birthday-bonus'] {
-    grid-column: 3;
-    grid-row: 2 / span 2;
-  }
-
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__item[data-block-id='manager'] {
-    grid-column: 1;
-    grid-row: 4;
-  }
-
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__item[data-block-id='private-sales'] {
-    grid-column: 2;
-    grid-row: 4;
-  }
-
-  .s-kartami-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .s-kartami-segment__item[data-block-id='travel-more'] {
-    grid-column: 3;
-    grid-row: 4;
-  }
 }
+
+
+
+
+
+
+
+

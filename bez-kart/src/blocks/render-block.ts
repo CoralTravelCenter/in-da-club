@@ -223,6 +223,17 @@ export function renderBlock(
     block.className = 'bez-kart-block';
     block.dataset.blockId = config.id;
 
+    if (config.presentation.background) {
+        const {mobile, desktop = mobile} = config.presentation.background;
+        block.dataset.hasBackground = '';
+        block.style.setProperty('--block-background-mobile', `url("${mobile.src}")`);
+        block.style.setProperty('--block-background-size-mobile', mobile.size);
+        block.style.setProperty('--block-background-position-mobile', mobile.position);
+        block.style.setProperty('--block-background-desktop', `url("${desktop.src}")`);
+        block.style.setProperty('--block-background-size-desktop', desktop.size);
+        block.style.setProperty('--block-background-position-desktop', desktop.position);
+    }
+
     if (block instanceof HTMLAnchorElement && config.href) {
         block.href = config.href;
     }

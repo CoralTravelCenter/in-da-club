@@ -1,4 +1,4 @@
-import type {ContentBlockConfig, SegmentConfig, SegmentContentConfig, SegmentId,} from './segment.types';
+import type {BlockId, BlockPresentation, ContentBlockConfig, ContentBlockDefinition, SegmentConfig, SegmentContentConfig, SegmentId,} from './segment.types';
 import {typographed} from '../../../shared/typography';
 
 const CLUB_VIDEO_URL = 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart/club.webm';
@@ -8,6 +8,23 @@ const REGULAR_CLIENT_REFERRAL_URLS = {
     'regular-2': 'https://coralbonus.ru/registration?promo=ME608I6I76IQCD7ZQ8941G6EPWVC31EOMLSXK46ZJPIXMST9AO4QOWPOWFBD06T',
     'regular-3': 'https://coralbonus.ru/registration?promo=JN53CKMQHT7RU26B02EW9V7P3SK2LTPNAOT9UE5ZW2S5OXDEAOTSQSNA9WZ68E2',
 } as const;
+
+const asset = (src: string): string => `${__PUBLIC_ASSETS_BASE__}/${src}`;
+const list = (column: string, row: string, background?: BlockPresentation['background']): BlockPresentation => ({placement: {mobile: 'list', desktop: {column, row}}, background});
+const featured = (column: string, row: string): BlockPresentation => ({placement: {mobile: 'featured', desktop: {column, row}}});
+const background = (mobile: [string, string, string], desktop: [string, string, string] = mobile): NonNullable<BlockPresentation['background']> => ({
+    mobile: {src: asset(mobile[0]), size: mobile[1], position: mobile[2]},
+    desktop: {src: asset(desktop[0]), size: desktop[1], position: desktop[2]},
+});
+
+const BLOCK_PRESENTATION = {
+    club: featured('2', '1 / span 3'),
+    'welcome-bonus': list('1', '1 / span 2', background(['hello-bonus.webp', 'auto 100%', 'right bottom'])),
+    manager: list('1', '3 / span 3', background(['manager.webp', 'auto 65%', 'right bottom'])),
+    'birthday-bonus': list('2', '4 / span 2', background(['birthday.webp', 'auto 100%', 'right bottom'], ['birthday-d.webp', 'auto 100%', 'right bottom'])),
+    cashback: list('3', '1 / span 2', background(['cashback.webp', 'min(45%, 180px) auto', 'right bottom'], ['cashback.webp', 'min(30%, 180px) auto', 'calc(100% - 32px) 30%'])),
+    'private-sales': list('3', '3 / span 3', background(['closed-promo.webp', 'auto 70%', 'right bottom'], ['closed-promo-d.webp', 'auto 60%', 'right bottom'])),
+} satisfies Record<BlockId, BlockPresentation>;
 
 export const SEGMENT_CONTENT = {
     'new-client': {
@@ -110,7 +127,7 @@ export const SEGMENT_CONTENT = {
 export function getSegmentConfig(id: SegmentId): SegmentConfig {
     const content = SEGMENT_CONTENT[id];
     const cashbackValue = `${content.cashback.percent}%`;
-    const blocks: ContentBlockConfig[] = [
+    const definitions: ContentBlockDefinition[] = [
         {
             id: 'club',
             title: typographed`Вступайте в клуб «Море возможностей» — получайте больше привилегий на отдых`,
@@ -172,6 +189,6 @@ export function getSegmentConfig(id: SegmentId): SegmentConfig {
     return {
         id,
         ariaLabel: content.ariaLabel,
-        blocks,
+        blocks: definitions.map((block): ContentBlockConfig => ({...block, presentation: BLOCK_PRESENTATION[block.id]})),
     };
 }

@@ -1,4 +1,3 @@
-@use 'abstracts/mixins' as mixins;
 @use '../abstracts/tokens' as tokens;
 
 .s-kartami-block {
@@ -115,29 +114,27 @@
   line-height: 1;
 }
 
-.s-kartami-segment[data-client='active'][data-ride='3'] {
-  .s-kartami-block__title,
-  .s-kartami-block__quantity {
-    font-family: 'Trajan Pro 3', serif;
-    font-weight: 400;
-  }
+.s-kartami-segment[data-client='active'][data-ride='3'] .s-kartami-block__title,
+.s-kartami-segment[data-client='active'][data-ride='3'] .s-kartami-block__quantity {
+  font-family: 'Trajan Pro 3', serif;
+  font-weight: 400;
+}
 
-  .s-kartami-block__value {
-    background: linear-gradient(329deg, #fff -60.42%, #e1e1e1 -3.11%, #fff 58.41%, #e1e1e1 108.13%);
-  }
+.s-kartami-segment[data-client='active'][data-ride='3'] .s-kartami-block__value {
+  background: linear-gradient(329deg, #fff -60.42%, #e1e1e1 -3.11%, #fff 58.41%, #e1e1e1 108.13%);
+}
 
-  .s-kartami-block__badge {
-    background:
-      linear-gradient(
-        145deg,
-        rgb(158 137 118 / 0.12) 26.53%,
-        rgb(246 208 171 / 0.12) 54.11%,
-        rgb(196 152 111 / 0.12) 72.91%,
-        rgb(157 119 78 / 0.12) 79.56%,
-        rgb(78 38 0 / 0.12) 96.06%
-      ),
-      var(--Base-color_Base_Light, #fff);
-  }
+.s-kartami-segment[data-client='active'][data-ride='3'] .s-kartami-block__badge {
+  background:
+    linear-gradient(
+      145deg,
+      rgb(158 137 118 / 0.12) 26.53%,
+      rgb(246 208 171 / 0.12) 54.11%,
+      rgb(196 152 111 / 0.12) 72.91%,
+      rgb(157 119 78 / 0.12) 79.56%,
+      rgb(78 38 0 / 0.12) 96.06%
+    ),
+    var(--Base-color_Base_Light, #fff);
 }
 
 .s-kartami-block__description {
@@ -241,237 +238,15 @@
   }
 }
 
-.s-kartami-block[data-block-id='cashback'] {
-  @include mixins.public-background(
-          'media/clients/shared/cashback.webp',
-          min(45%, 180px) auto,
-          right bottom
-  );
-}
-
-@media (min-width: tokens.$breakpoint-desktop) {
-  .s-kartami-block[data-block-id='cashback'] {
-    @include mixins.public-background(
-            'media/clients/shared/cashback.webp',
-            min(30%, 180px) auto,
-            calc(100% - 32px) 0%
-    );
-  }
-}
-
-.s-kartami-block[data-block-id='birthday-bonus'] {
-  @include mixins.public-background(
-          'media/clients/shared/birthday.webp',
-          auto 100%,
-          right bottom
-  );
+.s-kartami-block[data-has-background] {
+  background-image: var(--block-background-mobile);
+  background-repeat: no-repeat;
+  background-position: var(--block-background-position-mobile);
+  background-size: var(--block-background-size-mobile);
 
   @media (min-width: tokens.$breakpoint-desktop) {
-    @include mixins.public-background(
-            'media/clients/shared/birthday-d.webp',
-            auto 100%,
-            right bottom
-    );
-  }
-}
-
-.s-kartami-block[data-block-id='welcome-bonus'] {
-  @include mixins.public-background(
-          'media/clients/inactive/hello-bonus.webp',
-          auto 100%,
-          right bottom
-  );
-}
-
-.s-kartami-block[data-block-id='private-sales'] {
-  @include mixins.public-background(
-          'media/clients/shared/closed-promo.webp',
-          auto 70%,
-          right bottom
-  );
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    @include mixins.public-background(
-            'media/clients/shared/closed-promo-d.webp',
-            auto 60%,
-            right bottom
-    );
-  }
-}
-
-.s-kartami-block[data-block-id='manager'] {
-  @include mixins.public-background(
-          'media/clients/shared/manager.webp',
-          auto 65%,
-          right bottom
-  );
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    @include mixins.public-background(
-            'media/clients/shared/manager.webp',
-            auto 80%,
-            right bottom
-    );
-  }
-}
-
-.s-kartami-segment[data-client='active'][data-ride='1'] {
-  .s-kartami-block[data-block-id='birthday-bonus'] {
-    @include mixins.public-background(
-            'media/clients/one-trip/present.png',
-            auto 100%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='cashback'] {
-    @include mixins.public-background(
-            'media/clients/one-trip/cashback.png',
-            auto 85%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='club-launch'] {
-    @include mixins.public-background(
-            'media/clients/one-trip/launch.png',
-            auto 70%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='travel-more'] {
-    @include mixins.public-background(
-            'media/clients/one-trip/stars.png',
-            80% auto,
-            right bottom
-    );
-  }
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    .s-kartami-block[data-block-id='club-launch'] {
-      background-size: auto 100%;
-    }
-
-    .s-kartami-block[data-block-id='travel-more'] {
-      background-position: center bottom;
-      background-size: 100% auto;
-    }
-  }
-}
-
-.s-kartami-segment[data-client='active'][data-ride='2'] {
-  .s-kartami-block[data-block-id='balance'] {
-    @include mixins.public-background(
-            'media/clients/two-trips/balance.png',
-            cover,
-            center bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='cashback'] {
-    @include mixins.public-background(
-            'media/clients/two-trips/cashback.png',
-            auto 75%,
-            right center
-    );
-  }
-
-  .s-kartami-block[data-block-id='club-launch'] {
-    @include mixins.public-background(
-            'media/clients/two-trips/club-launch.png',
-            auto 90%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='birthday-bonus'] {
-    @include mixins.public-background(
-            'media/clients/two-trips/birthday-bonus.png',
-            auto 95%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='manager'] {
-    @include mixins.public-background(
-            'media/clients/two-trips/manager.png',
-            auto 90%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='private-sales'] {
-    @include mixins.public-background(
-            'media/clients/two-trips/private-sales.png',
-            auto 95%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='travel-more'] {
-    @include mixins.public-background(
-            'media/clients/two-trips/travel-more.png',
-            auto 90%,
-            right bottom
-    );
-  }
-}
-
-.s-kartami-segment[data-client='active'][data-ride='3'] {
-  .s-kartami-block[data-block-id='balance'] {
-    @include mixins.public-background(
-            'media/clients/three-plus/balance.png',
-            100% auto,
-            center bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='cashback'] {
-    @include mixins.public-background(
-            'media/clients/three-plus/cashback.png',
-            auto 75%,
-            right center
-    );
-  }
-
-  .s-kartami-block[data-block-id='club-launch'] {
-    @include mixins.public-background(
-            'media/clients/three-plus/club-launch.png',
-            auto 90%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='birthday-bonus'] {
-    @include mixins.public-background(
-            'media/clients/three-plus/birthday-bonus.png',
-            auto 95%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='manager'] {
-    @include mixins.public-background(
-            'media/clients/three-plus/manager.png',
-            auto 90%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='private-sales'] {
-    @include mixins.public-background(
-            'media/clients/three-plus/private-sales.png',
-            auto 95%,
-            right bottom
-    );
-  }
-
-  .s-kartami-block[data-block-id='travel-more'] {
-    @include mixins.public-background(
-            'media/clients/three-plus/travel-more.png',
-            auto 90%,
-            right bottom
-    );
+    background-image: var(--block-background-desktop);
+    background-position: var(--block-background-position-desktop);
+    background-size: var(--block-background-size-desktop);
   }
 }

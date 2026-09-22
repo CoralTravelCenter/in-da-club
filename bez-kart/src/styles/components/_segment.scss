@@ -4,95 +4,72 @@
 .bez-kart-segment {
   min-width: 0;
   padding: tokens.$space-xl 0;
+}
 
-  &__title {
-    margin: 0 0 28px;
-    font-size: 28px;
-    font-weight: 600;
-    line-height: 38px;
-    padding-inline: tokens.$space-md;
+.bez-kart-segment__title {
+  margin: 0 0 28px;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 38px;
+  padding-inline: tokens.$space-md;
 
-    @media (min-width: tokens.$breakpoint-desktop) {
-      padding-inline: 0;
-    }
+  @media (min-width: tokens.$breakpoint-desktop) {
+    padding-inline: 0;
   }
+}
 
-  &__content {
-    display: grid;
-    gap: tokens.$layout-gap;
-    min-width: 0;
+.bez-kart-segment__content {
+  display: grid;
+  gap: tokens.$layout-gap;
+  min-width: 0;
 
-    @media (min-width: tokens.$breakpoint-desktop) {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      grid-template-rows: repeat(5, minmax(0, 100px));
-    }
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 100px));
   }
+}
 
-  &__featured {
-    min-height: 340px;
-    padding-inline: tokens.$space-md;
+.bez-kart-segment__featured {
+  min-height: 340px;
+  padding-inline: tokens.$space-md;
 
-    @media (min-width: tokens.$breakpoint-desktop) {
-      grid-column: 2;
-      grid-row: 1 / span 3;
-      min-height: 330px;
-      padding: 0;
-    }
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-column: var(--block-grid-column);
+    grid-row: var(--block-grid-row);
+    min-height: 330px;
+    padding: 0;
   }
+}
 
-  &__list {
-    min-height: 220px;
-    list-style: none;
-    margin: 0;
-    padding-inline: 16px;
-    scroll-padding-inline: 16px;
+.bez-kart-segment__list {
+  min-height: 220px;
+  list-style: none;
+  margin: 0;
+  padding-inline: 16px;
+  scroll-padding-inline: 16px;
 
-    @include mixins.scroll-snap(
-            $gap: tokens.$layout-gap,
-            $item-selector: '> li',
-            $item-size: 90%,
-            $hide-scrollbar: true
-    );
+  @include mixins.scroll-snap(
+          $gap: tokens.$layout-gap,
+          $item-selector: '> li',
+          $item-size: 90%,
+          $hide-scrollbar: true
+  );
 
-    @media (min-width: tokens.$breakpoint-desktop) {
-      display: contents;
-    }
-
-    &--scroll-locked {
-      overflow: hidden;
-      overscroll-behavior: none;
-      touch-action: none;
-    }
+  @media (min-width: tokens.$breakpoint-desktop) {
+    display: contents;
   }
+}
 
-  &__item {
-    @media (min-width: tokens.$breakpoint-desktop) {
-      scroll-snap-align: none;
+.bez-kart-segment__list--scroll-locked {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
 
-      &[data-block-id='welcome-bonus'] {
-        grid-column: 1;
-        grid-row: 1 / span 2;
-      }
-
-      &[data-block-id='manager'] {
-        grid-column: 1;
-        grid-row: 3 / span 3;
-      }
-
-      &[data-block-id='birthday-bonus'] {
-        grid-column: 2;
-        grid-row: 4 / span 2;
-      }
-
-      &[data-block-id='cashback'] {
-        grid-column: 3;
-        grid-row: 1 / span 2;
-      }
-
-      &[data-block-id='private-sales'] {
-        grid-column: 3;
-        grid-row: 3 / span 3;
-      }
-    }
+.bez-kart-segment__item {
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-column: var(--block-grid-column);
+    grid-row: var(--block-grid-row);
+    scroll-snap-align: none;
   }
 }
