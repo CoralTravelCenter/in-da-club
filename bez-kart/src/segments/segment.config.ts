@@ -1,5 +1,5 @@
 import type {BlockId, BlockPresentation, ContentBlockConfig, ContentBlockDefinition, SegmentConfig, SegmentContentConfig, SegmentId,} from './segment.types';
-import {typographed} from '../../../shared/typography';
+import {typographed} from '../../../shared/runtime/typography';
 
 const CLUB_VIDEO_URL = 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart/club.webm';
 const CLUB_VIDEO_SAFARI_URL = 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart/club.mov';

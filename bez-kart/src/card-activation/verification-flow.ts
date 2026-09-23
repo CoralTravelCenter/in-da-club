@@ -1,6 +1,6 @@
 import {getProfile} from './profile';
 import {activateCard, getBonusProfile, refreshUser, sendVerificationCode, type RegistrationData} from './customer-api';
-import {typographed} from '../../../shared/typography';
+import {typographed} from '../../../shared/runtime/typography';
 import {
     setStep,
     showMessage,

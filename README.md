@@ -23,12 +23,14 @@ npm ci
 ```text
 bez-kart/       приложение для клиентов без карты
 s-kartami/      приложение для держателей карты
-shared/         общая build/runtime-инфраструктура
+shared/         общий browser runtime и Sass
+tests/          контрактные проверки корневой конфигурации
 scripts/        служебные скрипты, включая Typograf
+*.config.base.ts общие factories Vite и Vitest
 graphify-out/   граф файлов, зависимостей и архитектурный отчёт
 ```
 
-Подробности интеграции и локального поведения приложений находятся в `bez-kart/README.md` и `s-kartami/README.md`. Актуальный архитектурный обзор — в `PROJECT_ANALYSIS.md`.
+Подробности интеграции и локального поведения приложений находятся в `bez-kart/README.md` и `s-kartami/README.md`. Карта файлов и зависимостей находится в [`graphify-out/GRAPH_REPORT.md`](graphify-out/GRAPH_REPORT.md).
 
 ## Основные команды
 

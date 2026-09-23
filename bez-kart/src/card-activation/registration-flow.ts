@@ -1,7 +1,7 @@
 import type {UserProfile} from './profile';
 import {normalizePhone, registerCard, type RegistrationData} from './customer-api';
 import {applyConsents} from './consents';
-import {typographed} from '../../../shared/typography';
+import {typographed} from '../../../shared/runtime/typography';
 import {
     showMessage,
     type CoralPopupElement,

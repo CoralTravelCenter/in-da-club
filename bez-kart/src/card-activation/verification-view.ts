@@ -1,5 +1,5 @@
 import {ACTIVATION_DIALOG_ID} from './activation-view';
-import {typographed} from '../../../shared/typography';
+import {typographed} from '../../../shared/runtime/typography';
 
 export function validateVerificationForm(form: HTMLFormElement): boolean {
     form.querySelector('.bez-kart-activation__field-error')?.remove();

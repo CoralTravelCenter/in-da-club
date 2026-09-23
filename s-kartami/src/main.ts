@@ -1,7 +1,7 @@
 import { bootstrap } from './app/bootstrap';
 import {normalizeCardLevel} from './segments/bonus-profile';
 import { SEGMENT_IDS } from './segments/segment.types';
-import { mountWhenAvailable } from '../../shared/mount-when-available';
+import { mountWhenAvailable } from '../../shared/runtime/mount-when-available';
 import './styles/main.scss';
 
 const ROOT_SELECTOR = '[data-bez-kart-root]';

@@ -1,5 +1,5 @@
 import type {BlockId, BlockPresentation, CardLevel, ContentBlockConfig, ContentBlockDefinition, CustomerContext, SegmentConfig, SegmentId} from './segment.types';
-import {typographed} from '../../../shared/typography';
+import {typographed} from '../../../shared/runtime/typography';
 
 const CARD_IMAGE: Record<CardLevel, string> = {Silver: 'card-ag-comp.webp', Gold: 'card-au-comp.webp', Platinum: 'card-pt-comp.webp'};
 const SHARED_CLIENT_MEDIA = `${__PUBLIC_ASSETS_BASE__}/media/clients/shared`;

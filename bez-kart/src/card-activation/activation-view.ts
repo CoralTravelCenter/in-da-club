@@ -1,4 +1,4 @@
-import {typographed} from '../../../shared/typography';
+import {typographed} from '../../../shared/runtime/typography';
 
 export interface CoralPopupElement extends HTMLElement {
     show: () => Promise<void> | void;

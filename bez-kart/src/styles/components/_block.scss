@@ -1,20 +1,15 @@
+@use 'patterns/block' as shared-block;
 @use '../abstracts/tokens' as tokens;
 
-.bez-kart-block {
-  position: relative;
-  display: block;
-  height: 100%;
-  min-width: 0;
-  padding: tokens.$space-md;
-  color: tokens.$color-text;
-  text-decoration: none;
-  background-color: tokens.$color-surface;
-  border-radius: tokens.$radius-card;
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    padding: tokens.$space-lg;
-  }
-}
+@include shared-block.styles(
+  $namespace: 'bez-kart',
+  $breakpoint-desktop: tokens.$breakpoint-desktop,
+  $color-surface: tokens.$color-surface,
+  $color-text: tokens.$color-text,
+  $radius-card: tokens.$radius-card,
+  $space-md: tokens.$space-md,
+  $space-lg: tokens.$space-lg
+);
 
 .bez-kart-block--video {
   overflow: hidden;
@@ -47,31 +42,6 @@
   }
 }
 
-.bez-kart-block__content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  height: 100%;
-}
-
-.bez-kart-block__link {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 0;
-  color: inherit;
-  text-decoration: none;
-}
-
-.bez-kart-block__title,
-.bez-kart-block__value {
-  color: var(--Text-color_Text_Dark, #000);
-  font-size: 24px;
-  font-weight: var(--font-font_Weight_Semibold, 600);
-  line-height: 27px;
-}
-
 .bez-kart-block__value {
   display: flex;
   align-items: center;
@@ -81,48 +51,4 @@
   background: rgba(210, 233, 251, 0.8);
   border-radius: 16px;
   color: #E84E0F;
-}
-
-.bez-kart-block__value-prefix {
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.bez-kart-block__quantity {
-  font-size: 38px;
-  line-height: 1;
-}
-
-.bez-kart-block__description {
-  font-size: 16px;
-  line-height: 22px;
-}
-
-.bez-kart-block__description + .bez-kart-block__action {
-  margin-top: 8px;
-}
-
-.bez-kart-block__title + .bez-kart-block__action,
-.bez-kart-block__value + .bez-kart-block__action {
-  margin-top: 4px;
-}
-
-.bez-kart-block__badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-}
-
-.bez-kart-block[data-has-background] {
-  background-image: var(--block-background-mobile);
-  background-repeat: no-repeat;
-  background-position: var(--block-background-position-mobile);
-  background-size: var(--block-background-size-mobile);
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    background-image: var(--block-background-desktop);
-    background-position: var(--block-background-position-desktop);
-    background-size: var(--block-background-size-desktop);
-  }
 }

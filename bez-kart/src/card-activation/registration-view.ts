@@ -1,7 +1,7 @@
 import {formatBirthdate, type UserProfile} from './profile';
 import {cities} from './cities';
 import {ACTIVATION_DIALOG_ID} from './activation-view';
-import {typographed} from '../../../shared/typography';
+import {typographed} from '../../../shared/runtime/typography';
 
 const knownCities = new Set<string>(cities);
 

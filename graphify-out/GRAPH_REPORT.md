@@ -1,141 +1,141 @@
-# Graph Report - in-da-club  (2026-09-22)
+# Graph Report - in-da-club  (2026-09-23)
 
 ## Corpus Check
-- 60 files · ~174,937 words
+- 58 files · ~149,199 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 21 file(s) not represented in the graph (top: .scss 18, (none) 3)
+- Unclassified: 22 file(s) not represented in the graph (top: .scss 20, (none) 2)
 
 ## Summary
-- 339 nodes · 696 edges · 15 communities (14 shown, 1 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.9)
+- 324 nodes · 690 edges · 15 communities (14 shown, 1 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 14 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cc96644c`
+- Built from commit: `0af36160`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
+- customer-api.ts
 - typographed
-- customer-context.ts
 - bez-kart/src/segments/segment.config.ts
 - package.json
+- registration-view.ts
 - compilerOptions
-- customer-api.ts
+- consents.ts
 - bez-kart
-- Анализ проекта `in-da-club`
+- scripts
 - bez-kart/tsconfig.json
-- Design QA — inactive segment
-- s-kartami/src/segments/segment.config.ts
+- vite.config.base.ts
+- s-kartami/src/segments/segment.types.ts
 - s-kartami/tsconfig.json
-- shared/vite-env.d.ts
-- vite-config.ts
+- vite-env.d.ts
 - in-da-club
 
 ## God Nodes (most connected - your core abstractions)
-1. `typographed()` - 42 edges
+1. `typographed()` - 41 edges
 2. `scripts` - 17 edges
 3. `compilerOptions` - 16 edges
-4. `vitest` - 14 edges
+4. `vitest` - 15 edges
 5. `renderVerification()` - 13 edges
-6. `requestCardActivation()` - 12 edges
-7. `renderRegistration()` - 12 edges
-8. `renderBlock()` - 11 edges
+6. `renderRegistration()` - 12 edges
+7. `renderBlock()` - 11 edges
+8. `requestCardActivation()` - 11 edges
 9. `getBonusProfile()` - 11 edges
 10. `refreshUser()` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Типографика` --references--> `typographed()`  [INFERRED]
-  bez-kart/README.md → shared/typography.ts
-- `Сильные стороны` --references--> `typographed()`  [INFERRED]
-  PROJECT_ANALYSIS.md → shared/typography.ts
-- ``bez-kart`` --references--> `requestCardActivation()`  [INFERRED]
-  PROJECT_ANALYSIS.md → bez-kart/src/card-activation/card-activation.ts
-- ``bez-kart`` --references--> `typographed()`  [INFERRED]
-  PROJECT_ANALYSIS.md → shared/typography.ts
-- ``s-kartami`` --references--> `requestBonusProfile()`  [INFERRED]
-  PROJECT_ANALYSIS.md → s-kartami/src/segments/bonus-profile.ts
+  bez-kart/README.md → shared/runtime/typography.ts
+- `in-da-club` --references--> `shared()`  [INFERRED]
+  README.md → s-kartami/src/segments/segment.config.ts
+- `renderSegment()` --calls--> `typographed()`  [EXTRACTED]
+  bez-kart/src/blocks/render-segment.ts → shared/runtime/typography.ts
+- `showSuccessResult()` --calls--> `typographed()`  [EXTRACTED]
+  bez-kart/src/card-activation/activation-result-view.ts → shared/runtime/typography.ts
+- `showRefreshRequiredResult()` --calls--> `typographed()`  [EXTRACTED]
+  bez-kart/src/card-activation/activation-result-view.ts → shared/runtime/typography.ts
 
 ## Import Cycles
 - None detected.
 
 ## Communities (15 total, 1 thin omitted)
 
-### Community 0 - "typographed"
-Cohesion: 0.13
-Nodes (41): appendCard(), assetUrl(), showExistingCardResult(), showRefreshRequiredResult(), showSuccessResult(), ACTIVATION_DIALOG_ID, CoralPopupElement, createDialog() (+33 more)
+### Community 0 - "customer-api.ts"
+Cohesion: 0.10
+Nodes (46): appendCard(), assetUrl(), showExistingCardResult(), showRefreshRequiredResult(), showSuccessResult(), ACTIVATION_DIALOG_ID, CoralPopupElement, createDialog() (+38 more)
 
-### Community 1 - "customer-context.ts"
-Cohesion: 0.23
-Nodes (14): `s-kartami`, asNumber(), asString(), BonusProfile, normalizeBonusProfile(), normalizeCardLevel(), requestBonusProfile(), getCachedCustomerContext() (+6 more)
+### Community 1 - "typographed"
+Cohesion: 0.15
+Nodes (22): s-kartami, Контракт с Mindbox, Медиа, activeBlocks(), BIRTHDAY_TOOLTIP, birthdayBlock(), CARD_IMAGE, cardBlock() (+14 more)
 
 ### Community 2 - "bez-kart/src/segments/segment.config.ts"
-Cohesion: 0.07
-Nodes (36): bootstrap(), BootstrapOptions, appendAction(), appendBadge(), appendDescription(), appendHeadingOrValue(), appendTextWithLineBreaks(), appendVideo() (+28 more)
+Cohesion: 0.08
+Nodes (31): bootstrap(), BootstrapOptions, appendAction(), appendBadge(), appendDescription(), appendHeadingOrValue(), appendTextWithLineBreaks(), appendVideo() (+23 more)
 
 ### Community 3 - "package.json"
-Cohesion: 0.05
-Nodes (39): dependencies, petite-vue, scroll-lock, devDependencies, jsdom, sass, typescript, typograf (+31 more)
+Cohesion: 0.06
+Nodes (28): dependencies, petite-vue, scroll-lock, devDependencies, jsdom, sass, typescript, typograf (+20 more)
+
+### Community 4 - "registration-view.ts"
+Cohesion: 0.22
+Nodes (15): cities, formatBirthdate(), renderRegistration(), clearFieldError(), clearValidationErrors(), createRegistrationForm(), displayBirthdate(), isValidPhone() (+7 more)
 
 ### Community 5 - "compilerOptions"
 Cohesion: 0.12
 Nodes (16): compilerOptions, esModuleInterop, isolatedModules, lib, module, moduleResolution, noEmit, noImplicitReturns (+8 more)
 
-### Community 6 - "customer-api.ts"
-Cohesion: 0.09
-Nodes (31): profile, TestPopup, ConsentDocument, getConsentDocuments(), isConsentDocument(), LOAD_ERROR, SAVE_ERROR, documents (+23 more)
+### Community 6 - "consents.ts"
+Cohesion: 0.22
+Nodes (11): applyConsents(), ConsentDocument, getConsentDocuments(), isConsentDocument(), LOAD_ERROR, SAVE_ERROR, documents, registration (+3 more)
 
 ### Community 7 - "bez-kart"
 Cohesion: 0.33
 Nodes (5): bez-kart, Scroll snap, Контракт с Mindbox, Локальные изображения, Типографика
 
-### Community 8 - "Анализ проекта `in-da-club`"
-Cohesion: 0.10
-Nodes (17): `bez-kart`, Анализ проекта `in-da-club`, Артефакты анализа, Архитектура и потоки данных, Карта основных зависимостей, Назначение проекта, Общая оболочка, Основа и границы анализа (+9 more)
+### Community 8 - "scripts"
+Cohesion: 0.12
+Nodes (17): scripts, build, build:bez-kart, build:bez-kart:new-client, build:bez-kart:regular-1, build:bez-kart:regular-2, build:bez-kart:regular-3, build:s-kartami (+9 more)
 
 ### Community 9 - "bez-kart/tsconfig.json"
 Cohesion: 0.33
 Nodes (5): compilerOptions, paths, extends, include, ../tsconfig.base.json
 
-### Community 10 - "Design QA — inactive segment"
-Cohesion: 0.25
-Nodes (7): Comparison history, Design QA — inactive segment, Findings, Focused comparison evidence, Follow-up polish, Full-view comparison evidence, Verification
+### Community 10 - "vite.config.base.ts"
+Cohesion: 0.21
+Nodes (8): ref_node_url, vite, vite-plugin-monkey, SEGMENT_IDS, createViteConfig(), htmlBuildOutput(), ViteConfigOptions, createVitestConfig()
 
-### Community 11 - "s-kartami/src/segments/segment.config.ts"
-Cohesion: 0.09
-Nodes (32): scroll-lock, API_DEPENDENT_BLOCKS, bootstrap(), BootstrapOptions, withLoadingBlocks(), appendTextWithBreaks(), appendVideo(), createTooltip() (+24 more)
+### Community 11 - "s-kartami/src/segments/segment.types.ts"
+Cohesion: 0.08
+Nodes (36): vitest, API_DEPENDENT_BLOCKS, bootstrap(), BootstrapOptions, withCardLevelOverride(), withLoadingBlocks(), appendTextWithBreaks(), appendVideo() (+28 more)
 
 ### Community 12 - "s-kartami/tsconfig.json"
 Cohesion: 0.33
 Nodes (5): compilerOptions, paths, extends, include, ../tsconfig.base.json
 
-### Community 14 - "vite-config.ts"
-Cohesion: 0.24
-Nodes (6): ref_node_url, vite, htmlBuildOutput(), createViteConfig(), ViteConfigOptions, createVitestConfig()
-
 ### Community 16 - "in-da-club"
-Cohesion: 0.15
-Nodes (11): in-da-club, Основные команды, Правила безопасного изменения, Сегменты и артефакты, Структура, Требования и установка, s-kartami, Контракт с Mindbox (+3 more)
+Cohesion: 0.25
+Nodes (7): in-da-club, Основные команды, Правила безопасного изменения, Проверка сегментов в dev-режиме, Сегменты и артефакты, Структура, Требования и установка
 
 ## Knowledge Gaps
-- **111 isolated node(s):** `presentation`, `profile`, `registration`, `documents`, `ConsentDocument` (+106 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 137 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **101 isolated node(s):** `presentation`, `profile`, `registration`, `documents`, `ConsentDocument` (+96 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 125 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `typographed()` connect `typographed` to `bez-kart/src/segments/segment.config.ts`, `customer-api.ts`, `bez-kart`, `Анализ проекта `in-da-club``, `s-kartami/src/segments/segment.config.ts`?**
-  _High betweenness centrality (0.223) - this node is a cross-community bridge._
-- **Why does `vitest` connect `bez-kart/src/segments/segment.config.ts` to `customer-context.ts`, `package.json`, `customer-api.ts`, `s-kartami/src/segments/segment.config.ts`, `vite-config.ts`?**
-  _High betweenness centrality (0.212) - this node is a cross-community bridge._
-- **Are the 3 inferred relationships involving `typographed()` (e.g. with `Типографика` and ``bez-kart``) actually correct?**
-  _`typographed()` has 3 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `vitest` connect `s-kartami/src/segments/segment.types.ts` to `customer-api.ts`, `bez-kart/src/segments/segment.config.ts`, `package.json`, `consents.ts`, `vite.config.base.ts`?**
+  _High betweenness centrality (0.242) - this node is a cross-community bridge._
+- **Why does `typographed()` connect `typographed` to `customer-api.ts`, `bez-kart/src/segments/segment.config.ts`, `registration-view.ts`, `consents.ts`, `bez-kart`?**
+  _High betweenness centrality (0.205) - this node is a cross-community bridge._
+- **Why does `scripts` connect `scripts` to `package.json`?**
+  _High betweenness centrality (0.087) - this node is a cross-community bridge._
 - **What connects `presentation`, `profile`, `registration` to the rest of the system?**
-  _111 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `typographed` be split into smaller, more focused modules?**
-  _Cohesion score 0.12627450980392158 - nodes in this community are weakly interconnected._
+  _101 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `customer-api.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.09571655208884189 - nodes in this community are weakly interconnected._
 - **Should `bez-kart/src/segments/segment.config.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.06966618287373004 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08282828282828283 - nodes in this community are weakly interconnected._
 - **Should `package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.05 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._

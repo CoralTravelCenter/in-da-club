@@ -22,7 +22,7 @@
     "build:s-kartami:three-plus": "vite build --config s-kartami/vite.config.ts --mode three-plus",
     "typograf": "node scripts/typograf.mjs bez-kart/src && node scripts/typograf.mjs s-kartami/src",
     "typecheck": "tsc -p bez-kart/tsconfig.json && tsc -p s-kartami/tsconfig.json",
-    "test": "vitest run shared --environment jsdom && vitest run --config bez-kart/vitest.config.ts && vitest run --config s-kartami/vitest.config.ts"
+    "test": "vitest run shared tests --environment jsdom && vitest run --config bez-kart/vitest.config.ts && vitest run --config s-kartami/vitest.config.ts"
   },
   "dependencies": {
     "petite-vue": "^0.4.1",

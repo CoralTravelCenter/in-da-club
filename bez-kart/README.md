@@ -36,7 +36,7 @@ Mindbox отвечает за таргетинг, а запущенный скр
 
 Весь пользовательский текст перед вставкой в DOM обрабатывается пакетом
 `typograf` с локалью `ru`. Используйте тег `typographed` из
-`../shared/typography.ts` для новых текстовых узлов и accessibility-атрибутов.
+`../shared/runtime/typography.ts` для новых текстовых узлов и accessibility-атрибутов.
 Обработка работает одинаково при `npm run dev:bez-kart` и
 `npm run build:bez-kart`.
 
@@ -56,8 +56,8 @@ Mindbox отвечает за таргетинг, а запущенный скр
 }
 ```
 
-Базовый адрес находится в `src/styles/abstracts/_config.scss`. Для production его
-нужно заменить на адрес CDN или статического хоста, доступного пользователям.
+Базовый адрес передаётся из `vite.config.ts` в общий Vite-конфиг. Для production
+используется `productionAssetsBase`, поэтому URL ресурсов не нужно менять в SCSS.
 
 ## Scroll snap
 
@@ -69,11 +69,13 @@ Mindbox отвечает за таргетинг, а запущенный скр
 .bez-kart-slider {
   @include mixins.scroll-snap(
     $gap: 8px,
-    $padding: 0 16px,
     $hide-scrollbar: true
   );
 }
 ```
+
+Внутренние отступы и `scroll-padding` задавайте на самом контейнере: миксин отвечает
+только за механику прокрутки и snap-поведение.
 
 Для вертикальной прокрутки передайте `$direction: y`. Если snap-элементы не
 являются непосредственными потомками, задайте `$item-selector`, например

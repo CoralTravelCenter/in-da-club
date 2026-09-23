@@ -1,4 +1,4 @@
-import {createViteConfig} from '../shared/vite-config.ts';
+import {createViteConfig} from '../vite.config.base.ts';
 import {SEGMENT_IDS} from './src/segments/segment.types.ts';
 
 export default createViteConfig({

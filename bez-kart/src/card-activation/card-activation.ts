@@ -1,6 +1,6 @@
 import {getProfile, waitForLogin, type UserProfile} from './profile';
 import {getBonusProfile} from './customer-api';
-import {typographed} from '../../../shared/typography';
+import {typographed} from '../../../shared/runtime/typography';
 import {
     createDialog,
     type CoralPopupElement,

@@ -1,7 +1,7 @@
 import type {UserProfile} from './profile';
 import type {BonusProfile} from './customer-api';
 import {ACTIVATION_DIALOG_ID} from './activation-view';
-import {typographed} from '../../../shared/typography';
+import {typographed} from '../../../shared/runtime/typography';
 
 function assetUrl(path: string): string {
     return `${__PUBLIC_ASSETS_BASE__}/${path}`;
