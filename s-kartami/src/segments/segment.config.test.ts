@@ -60,8 +60,8 @@ describe('getSegmentConfig', () => {
 
         expect(greeting?.media).toMatchObject({
             type: 'video',
-            src: expect.stringContaining(`/media/clients/${assetPath}.webm`),
-            safariSrc: expect.stringContaining(`/media/clients/${assetPath}.mov`),
+            src: expect.stringContaining(`/clients/${assetPath}.webm`),
+            safariSrc: expect.stringContaining(`/clients/${assetPath}.mov`),
         });
     });
 
