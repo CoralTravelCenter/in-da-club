@@ -8,6 +8,7 @@ import {
 } from './activation-view';
 import {createVerificationForm, readVerificationCode, validateVerificationForm} from './verification-view';
 import {showRefreshRequiredResult, showSuccessResult} from './activation-result-view';
+import {sendBonusAccountActivation} from './mindbox';
 
 interface ResendCooldown {
     start: () => void;
@@ -108,6 +109,7 @@ export async function renderVerification(dialog: CoralPopupElement, data: Regist
             form.setAttribute('aria-busy', 'true');
             form.querySelector('.bez-kart-activation__error')?.remove();
             await activateCard(data.mobilePhone, code);
+            sendBonusAccountActivation(data.city);
             cooldown.stop();
             await renderSuccess(dialog);
         } catch (error) {

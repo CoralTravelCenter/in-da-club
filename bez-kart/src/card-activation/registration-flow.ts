@@ -8,6 +8,7 @@ import {
 } from './activation-view';
 import {createRegistrationForm, parseBirthdate, validateRegistrationForm} from './registration-view';
 import {renderVerification} from './verification-flow';
+import {sendBonusAccountRegistration} from './mindbox';
 
 export function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): void {
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
@@ -51,6 +52,7 @@ export function renderRegistration(dialog: CoralPopupElement, profile: UserProfi
             const registrationChanged = JSON.stringify(completedRegistration) !== JSON.stringify(registration);
             if (registrationChanged) {
                 await registerCard(registration);
+                sendBonusAccountRegistration(registration.city);
                 completedRegistration = registration;
                 consentsApplied = false;
             }
