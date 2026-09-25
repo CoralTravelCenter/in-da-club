@@ -18,6 +18,8 @@ interface MindboxPayload {
                 bonusAccountCity: string;
                 bonusAccountRegistrationDate?: Date;
                 bonusAccountActivationDate?: Date;
+                bonusLevel?: string;
+                bonusAccountNumber?: string;
             };
         };
     };
@@ -30,6 +32,7 @@ function sendBonusAccountOperation(
     status: BonusAccountStatus,
     dateField: BonusAccountDateField,
     city: string,
+    additionalCustomFields: {bonusLevel?: string; bonusAccountNumber?: string} = {},
 ): void {
     const nameId = getProfile()?.nameId;
     const clientId = nameId ? String(nameId) : '';
@@ -52,6 +55,7 @@ function sendBonusAccountOperation(
                         bonusAccountStatus: status,
                         [dateField]: operationDate,
                         bonusAccountCity: city,
+                        ...additionalCustomFields,
                     },
                 },
             },
@@ -70,11 +74,16 @@ export function sendBonusAccountRegistration(city: string): void {
     );
 }
 
-export function sendBonusAccountActivation(city: string): void {
+export function sendBonusAccountActivation(
+    city: string,
+    bonusLevel: string | undefined,
+    bonusAccountNumber: string | undefined,
+): void {
     sendBonusAccountOperation(
         'Website.BonusAccountActivation',
         2,
         'bonusAccountActivationDate',
         city,
+        {bonusLevel, bonusAccountNumber},
     );
 }

@@ -121,6 +121,15 @@ describe('Customer API', () => {
         expect(storage.has('user')).toBe(false);
     });
 
+    it('не записывает профиль, если в новом JWT нет BonusUserId', async () => {
+        storage.set('user', JSON.stringify({name: 'Анна'}));
+        const payload = btoa(JSON.stringify({BonusLevel: 'Gold'}));
+        fetchMock.mockResolvedValueOnce(response({result: {token: `header.${payload}.signature`}}));
+
+        await expect(refreshUser()).resolves.toBe(false);
+        expect(JSON.parse(storage.get('user') ?? '{}')).toEqual({name: 'Анна'});
+    });
+
     it('не записывает профиль при повреждённом JWT', async () => {
         storage.set('user', JSON.stringify({name: 'Анна'}));
         fetchMock.mockResolvedValueOnce(response({result: {token: 'invalid-token'}}));

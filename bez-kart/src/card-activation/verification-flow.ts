@@ -44,7 +44,7 @@ function createResendCooldown(button: HTMLButtonElement): ResendCooldown {
     return {start, stop};
 }
 
-async function renderSuccess(dialog: CoralPopupElement): Promise<void> {
+async function renderSuccess(dialog: CoralPopupElement, city: string): Promise<void> {
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
     if (!stage) return;
     try {
@@ -54,6 +54,7 @@ async function renderSuccess(dialog: CoralPopupElement): Promise<void> {
         const bonus = await getBonusProfile();
         const profile = getProfile();
         if (!profile) throw new Error(typographed`Не удалось обновить данные карты`);
+        sendBonusAccountActivation(city, bonus.cardType, bonus.cardNumber);
         setStep(dialog, 2);
         dialog.setAttribute('aria-label', typographed`Карта активирована`);
         showSuccessResult(stage, bonus, profile);
@@ -109,9 +110,8 @@ export async function renderVerification(dialog: CoralPopupElement, data: Regist
             form.setAttribute('aria-busy', 'true');
             form.querySelector('.bez-kart-activation__error')?.remove();
             await activateCard(data.mobilePhone, code);
-            sendBonusAccountActivation(data.city);
             cooldown.stop();
-            await renderSuccess(dialog);
+            await renderSuccess(dialog, data.city);
         } catch (error) {
             showMessage(form, error instanceof Error ? error.message : typographed`Не удалось активировать карту`);
             delete form.dataset.state;

@@ -10,6 +10,18 @@ function isValidPhone(value: string): boolean {
     return digits.length === 10 || (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8')));
 }
 
+function displayPhone(value?: string): string {
+    const digits = (value ?? '').replace(/\D/g, '');
+    const national = digits.length === 10
+        ? digits
+        : digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))
+            ? digits.slice(1)
+            : '';
+    return national
+        ? `+7 (${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6, 8)}-${national.slice(8)}`
+        : '';
+}
+
 function displayBirthdate(value?: string): string {
     const isoDate = formatBirthdate(value);
     const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -191,14 +203,7 @@ export function createRegistrationForm(profile: UserProfile): HTMLFormElement {
     setValue('givenName', profile.name ?? '');
     setValue('birthDate', displayBirthdate(profile.birthdate));
     setValue('email', profile.email ?? '');
-    const mobilePhone = form.elements.namedItem('mobilePhone') as HTMLInputElement;
-    const profilePhone = profile.mobilePhone ?? '';
-    if (isValidPhone(profilePhone)) {
-        mobilePhone.value = profilePhone;
-    } else {
-        mobilePhone.readOnly = false;
-        mobilePhone.placeholder = '+7 (___) ___-__-__';
-    }
+    setValue('mobilePhone', displayPhone(profile.mobilePhone));
     const gender = String(profile.gender ?? '').toUpperCase();
     const genderInput = form.querySelector<HTMLInputElement>(`input[name="gender"][value="${gender === 'F' || gender === '1' ? '1' : '0'}"]`);
     if (genderInput) genderInput.checked = true;

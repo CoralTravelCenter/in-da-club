@@ -137,12 +137,12 @@ export async function refreshUser(): Promise<boolean> {
     const result = getResult(await postJson('/endpoints/Customer/RefreshLogin', {}));
     const token = typeof result?.token === 'string' ? result.token : null;
     const decoded = token ? decodeJwtPayload(token) : null;
-    if (!decoded) return false;
+    if (!decoded || !decoded.BonusUserId) return false;
 
     const current = getProfile() ?? {};
     for (const [key, value] of Object.entries(decoded)) {
         if (key.startsWith('Bonus')) current[key] = value;
     }
     window.localStorage.setItem('user', JSON.stringify(current));
-    return true;
+    return getProfile()?.BonusUserId === decoded.BonusUserId;
 }

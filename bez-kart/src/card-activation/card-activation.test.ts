@@ -84,6 +84,7 @@ describe('card activation markup and flow', () => {
         expect((form?.elements.namedItem('givenName') as HTMLInputElement).value).toBe('Анна');
         expect((form?.elements.namedItem('birthDate') as HTMLInputElement).value).toBe('02 / 01 / 1990');
         expect((form?.elements.namedItem('mobilePhone') as HTMLInputElement).readOnly).toBe(true);
+        expect((form?.elements.namedItem('mobilePhone') as HTMLInputElement).value).toBe('+7 (999) 000-00-00');
     });
 
     it('использует актуальные ссылки на согласия и правила программы', async () => {
@@ -100,28 +101,20 @@ describe('card activation markup and flow', () => {
         expect(links.every(({target, rel}) => target === '_blank' && rel === 'noopener')).toBe(true);
     });
 
-    it('позволяет заполнить телефон, если профиль не вернул корректный номер', async () => {
+    it('не позволяет изменить или отправить некорректный телефон из профиля', async () => {
         vi.mocked(getProfile).mockReturnValue({...profile, mobilePhone: 'некорректный номер'});
         await requestCardActivation();
 
         const form = document.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
         const mobilePhone = form.elements.namedItem('mobilePhone') as HTMLInputElement;
-        expect(mobilePhone.readOnly).toBe(false);
+        expect(mobilePhone.readOnly).toBe(true);
         expect(mobilePhone.value).toBe('');
-        expect(mobilePhone.placeholder).toBe('+7 (___) ___-__-__');
 
         fillRequiredFields(form);
-        mobilePhone.value = '123';
         submit(form);
         expect(registerCard).not.toHaveBeenCalled();
         expect(mobilePhone.getAttribute('aria-invalid')).toBe('true');
-        expect(form.textContent).toContain('Укажите корректный номер телефона');
-
-        mobilePhone.value = '8 (999) 000-00-00';
-        mobilePhone.dispatchEvent(new Event('input', {bubbles: true}));
-        submit(form);
-        await vi.waitFor(() => expect(registerCard).toHaveBeenCalledOnce());
-        expect(normalizePhone).toHaveBeenCalledWith('8 (999) 000-00-00');
+        expect(form.textContent).toContain('Укажите телефон');
     });
 
     it('сохраняет высоту первого шага для следующих экранов', async () => {
@@ -324,7 +317,9 @@ describe('card activation markup and flow', () => {
 
         await vi.waitFor(() => expect(dialog.textContent).toContain('Карта активирована!'));
         expect(activateCard).toHaveBeenCalledWith('79990000000', '123456');
-        expect(sendBonusAccountActivation).toHaveBeenCalledWith('Москва');
+        expect(sendBonusAccountActivation).toHaveBeenCalledWith('Москва', 'Gold', '12345678901');
+        expect(vi.mocked(getBonusProfile).mock.invocationCallOrder[0])
+            .toBeLessThan(vi.mocked(sendBonusAccountActivation).mock.invocationCallOrder[0]);
         expect(getBonusProfile).toHaveBeenCalledOnce();
         expect(dialog.querySelector('.bez-kart-activation__result')).toBeTruthy();
         expect(dialog.querySelector('.bez-kart-activation__card')).toBeTruthy();
@@ -352,9 +347,48 @@ describe('card activation markup and flow', () => {
         expect(verification.querySelector<HTMLButtonElement>('.bez-kart-activation__submit')?.textContent).toBe('Активируем карту…');
         expect(dialog.textContent).not.toContain('Проверяем…');
         expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('2');
+        expect(sendBonusAccountActivation).not.toHaveBeenCalled();
 
         resolveRefresh(true);
         await vi.waitFor(() => expect(dialog.textContent).toContain('Карта активирована!'));
+        expect(sendBonusAccountActivation).toHaveBeenCalledOnce();
+    });
+
+    it('не отправляет активацию в Mindbox, если RefreshLogin не обновил профиль', async () => {
+        vi.mocked(refreshUser).mockResolvedValueOnce(false);
+        await requestCardActivation();
+        const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation')!;
+        const registration = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        fillRequiredFields(registration);
+        submit(registration);
+        await vi.waitFor(() => expect(dialog.querySelector('.bez-kart-activation__verify')).toBeTruthy());
+
+        const verification = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__verify')!;
+        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
+        submit(verification);
+
+        await vi.waitFor(() => expect(dialog.textContent).toContain('Что-то пошло не\u00a0так'));
+        expect(dialog.getAttribute('aria-label')).toBe('Не\u00a0удалось обновить данные карты');
+        expect(getBonusProfile).not.toHaveBeenCalled();
+        expect(sendBonusAccountActivation).not.toHaveBeenCalled();
+    });
+
+    it('не отправляет активацию в Mindbox, если BonusProfile завершился ошибкой', async () => {
+        vi.mocked(getBonusProfile).mockRejectedValueOnce(new Error('Нет ответа'));
+        await requestCardActivation();
+        const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation')!;
+        const registration = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        fillRequiredFields(registration);
+        submit(registration);
+        await vi.waitFor(() => expect(dialog.querySelector('.bez-kart-activation__verify')).toBeTruthy());
+
+        const verification = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__verify')!;
+        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
+        submit(verification);
+
+        await vi.waitFor(() => expect(dialog.textContent).toContain('Что-то пошло не\u00a0так'));
+        expect(dialog.getAttribute('aria-label')).toBe('Не\u00a0удалось обновить данные карты');
+        expect(sendBonusAccountActivation).not.toHaveBeenCalled();
     });
 
     it('при ошибке SMS оставляет форму и показывает сообщение', async () => {

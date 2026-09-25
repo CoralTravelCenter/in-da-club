@@ -43,7 +43,7 @@ describe('Mindbox bonus account operations', () => {
     });
 
     it('отправляет активацию с соответствующими статусом и датой', () => {
-        sendBonusAccountActivation('Казань');
+        sendBonusAccountActivation('Казань', 'Gold', '12345678901');
 
         expect(mindbox).toHaveBeenCalledWith('async', expect.objectContaining({
             operation: 'Website.BonusAccountActivation',
@@ -53,6 +53,8 @@ describe('Mindbox bonus account operations', () => {
                         bonusAccountStatus: 2,
                         bonusAccountActivationDate: operationDate,
                         bonusAccountCity: 'Казань',
+                        bonusLevel: 'Gold',
+                        bonusAccountNumber: '12345678901',
                     }),
                 }),
             }),
@@ -68,7 +70,7 @@ describe('Mindbox bonus account operations', () => {
 
         window.localStorage.setItem('user', JSON.stringify({nameId: 42}));
         Reflect.deleteProperty(window, 'mindbox');
-        expect(() => sendBonusAccountActivation('Москва')).not.toThrow();
+        expect(() => sendBonusAccountActivation('Москва', 'Gold', '12345678901')).not.toThrow();
         expect(consoleError).toHaveBeenCalledTimes(2);
     });
 
