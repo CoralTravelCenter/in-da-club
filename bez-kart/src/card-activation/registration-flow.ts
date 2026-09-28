@@ -52,7 +52,7 @@ export function renderRegistration(dialog: CoralPopupElement, profile: UserProfi
             const registrationChanged = JSON.stringify(completedRegistration) !== JSON.stringify(registration);
             if (registrationChanged) {
                 await registerCard(registration);
-                sendBonusAccountRegistration(registration.city);
+                sendBonusAccountRegistration(registration.city, profile.nameId);
                 completedRegistration = registration;
                 consentsApplied = false;
             }

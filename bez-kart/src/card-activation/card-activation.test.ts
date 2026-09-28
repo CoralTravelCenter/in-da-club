@@ -303,7 +303,7 @@ describe('card activation markup and flow', () => {
         await vi.waitFor(() => expect(dialog.querySelector('.bez-kart-activation__verify')).toBeTruthy());
         expect(registerCard).toHaveBeenCalledOnce();
         expect(registerCard).toHaveBeenCalledWith(expect.objectContaining({birthDate: '1990-01-02', city: 'Москва'}));
-        expect(sendBonusAccountRegistration).toHaveBeenCalledWith('Москва');
+        expect(sendBonusAccountRegistration).toHaveBeenCalledWith('Москва', undefined);
         expect(applyConsents).toHaveBeenCalledOnce();
         expect(sendVerificationCode).toHaveBeenCalledWith('79990000000');
         expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('2');

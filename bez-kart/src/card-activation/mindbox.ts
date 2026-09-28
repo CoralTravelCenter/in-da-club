@@ -23,9 +23,12 @@ interface MindboxPayload {
             };
         };
     };
+    onSuccess: () => void;
+    onError: (error: unknown) => void;
 }
 
 type Mindbox = (method: 'async', payload: MindboxPayload) => void;
+const MINDBOX_RETRY_DELAYS_MS = [250, 1_000, 3_000] as const;
 
 function sendBonusAccountOperation(
     operation: MindboxOperation,
@@ -33,44 +36,74 @@ function sendBonusAccountOperation(
     dateField: BonusAccountDateField,
     city: string,
     additionalCustomFields: {bonusLevel?: string; bonusAccountNumber?: string} = {},
+    explicitClientId?: unknown,
 ): void {
-    const nameId = getProfile()?.nameId;
-    const clientId = nameId ? String(nameId) : '';
-    const mindbox = (window as Window & {mindbox?: Mindbox}).mindbox;
-    if (!clientId || typeof mindbox !== 'function') {
+    const nameId = explicitClientId ?? getProfile()?.nameId;
+    const clientId = (typeof nameId === 'string' || typeof nameId === 'number') && nameId
+        ? String(nameId)
+        : '';
+    if (!clientId) {
         console.error('CoralBonus: failed to send Mindbox operation', {operation});
         return;
     }
 
-    try {
-        const operationDate = new Date();
-        mindbox('async', {
-            operation,
-            data: {
-                executionDateTimeUtc: operationDate,
-                customer: {
-                    ids: {clientId},
-                    customFields: {
-                        isIssuedByCB: true,
-                        bonusAccountStatus: status,
-                        [dateField]: operationDate,
-                        bonusAccountCity: city,
-                        ...additionalCustomFields,
-                    },
+    const operationDate = new Date();
+    const payload: MindboxPayload = {
+        operation,
+        data: {
+            executionDateTimeUtc: operationDate,
+            customer: {
+                ids: {clientId},
+                customFields: {
+                    isIssuedByCB: true,
+                    bonusAccountStatus: status,
+                    [dateField]: operationDate,
+                    bonusAccountCity: city,
+                    ...additionalCustomFields,
                 },
             },
-        });
-    } catch (error) {
-        console.error('CoralBonus: failed to send Mindbox operation', {operation, error});
-    }
+        },
+        onSuccess: () => {},
+        onError: (error) => {
+            console.error('CoralBonus: Mindbox operation failed', {operation, error});
+        },
+    };
+
+    const trySend = (attempt: number): void => {
+        const mindbox = (window as Window & {mindbox?: Mindbox}).mindbox;
+        if (typeof mindbox !== 'function') {
+            const retryDelay = MINDBOX_RETRY_DELAYS_MS[attempt];
+            if (retryDelay !== undefined) {
+                window.setTimeout(() => trySend(attempt + 1), retryDelay);
+                return;
+            }
+            console.error('CoralBonus: failed to send Mindbox operation', {operation});
+            return;
+        }
+
+        try {
+            mindbox('async', payload);
+        } catch (error) {
+            const retryDelay = MINDBOX_RETRY_DELAYS_MS[attempt];
+            if (retryDelay !== undefined) {
+                window.setTimeout(() => trySend(attempt + 1), retryDelay);
+                return;
+            }
+            console.error('CoralBonus: failed to send Mindbox operation', {operation, error});
+        }
+    };
+
+    trySend(0);
 }
 
-export function sendBonusAccountRegistration(city: string): void {
+export function sendBonusAccountRegistration(city: string, clientId?: unknown): void {
     sendBonusAccountOperation(
         'Website.BonusAccountRegistration',
         1,
         'bonusAccountRegistrationDate',
         city,
+        {},
+        clientId,
     );
 }
 

@@ -23,7 +23,7 @@ describe('Mindbox bonus account operations', () => {
     });
 
     it('отправляет регистрацию с идентификатором клиента, городом и единым временем', () => {
-        sendBonusAccountRegistration('Москва');
+        sendBonusAccountRegistration('Москва', 42);
 
         expect(mindbox).toHaveBeenCalledWith('async', {
             operation: 'Website.BonusAccountRegistration',
@@ -39,6 +39,8 @@ describe('Mindbox bonus account operations', () => {
                     },
                 },
             },
+            onSuccess: expect.any(Function),
+            onError: expect.any(Function),
         });
     });
 
@@ -61,27 +63,46 @@ describe('Mindbox bonus account operations', () => {
         }));
     });
 
-    it('не ломает сценарий без clientId или глобальной функции Mindbox', () => {
+    it('не ломает сценарий без clientId', () => {
         const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
         window.localStorage.setItem('user', '{invalid');
 
         expect(() => sendBonusAccountRegistration('Москва')).not.toThrow();
         expect(mindbox).not.toHaveBeenCalled();
-
-        window.localStorage.setItem('user', JSON.stringify({nameId: 42}));
-        Reflect.deleteProperty(window, 'mindbox');
-        expect(() => sendBonusAccountActivation('Москва', 'Gold', '12345678901')).not.toThrow();
-        expect(consoleError).toHaveBeenCalledTimes(2);
+        expect(consoleError).toHaveBeenCalledOnce();
     });
 
-    it('перехватывает исключение Mindbox', () => {
+    it('повторяет отправку после появления глобальной функции Mindbox', async () => {
+        Reflect.deleteProperty(window, 'mindbox');
+
+        sendBonusAccountRegistration('Москва', 42);
+        Object.assign(window, {mindbox});
+        await vi.advanceTimersByTimeAsync(250);
+
+        expect(mindbox).toHaveBeenCalledOnce();
+    });
+
+    it('повторяет отправку после исключения Mindbox и не дублирует успешную операцию', async () => {
         const error = new Error('Mindbox unavailable');
-        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
         mindbox.mockImplementationOnce(() => { throw error; });
 
         expect(() => sendBonusAccountRegistration('Москва')).not.toThrow();
+        await vi.advanceTimersByTimeAsync(250);
+
+        expect(mindbox).toHaveBeenCalledTimes(2);
+        await vi.runAllTimersAsync();
+        expect(mindbox).toHaveBeenCalledTimes(2);
+    });
+
+    it('логирует асинхронную ошибку Mindbox, не выбрасывая исключение', () => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+        sendBonusAccountRegistration('Москва', 42);
+        const payload = mindbox.mock.calls[0]?.[1] as {onError?: (error: unknown) => void};
+        const error = new Error('Mindbox rejected operation');
+
+        expect(() => payload.onError?.(error)).not.toThrow();
         expect(consoleError).toHaveBeenCalledWith(
-            'CoralBonus: failed to send Mindbox operation',
+            'CoralBonus: Mindbox operation failed',
             {operation: 'Website.BonusAccountRegistration', error},
         );
     });
