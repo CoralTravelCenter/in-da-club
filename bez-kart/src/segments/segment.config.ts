@@ -1,4 +1,12 @@
-import type {BlockId, BlockPresentation, ContentBlockConfig, ContentBlockDefinition, SegmentConfig, SegmentContentConfig, SegmentId,} from './segment.types';
+import type {
+    BlockId,
+    BlockPresentation,
+    ContentBlockConfig,
+    ContentBlockDefinition,
+    SegmentConfig,
+    SegmentContentConfig,
+    SegmentId,
+} from './segment.types';
 import {typographed} from '../../../shared/runtime/typography';
 
 const CLUB_VIDEO_URL = 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart/club.webm';
@@ -10,8 +18,18 @@ const REGULAR_CLIENT_REFERRAL_URLS = {
 } as const;
 
 const asset = (src: string): string => `${__PUBLIC_ASSETS_BASE__}/${src}`;
-const list = (column: string, row: string, background?: BlockPresentation['background']): BlockPresentation => ({placement: {mobile: 'list', desktop: {column, row}}, background});
-const featured = (column: string, row: string): BlockPresentation => ({placement: {mobile: 'featured', desktop: {column, row}}});
+const list = (column: string, row: string, background?: BlockPresentation['background']): BlockPresentation => ({
+    placement: {
+        mobile: 'list',
+        desktop: {column, row}
+    }, background
+});
+const featured = (column: string, row: string): BlockPresentation => ({
+    placement: {
+        mobile: 'featured',
+        desktop: {column, row}
+    }
+});
 const background = (mobile: [string, string, string], desktop: [string, string, string] = mobile): NonNullable<BlockPresentation['background']> => ({
     mobile: {src: asset(mobile[0]), size: mobile[1], position: mobile[2]},
     desktop: {src: asset(desktop[0]), size: desktop[1], position: desktop[2]},
@@ -54,7 +72,7 @@ export const SEGMENT_CONTENT = {
         ariaLabel: typographed`Преимущества постоянного клиента, уровень 1`,
         bonus: {
             title: typographed`10 000`,
-            description: typographed`Приветственные бонусы для новых держателей карты`,
+            description: typographed`Приветственные бонусы<br> для новых держателей карты`,
         },
         club: {
             level: 'Silver',
@@ -71,14 +89,14 @@ export const SEGMENT_CONTENT = {
         },
         cashback: {
             percent: 3,
-            description: typographed`Кешбэк бонусами за каждое бронирование`,
+            description: typographed`Кешбэк бонусами<br> за каждое бронирование`,
         },
     },
     'regular-2': {
         ariaLabel: typographed`Преимущества постоянного клиента, уровень 2`,
         bonus: {
             title: typographed`10 000`,
-            description: typographed`Приветственные бонусы для новых держателей карты`,
+            description: typographed`Приветственные бонусы<br> для новых держателей карты`,
         },
         club: {
             level: 'Silver',
@@ -95,14 +113,14 @@ export const SEGMENT_CONTENT = {
         },
         cashback: {
             percent: 3,
-            description: typographed`Кешбэк бонусами за каждое бронирование`,
+            description: typographed`Кешбэк бонусами<br> за каждое бронирование`,
         },
     },
     'regular-3': {
         ariaLabel: typographed`Преимущества постоянного клиента, уровень 3`,
         bonus: {
             title: typographed`10 000`,
-            description: typographed`Приветственные бонусы для новых держателей карты`,
+            description: typographed`Приветственные бонусы<br> для новых держателей карты`,
         },
         club: {
             level: 'Silver',
@@ -119,7 +137,7 @@ export const SEGMENT_CONTENT = {
         },
         cashback: {
             percent: 3,
-            description: typographed`Кешбэк бонусами за каждое бронирование`,
+            description: typographed`Кешбэк бонусами<br> за каждое бронирование`,
         },
     },
 } satisfies Record<SegmentId, SegmentContentConfig>;
@@ -189,6 +207,9 @@ export function getSegmentConfig(id: SegmentId): SegmentConfig {
     return {
         id,
         ariaLabel: content.ariaLabel,
-        blocks: definitions.map((block): ContentBlockConfig => ({...block, presentation: BLOCK_PRESENTATION[block.id]})),
+        blocks: definitions.map((block): ContentBlockConfig => ({
+            ...block,
+            presentation: BLOCK_PRESENTATION[block.id]
+        })),
     };
 }
