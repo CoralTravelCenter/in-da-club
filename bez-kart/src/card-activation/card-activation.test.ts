@@ -42,6 +42,7 @@ const profile = {
     mobilePhone: '79990000000',
     birthdate: '1990-01-02',
     gender: 'F',
+    nameId: 42,
 };
 
 function fillRequiredFields(form: HTMLFormElement): void {
@@ -303,7 +304,7 @@ describe('card activation markup and flow', () => {
         await vi.waitFor(() => expect(dialog.querySelector('.bez-kart-activation__verify')).toBeTruthy());
         expect(registerCard).toHaveBeenCalledOnce();
         expect(registerCard).toHaveBeenCalledWith(expect.objectContaining({birthDate: '1990-01-02', city: 'Москва'}));
-        expect(sendBonusAccountRegistration).toHaveBeenCalledWith('Москва', undefined);
+        expect(sendBonusAccountRegistration).toHaveBeenCalledWith('Москва', 42);
         expect(applyConsents).toHaveBeenCalledOnce();
         expect(sendVerificationCode).toHaveBeenCalledWith('79990000000');
         expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('2');
@@ -317,7 +318,7 @@ describe('card activation markup and flow', () => {
 
         await vi.waitFor(() => expect(dialog.textContent).toContain('Карта активирована!'));
         expect(activateCard).toHaveBeenCalledWith('79990000000', '123456');
-        expect(sendBonusAccountActivation).toHaveBeenCalledWith('Москва', 'Gold', '12345678901');
+        expect(sendBonusAccountActivation).toHaveBeenCalledWith('Москва', 'Gold', '12345678901', 42);
         expect(vi.mocked(getBonusProfile).mock.invocationCallOrder[0])
             .toBeLessThan(vi.mocked(sendBonusAccountActivation).mock.invocationCallOrder[0]);
         expect(getBonusProfile).toHaveBeenCalledOnce();
@@ -388,6 +389,27 @@ describe('card activation markup and flow', () => {
 
         await vi.waitFor(() => expect(dialog.textContent).toContain('Что-то пошло не\u00a0так'));
         expect(dialog.getAttribute('aria-label')).toBe('Не\u00a0удалось обновить данные карты');
+        expect(sendBonusAccountActivation).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        {cardNumber: '12345678901'},
+        {cardType: 'Gold' as const},
+        {cardType: 'Gold' as const, cardNumber: '   '},
+    ])('не отправляет активацию в Mindbox с неполными данными карты', async (bonus) => {
+        vi.mocked(getBonusProfile).mockResolvedValueOnce(bonus);
+        await requestCardActivation();
+        const dialog = document.querySelector<HTMLElement>('#bez-kart-card-activation')!;
+        const registration = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__form')!;
+        fillRequiredFields(registration);
+        submit(registration);
+        await vi.waitFor(() => expect(dialog.querySelector('.bez-kart-activation__verify')).toBeTruthy());
+
+        const verification = dialog.querySelector<HTMLFormElement>('.bez-kart-activation__verify')!;
+        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
+        submit(verification);
+
+        await vi.waitFor(() => expect(dialog.textContent).toContain('Что-то пошло не так'));
         expect(sendBonusAccountActivation).not.toHaveBeenCalled();
     });
 

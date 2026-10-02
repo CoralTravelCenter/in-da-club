@@ -44,7 +44,7 @@ function createResendCooldown(button: HTMLButtonElement): ResendCooldown {
     return {start, stop};
 }
 
-async function renderSuccess(dialog: CoralPopupElement, city: string): Promise<void> {
+async function renderSuccess(dialog: CoralPopupElement, city: string, clientId: unknown): Promise<void> {
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
     if (!stage) return;
     try {
@@ -52,9 +52,12 @@ async function renderSuccess(dialog: CoralPopupElement, city: string): Promise<v
             throw new Error(typographed`Не удалось обновить данные карты`);
         }
         const bonus = await getBonusProfile();
+        if (!bonus.cardType || !bonus.cardNumber?.trim()) {
+            throw new Error(typographed`Не удалось загрузить данные карты`);
+        }
         const profile = getProfile();
         if (!profile) throw new Error(typographed`Не удалось обновить данные карты`);
-        sendBonusAccountActivation(city, bonus.cardType, bonus.cardNumber);
+        sendBonusAccountActivation(city, bonus.cardType, bonus.cardNumber, clientId);
         setStep(dialog, 2);
         dialog.setAttribute('aria-label', typographed`Карта активирована`);
         showSuccessResult(stage, bonus, profile);
@@ -65,7 +68,7 @@ async function renderSuccess(dialog: CoralPopupElement, city: string): Promise<v
     }
 }
 
-export async function renderVerification(dialog: CoralPopupElement, data: RegistrationData): Promise<void> {
+export async function renderVerification(dialog: CoralPopupElement, data: RegistrationData, clientId: unknown): Promise<void> {
     const stage = dialog.querySelector<HTMLElement>('.bez-kart-activation__stage');
     if (!stage) throw new Error(typographed`Не удалось открыть шаг подтверждения`);
 
@@ -111,7 +114,7 @@ export async function renderVerification(dialog: CoralPopupElement, data: Regist
             form.querySelector('.bez-kart-activation__error')?.remove();
             await activateCard(data.mobilePhone, code);
             cooldown.stop();
-            await renderSuccess(dialog, data.city);
+            await renderSuccess(dialog, data.city, clientId);
         } catch (error) {
             showMessage(form, error instanceof Error ? error.message : typographed`Не удалось активировать карту`);
             delete form.dataset.state;

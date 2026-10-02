@@ -60,7 +60,7 @@ export function renderRegistration(dialog: CoralPopupElement, profile: UserProfi
                 await applyConsents(registration, acceptedDocuments);
                 consentsApplied = true;
             }
-            await renderVerification(dialog, registration);
+            await renderVerification(dialog, registration, profile.nameId);
         } catch (error) {
             showMessage(form, error instanceof Error ? error.message : typographed`Не удалось оформить карту`);
             delete form.dataset.state;

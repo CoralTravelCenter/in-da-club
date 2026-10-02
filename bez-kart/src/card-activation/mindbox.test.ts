@@ -82,6 +82,32 @@ describe('Mindbox bonus account operations', () => {
         expect(mindbox).toHaveBeenCalledOnce();
     });
 
+    it('отменяет отложенную регистрацию, если для того же клиента уже запущена активация', async () => {
+        Reflect.deleteProperty(window, 'mindbox');
+        sendBonusAccountRegistration('Москва', 42);
+        sendBonusAccountActivation('Москва', 'Gold', '12345678901', 42);
+        Object.assign(window, {mindbox});
+
+        await vi.advanceTimersByTimeAsync(250);
+
+        expect(mindbox).toHaveBeenCalledOnce();
+        expect(mindbox).toHaveBeenCalledWith('async', expect.objectContaining({
+            operation: 'Website.BonusAccountActivation',
+        }));
+    });
+
+    it('использует явный clientId для активации', () => {
+        window.localStorage.setItem('user', JSON.stringify({nameId: 99}));
+
+        sendBonusAccountActivation('Казань', 'Gold', '12345678901', 42);
+
+        expect(mindbox).toHaveBeenCalledWith('async', expect.objectContaining({
+            data: expect.objectContaining({
+                customer: expect.objectContaining({ids: {clientId: '42'}}),
+            }),
+        }));
+    });
+
     it('повторяет отправку после исключения Mindbox и не дублирует успешную операцию', async () => {
         const error = new Error('Mindbox unavailable');
         mindbox.mockImplementationOnce(() => { throw error; });
@@ -103,7 +129,33 @@ describe('Mindbox bonus account operations', () => {
         expect(() => payload.onError?.(error)).not.toThrow();
         expect(consoleError).toHaveBeenCalledWith(
             'CoralBonus: Mindbox operation failed',
-            {operation: 'Website.BonusAccountRegistration', error},
+            {
+                operation: 'Website.BonusAccountRegistration',
+                clientId: '42',
+                bonusAccountStatus: 1,
+                bonusLevel: undefined,
+                bonusAccountNumber: undefined,
+                error,
+            },
+        );
+    });
+
+    it('логирует успешную активацию с фактическими полями', () => {
+        const consoleInfo = vi.spyOn(console, 'info').mockImplementation(() => {});
+        sendBonusAccountActivation('Казань', 'Gold', '12345678901', 42);
+        const payload = mindbox.mock.calls[0]?.[1] as {onSuccess?: () => void};
+
+        payload.onSuccess?.();
+
+        expect(consoleInfo).toHaveBeenCalledWith(
+            'CoralBonus: Mindbox operation succeeded',
+            {
+                operation: 'Website.BonusAccountActivation',
+                clientId: '42',
+                bonusAccountStatus: 2,
+                bonusLevel: 'Gold',
+                bonusAccountNumber: '12345678901',
+            },
         );
     });
 });
