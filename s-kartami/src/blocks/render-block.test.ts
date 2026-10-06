@@ -14,6 +14,21 @@ describe('renderBlock', () => {
     beforeEach(() => vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({matches: false})));
     afterEach(() => vi.unstubAllGlobals());
 
+    it('renders a skeleton for the whole card without exposing its content', () => {
+        const block = renderBlock({
+            id: 'cashback',
+            isLoading: 'card',
+            value: '3%',
+            description: 'Кешбэк',
+            presentation,
+        });
+
+        expect(block.classList.contains('s-kartami-block--card-loading')).toBe(true);
+        expect(block.getAttribute('aria-busy')).toBe('true');
+        expect(block.querySelector('.s-kartami-block__skeleton--card')).not.toBeNull();
+        expect(block.textContent).toBe('');
+    });
+
     it('renders a cashback skeleton only in place of the API value', () => {
         const block = renderBlock({
             id: 'cashback',

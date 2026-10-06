@@ -2,10 +2,10 @@ import type {BlockId, BlockPresentation, CardLevel, ContentBlockConfig, ContentB
 import {typographed} from '../../../shared/runtime/typography';
 
 const CARD_IMAGE: Record<CardLevel, string> = {Silver: 'card-ag-comp.webp', Gold: 'card-au-comp.webp', Platinum: 'card-pt-comp.webp'};
-const SHARED_CLIENT_MEDIA = `${__PUBLIC_ASSETS_BASE__}/clients/shared`;
-const INACTIVE_CLIENT_MEDIA = `${__PUBLIC_ASSETS_BASE__}/clients/inactive`;
+const SHARED_CLIENT_MEDIA = `${__S_KARTAMI_ASSETS_BASE__}/clients/shared`;
+const INACTIVE_CLIENT_MEDIA = `${__S_KARTAMI_ASSETS_BASE__}/clients/inactive`;
 const CASHBACK: Record<CardLevel, number> = {Silver: 1, Gold: 2, Platinum: 3};
-const segmentMedia = (folder: string, file: string): string => `${__PUBLIC_ASSETS_BASE__}/clients/${folder}/${file}`;
+const segmentMedia = (folder: string, file: string): string => `${__S_KARTAMI_ASSETS_BASE__}/clients/${folder}/${file}`;
 const placement = (mobile: 'featured' | 'list', column: string, row: string, background?: BlockPresentation['background']): BlockPresentation => ({placement: {mobile, desktop: {column, row}}, background});
 const bg = (src: string, size: string, position: string, desktop: Partial<{src: string; size: string; position: string}> = {}): NonNullable<BlockPresentation['background']> => ({mobile: {src, size, position}, desktop: {src: desktop.src ?? src, size: desktop.size ?? size, position: desktop.position ?? position}});
 const shared = (file: string): string => segmentMedia('shared', file);

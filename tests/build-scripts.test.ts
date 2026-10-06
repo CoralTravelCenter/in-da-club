@@ -9,11 +9,13 @@ const scripts: Record<string, string> = packageJson.scripts;
 const EXPECTED_SCRIPT_NAMES = [
     'dev:bez-kart',
     'dev:s-kartami',
+    'dev:unified',
     'build',
     'build:bez-kart',
     ...BEZ_KART_SEGMENT_IDS.map((segmentId) => `build:bez-kart:${segmentId}`),
     'build:s-kartami',
     ...S_KARTAMI_SEGMENT_IDS.map((segmentId) => `build:s-kartami:${segmentId}`),
+    'build:unified',
     'typograf',
     'typecheck',
     'test',
@@ -48,5 +50,11 @@ describe('segment build scripts', () => {
 
     it('matches s-kartami segment ids', () => {
         expectSegmentBuildScripts('s-kartami', S_KARTAMI_SEGMENT_IDS);
+    });
+
+    it('exposes the unified development server', () => {
+        expect(scripts['dev:unified']).toBe(
+            'node scripts/typograf.mjs bez-kart/src && node scripts/typograf.mjs s-kartami/src && vite --config unified/vite.config.ts --mode unified',
+        );
     });
 });

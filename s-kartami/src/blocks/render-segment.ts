@@ -1,4 +1,4 @@
-import type {SegmentConfig} from '@/segments/segment.types';
+import type {SegmentConfig} from '../segments/segment.types';
 import {renderBlock} from './render-block';
 
 const RIDE_COUNT: Record<SegmentConfig['id'], number> = {

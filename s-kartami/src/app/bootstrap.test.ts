@@ -33,6 +33,21 @@ describe('bootstrap', () => {
         expect(container.textContent).toContain('Вам доступнывсе\u00a0привилегии');
     });
 
+    it('renders a provided customer context without another BonusProfile request', async () => {
+        const container = document.createElement('div');
+        const fetchMock = vi.fn();
+        vi.stubGlobal('fetch', fetchMock);
+
+        await bootstrap({
+            container,
+            segmentId: 'two-trips',
+            customerContext: {displayName: 'Михаил', cardLevel: 'Gold'},
+        });
+
+        expect(container.querySelector('.s-kartami-block__badge')?.textContent).toBe('Gold');
+        expect(fetchMock).not.toHaveBeenCalled();
+    });
+
     it.each(['inactive', 'one-trip', 'two-trips', 'three-plus'] as const)(
         'shows precise API skeletons for %s',
         async (segmentId) => {

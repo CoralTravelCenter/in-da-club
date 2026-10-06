@@ -4,7 +4,7 @@ import {ACTIVATION_DIALOG_ID} from './activation-view';
 import {typographed} from '../../../shared/runtime/typography';
 
 function assetUrl(path: string): string {
-    return `${__PUBLIC_ASSETS_BASE__}/${path}`;
+    return `${__BEZ_KART_ASSETS_BASE__}/${path}`;
 }
 
 function appendCard(stage: HTMLElement, bonus: BonusProfile, profile: UserProfile): void {

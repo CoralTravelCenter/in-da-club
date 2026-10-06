@@ -1,4 +1,4 @@
-import type {ContentBlockConfig} from '@/segments/segment.types';
+import type {ContentBlockConfig} from '../segments/segment.types';
 import {addLockableTarget, disablePageScroll, enablePageScroll} from 'scroll-lock';
 
 const TOOLTIP_ICON_URL = 'https://b2ccdn.coral.ru/content/info.svg';
@@ -130,7 +130,7 @@ function appendTextWithBreaks(element: HTMLElement, text: string): void {
     });
 }
 
-function createSkeleton(part: 'name' | 'value' | 'badge' | 'image'): HTMLSpanElement {
+function createSkeleton(part: 'name' | 'value' | 'badge' | 'image' | 'card'): HTMLSpanElement {
     const skeleton = document.createElement('span');
     skeleton.className = `s-kartami-block__skeleton s-kartami-block__skeleton--${part}`;
     skeleton.setAttribute('aria-hidden', 'true');
@@ -142,6 +142,14 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
     const content = document.createElement('div');
     block.className = 's-kartami-block';
     block.dataset.blockId = config.id;
+    content.className = 's-kartami-block__content';
+    if (config.isLoading === 'card') {
+        block.classList.add('s-kartami-block--loading', 's-kartami-block--card-loading');
+        block.setAttribute('aria-busy', 'true');
+        content.append(createSkeleton('card'));
+        block.append(content);
+        return block;
+    }
     if (config.presentation.background) {
         const {mobile, desktop = mobile} = config.presentation.background;
         block.dataset.hasBackground = '';
@@ -152,7 +160,6 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
         block.style.setProperty('--block-background-size-desktop', desktop.size);
         block.style.setProperty('--block-background-position-desktop', desktop.position);
     }
-    content.className = 's-kartami-block__content';
     if (config.isLoading) {
         block.classList.add('s-kartami-block--loading');
         block.setAttribute('aria-busy', 'true');

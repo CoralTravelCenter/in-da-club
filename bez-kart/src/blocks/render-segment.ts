@@ -1,4 +1,4 @@
-import type { SegmentConfig } from '@/segments/segment.types';
+import type { SegmentConfig } from '../segments/segment.types';
 import {typographed} from '../../../shared/runtime/typography';
 import { renderBlock } from './render-block';
 

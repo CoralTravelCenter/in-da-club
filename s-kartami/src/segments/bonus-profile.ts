@@ -4,6 +4,7 @@ export interface BonusProfile {
     cardType: CardLevel | null;
     cardNumber: string | null;
     totalTravel: number | null;
+    bonusTripCount: number | null;
     countryVisited: number | null;
     balance: number | null;
     accumulatedBalance: number | null;
@@ -44,6 +45,7 @@ function normalizeBonusProfile(value: unknown): BonusProfile | null {
         cardType: normalizeCardLevel(source.cardType),
         cardNumber: asString(source.cardNumber),
         totalTravel: asNumber(source.totalTravel),
+        bonusTripCount: asNumber(source.bonusTripCount),
         countryVisited: asNumber(source.countryVisited),
         balance: asNumber(source.balance),
         accumulatedBalance: asNumber(source.accumulatedBalance),
@@ -53,24 +55,37 @@ function normalizeBonusProfile(value: unknown): BonusProfile | null {
     };
 }
 
-export async function requestBonusProfile(signal?: AbortSignal): Promise<BonusProfile | null> {
+export async function requestBonusProfileStrict(signal?: AbortSignal): Promise<BonusProfile | null> {
     const timeoutSignal = AbortSignal.timeout(BONUS_PROFILE_TIMEOUT_MS);
     const requestSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal;
+    const response = await fetch(BONUS_PROFILE_URL, {
+        method: 'POST',
+        headers: {'content-type': 'application/json'},
+        body: '{}',
+        signal: requestSignal,
+    });
 
+    if (response.status === 500) return null;
+    if (!response.ok) {
+        throw Object.assign(new Error('BonusProfile request failed'), {status: response.status});
+    }
+
+    const payload: unknown = await response.json();
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+        throw new Error('BonusProfile response is invalid');
+    }
+
+    const result = (payload as {result?: unknown}).result;
+    if (result === null || result === undefined) return null;
+
+    const profile = normalizeBonusProfile(result);
+    if (!profile) throw new Error('BonusProfile result is invalid');
+    return profile;
+}
+
+export async function requestBonusProfile(signal?: AbortSignal): Promise<BonusProfile | null> {
     try {
-        const response = await fetch(BONUS_PROFILE_URL, {
-            method: 'POST',
-            headers: {'content-type': 'application/json'},
-            body: '{}',
-            signal: requestSignal,
-        });
-
-        if (!response.ok) return null;
-
-        const payload: unknown = await response.json();
-        if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null;
-
-        return normalizeBonusProfile((payload as {result?: unknown}).result);
+        return await requestBonusProfileStrict(signal);
     } catch {
         return null;
     }

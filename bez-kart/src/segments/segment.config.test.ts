@@ -1,11 +1,17 @@
 import {describe, expect, it} from 'vitest';
-import {SEGMENT_CONTENT} from './segment.config';
+import {getSegmentConfig, SEGMENT_CONTENT} from './segment.config';
 
 describe('SEGMENT_CONTENT', () => {
     it('открывает форму только для новых клиентов', () => {
         expect(SEGMENT_CONTENT['new-client'].club.action).toMatchObject({
             type: 'activate-card',
         });
+    });
+
+    it('помечает закрытые акции как доступные только участникам клуба', () => {
+        const block = getSegmentConfig('new-client').blocks.find(({id}) => id === 'private-sales');
+
+        expect(block?.description).toBe('Только для\u00a0участников клуба');
     });
 
     it.each([

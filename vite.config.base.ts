@@ -38,6 +38,11 @@ interface ViteConfigOptions<SegmentId extends string> {
     productionAssetsBase: string;
 }
 
+const PRODUCTION_ASSETS_BASE = {
+    bezKart: 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart',
+    sKartami: 'https://b2ccdn.coral.ru/content/in-da-club/s-kartami',
+} as const;
+
 export function createViteConfig<const SegmentId extends string>({
     appName,
     configUrl,
@@ -70,6 +75,12 @@ export function createViteConfig<const SegmentId extends string>({
             define: {
                 __MINDBOX_SEGMENT__: JSON.stringify(segmentId),
                 __PUBLIC_ASSETS_BASE__: JSON.stringify(publicAssetsBase),
+                __BEZ_KART_ASSETS_BASE__: JSON.stringify(
+                    appName === 'bez-kart' ? publicAssetsBase : PRODUCTION_ASSETS_BASE.bezKart,
+                ),
+                __S_KARTAMI_ASSETS_BASE__: JSON.stringify(
+                    appName === 's-kartami' ? publicAssetsBase : PRODUCTION_ASSETS_BASE.sKartami,
+                ),
             },
             css: {
                 preprocessorOptions: {

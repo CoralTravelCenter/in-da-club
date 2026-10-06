@@ -1,8 +1,13 @@
-import {renderSegment} from '@/blocks/render-segment';
-import {getCachedCustomerContext, getCustomerContext} from '@/segments/customer-context';
-import {getSegmentConfig} from '@/segments/segment.config';
-import type {CardLevel, CustomerContext, SegmentConfig, SegmentId} from '@/segments/segment.types';
-export interface BootstrapOptions { container: HTMLElement; segmentId: SegmentId; cardLevelOverride?: CardLevel; }
+import {renderSegment} from '../blocks/render-segment';
+import {getCachedCustomerContext, getCustomerContext} from '../segments/customer-context';
+import {getSegmentConfig} from '../segments/segment.config';
+import type {CardLevel, CustomerContext, SegmentConfig, SegmentId} from '../segments/segment.types';
+export interface BootstrapOptions {
+    container: HTMLElement;
+    segmentId: SegmentId;
+    cardLevelOverride?: CardLevel;
+    customerContext?: CustomerContext;
+}
 
 const API_DEPENDENT_BLOCKS: Record<SegmentId, ReadonlySet<string>> = {
     inactive: new Set(['card-level', 'cashback']),
@@ -30,7 +35,12 @@ function withCardLevelOverride(customer: CustomerContext, cardLevelOverride?: Ca
     return cardLevelOverride ? {...customer, cardLevel: cardLevelOverride} : customer;
 }
 
-export async function bootstrap({container, segmentId, cardLevelOverride}: BootstrapOptions): Promise<void> {
+export async function bootstrap({container, segmentId, cardLevelOverride, customerContext}: BootstrapOptions): Promise<void> {
+    if (customerContext) {
+        container.replaceChildren(renderSegment(getSegmentConfig(segmentId, customerContext)));
+        return;
+    }
+
     const cached = getCachedCustomerContext();
     const initialConfig = getSegmentConfig(segmentId, withCardLevelOverride(cached.customer, cardLevelOverride));
 

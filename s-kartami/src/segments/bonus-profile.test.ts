@@ -1,5 +1,5 @@
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {normalizeCardLevel, requestBonusProfile} from './bonus-profile';
+import {normalizeCardLevel, requestBonusProfile, requestBonusProfileStrict} from './bonus-profile';
 
 describe('normalizeCardLevel', () => {
     it.each([
@@ -24,6 +24,7 @@ describe('requestBonusProfile', () => {
                     cardType: 'Platinum',
                     cardNumber: '002-0009-7403',
                     totalTravel: '3',
+                    bonusTripCount: '2',
                     balance: 1_500,
                     accumulatedBalance: '1000',
                     promoBalance: 500,
@@ -36,6 +37,7 @@ describe('requestBonusProfile', () => {
             cardType: 'Platinum',
             cardNumber: '002-0009-7403',
             totalTravel: 3,
+            bonusTripCount: 2,
             balance: 1_500,
             accumulatedBalance: 1_000,
             promoBalance: 500,
@@ -44,8 +46,30 @@ describe('requestBonusProfile', () => {
     });
 
     it('returns null for an unsuccessful response', async () => {
-        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: false}));
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: false, status: 503}));
         await expect(requestBonusProfile()).resolves.toBeNull();
+    });
+
+    it('keeps the API error observable for the unified client flow', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: false, status: 503}));
+        await expect(requestBonusProfileStrict()).rejects.toMatchObject({
+            message: 'BonusProfile request failed',
+            status: 503,
+        });
+    });
+
+    it('treats HTTP 500 as a missing card so the unified flow can continue', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: false, status: 500}));
+        await expect(requestBonusProfileStrict()).resolves.toBeNull();
+    });
+
+    it('returns no profile for a successful response without a result', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            ok: true,
+            json: vi.fn().mockResolvedValue({result: null}),
+        }));
+
+        await expect(requestBonusProfileStrict()).resolves.toBeNull();
     });
 
     it('returns null for an invalid result', async () => {

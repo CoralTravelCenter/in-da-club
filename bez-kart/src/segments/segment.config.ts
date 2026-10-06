@@ -17,7 +17,7 @@ const REGULAR_CLIENT_REFERRAL_URLS = {
     'regular-3': 'https://coralbonus.ru/registration?promo=JN53CKMQHT7RU26B02EW9V7P3SK2LTPNAOT9UE5ZW2S5OXDEAOTSQSNA9WZ68E2',
 } as const;
 
-const asset = (src: string): string => `${__PUBLIC_ASSETS_BASE__}/${src}`;
+const asset = (src: string): string => `${__BEZ_KART_ASSETS_BASE__}/${src}`;
 const list = (column: string, row: string, background?: BlockPresentation['background']): BlockPresentation => ({
     placement: {
         mobile: 'list',
@@ -195,7 +195,9 @@ export function getSegmentConfig(id: SegmentId): SegmentConfig {
         {
             id: 'private-sales',
             title: typographed`Закрытые акции`,
-            description: typographed`Досрочный доступ<br> к предложениям`,
+            description: id === 'new-client'
+                ? typographed`Только для участников клуба`
+                : typographed`Досрочный доступ<br> к предложениям`,
         },
         {
             id: 'manager',

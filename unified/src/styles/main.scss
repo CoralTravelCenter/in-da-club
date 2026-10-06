@@ -1,0 +1,46 @@
+@use '../../../bez-kart/src/styles/main';
+@use '../../../s-kartami/src/styles/main' as cards;
+
+.unified-error {
+  padding: 40px 16px;
+}
+
+.unified-error__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background: #fff;
+  border-radius: 20px;
+}
+
+.unified-error__title,
+.unified-error__description {
+  margin: 0;
+}
+
+.unified-error__title {
+  font-size: 24px;
+  line-height: 27px;
+}
+
+.unified-error__description {
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.unified-error__action button {
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+}
+
+@media (min-width: 768px) {
+  .unified-error {
+    padding-inline: 0;
+  }
+}

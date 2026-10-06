@@ -17,7 +17,7 @@ export interface BlockPresentation {
 export interface CustomerContext { displayName: string; cardLevel: CardLevel; }
 export interface ContentBlockDefinition {
     id: BlockId;
-    isLoading?: boolean;
+    isLoading?: boolean | 'card';
     title?: string;
     titleAccent?: string;
     titleAccentAfter?: boolean;

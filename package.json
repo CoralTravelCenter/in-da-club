@@ -9,7 +9,8 @@
   "scripts": {
     "dev:bez-kart": "node scripts/typograf.mjs bez-kart/src && vite --config bez-kart/vite.config.ts",
     "dev:s-kartami": "node scripts/typograf.mjs s-kartami/src && vite --config s-kartami/vite.config.ts",
-    "build": "npm run build:bez-kart && npm run build:s-kartami",
+    "dev:unified": "node scripts/typograf.mjs bez-kart/src && node scripts/typograf.mjs s-kartami/src && vite --config unified/vite.config.ts --mode unified",
+    "build": "npm run build:bez-kart && npm run build:s-kartami && npm run build:unified",
     "build:bez-kart": "node scripts/typograf.mjs bez-kart/src && tsc -p bez-kart/tsconfig.json && npm run build:bez-kart:new-client && npm run build:bez-kart:regular-1 && npm run build:bez-kart:regular-2 && npm run build:bez-kart:regular-3",
     "build:bez-kart:new-client": "vite build --config bez-kart/vite.config.ts --mode new-client",
     "build:bez-kart:regular-1": "vite build --config bez-kart/vite.config.ts --mode regular-1",
@@ -20,12 +21,14 @@
     "build:s-kartami:one-trip": "vite build --config s-kartami/vite.config.ts --mode one-trip",
     "build:s-kartami:two-trips": "vite build --config s-kartami/vite.config.ts --mode two-trips",
     "build:s-kartami:three-plus": "vite build --config s-kartami/vite.config.ts --mode three-plus",
+    "build:unified": "node scripts/typograf.mjs bez-kart/src && node scripts/typograf.mjs s-kartami/src && tsc -p unified/tsconfig.json && vite build --config unified/vite.config.ts --mode unified",
     "typograf": "node scripts/typograf.mjs bez-kart/src && node scripts/typograf.mjs s-kartami/src",
-    "typecheck": "tsc -p bez-kart/tsconfig.json && tsc -p s-kartami/tsconfig.json",
-    "test": "vitest run shared tests --environment jsdom && vitest run --config bez-kart/vitest.config.ts && vitest run --config s-kartami/vitest.config.ts"
+    "typecheck": "tsc -p bez-kart/tsconfig.json && tsc -p s-kartami/tsconfig.json && tsc -p unified/tsconfig.json",
+    "test": "vitest run shared tests --environment jsdom && vitest run --config bez-kart/vitest.config.ts && vitest run --config s-kartami/vitest.config.ts && vitest run --config unified/vitest.config.ts"
   },
   "dependencies": {
     "petite-vue": "^0.4.1",
+    "reactive-localstorage": "^1.0.1",
     "scroll-lock": "^2.1.5"
   },
   "devDependencies": {
