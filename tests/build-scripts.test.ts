@@ -2,59 +2,30 @@
 
 import {describe, expect, it} from 'vitest';
 import packageJson from '../package.json';
-import {SEGMENT_IDS as BEZ_KART_SEGMENT_IDS} from '../bez-kart/src/segments/segment.types';
-import {SEGMENT_IDS as S_KARTAMI_SEGMENT_IDS} from '../s-kartami/src/segments/segment.types';
 
 const scripts: Record<string, string> = packageJson.scripts;
 const EXPECTED_SCRIPT_NAMES = [
-    'dev:bez-kart',
-    'dev:s-kartami',
-    'dev:unified',
+    'dev',
     'build',
-    'build:bez-kart',
-    ...BEZ_KART_SEGMENT_IDS.map((segmentId) => `build:bez-kart:${segmentId}`),
-    'build:s-kartami',
-    ...S_KARTAMI_SEGMENT_IDS.map((segmentId) => `build:s-kartami:${segmentId}`),
-    'build:unified',
     'typograf',
     'typecheck',
     'test',
 ];
-
-function expectSegmentBuildScripts(appName: string, segmentIds: readonly string[]): void {
-    const prefix = `build:${appName}:`;
-    const expectedNames = segmentIds.map((segmentId) => `${prefix}${segmentId}`);
-    const actualNames = Object.keys(scripts)
-        .filter((name) => name.startsWith(prefix))
-        .sort();
-
-    expect(actualNames).toEqual([...expectedNames].sort());
-
-    for (const segmentId of segmentIds) {
-        const scriptName = `${prefix}${segmentId}`;
-        expect(scripts[scriptName]).toBe(
-            `vite build --config ${appName}/vite.config.ts --mode ${segmentId}`,
-        );
-        expect(scripts[`build:${appName}`]).toContain(`npm run ${scriptName}`);
-    }
-}
 
 describe('segment build scripts', () => {
     it('exposes only supported project commands', () => {
         expect(Object.keys(scripts).sort()).toEqual(EXPECTED_SCRIPT_NAMES.sort());
     });
 
-    it('matches bez-kart segment ids', () => {
-        expectSegmentBuildScripts('bez-kart', BEZ_KART_SEGMENT_IDS);
+    it('exposes the unified development server with typography normalization', () => {
+        expect(scripts.dev).toBe(
+            'node scripts/typograf.mjs unified/src && vite --config unified/vite.config.ts --mode unified',
+        );
     });
 
-    it('matches s-kartami segment ids', () => {
-        expectSegmentBuildScripts('s-kartami', S_KARTAMI_SEGMENT_IDS);
-    });
-
-    it('exposes the unified development server', () => {
-        expect(scripts['dev:unified']).toBe(
-            'node scripts/typograf.mjs bez-kart/src && node scripts/typograf.mjs s-kartami/src && vite --config unified/vite.config.ts --mode unified',
+    it('builds unified after typography normalization and typecheck', () => {
+        expect(scripts.build).toBe(
+            'node scripts/typograf.mjs unified/src && tsc -p unified/tsconfig.json && vite build --config unified/vite.config.ts --mode unified',
         );
     });
 });

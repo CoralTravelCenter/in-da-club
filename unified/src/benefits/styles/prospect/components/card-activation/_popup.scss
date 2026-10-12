@@ -1,0 +1,39 @@
+@use '../../abstracts/tokens' as tokens;
+
+.in-da-club-activation::part(popup-body) {
+  @media (min-width: tokens.$breakpoint-desktop) {
+    align-items: center;
+  }
+}
+
+.in-da-club-activation::part(popup-close) {
+  @media (min-width: tokens.$breakpoint-desktop) {
+    display: none;
+  }
+}
+
+.in-da-club-activation::part(popup-dialog) {
+  max-width: 800px;
+  overflow: visible;
+  background: #fff;
+  border-radius: 16px;
+}
+
+.in-da-club-activation:has(.in-da-club-activation__body--single)::part(popup-dialog) {
+  max-width: 500px;
+}
+
+.in-da-club-activation::part(popup-content) {
+  position: relative;
+  gap: 0;
+
+  @media (max-width: tokens.$breakpoint-desktop) {
+    padding: 0;
+  }
+}
+
+.in-da-club-activation__close {
+  @media (max-width: tokens.$breakpoint-desktop) {
+    display: none;
+  }
+}

@@ -9,4 +9,5 @@ export default createViteConfig({
     defaultSegment: 'unified',
     devPort: 5175,
     productionAssetsBase: 'https://b2ccdn.coral.ru/content/in-da-club',
+    outputDir: 'dist',
 });

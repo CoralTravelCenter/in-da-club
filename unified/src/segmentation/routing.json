@@ -1,0 +1,14 @@
+{
+  "reservationTrips": [
+    {"through": 0, "segment": "new-client"},
+    {"through": 1, "segment": "regular-1"},
+    {"through": 2, "segment": "regular-2"},
+    {"through": null, "segment": "regular-3"}
+  ],
+  "bonusTrips": [
+    {"through": 0, "segment": "inactive"},
+    {"through": 1, "segment": "one-trip"},
+    {"through": 2, "segment": "two-trips"},
+    {"through": null, "segment": "three-plus"}
+  ]
+}

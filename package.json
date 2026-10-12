@@ -7,24 +7,11 @@
     "node": ">=22.22.2"
   },
   "scripts": {
-    "dev:bez-kart": "node scripts/typograf.mjs bez-kart/src && vite --config bez-kart/vite.config.ts",
-    "dev:s-kartami": "node scripts/typograf.mjs s-kartami/src && vite --config s-kartami/vite.config.ts",
-    "dev:unified": "node scripts/typograf.mjs bez-kart/src && node scripts/typograf.mjs s-kartami/src && vite --config unified/vite.config.ts --mode unified",
-    "build": "npm run build:bez-kart && npm run build:s-kartami && npm run build:unified",
-    "build:bez-kart": "node scripts/typograf.mjs bez-kart/src && tsc -p bez-kart/tsconfig.json && npm run build:bez-kart:new-client && npm run build:bez-kart:regular-1 && npm run build:bez-kart:regular-2 && npm run build:bez-kart:regular-3",
-    "build:bez-kart:new-client": "vite build --config bez-kart/vite.config.ts --mode new-client",
-    "build:bez-kart:regular-1": "vite build --config bez-kart/vite.config.ts --mode regular-1",
-    "build:bez-kart:regular-2": "vite build --config bez-kart/vite.config.ts --mode regular-2",
-    "build:bez-kart:regular-3": "vite build --config bez-kart/vite.config.ts --mode regular-3",
-    "build:s-kartami": "node scripts/typograf.mjs s-kartami/src && tsc -p s-kartami/tsconfig.json && npm run build:s-kartami:inactive && npm run build:s-kartami:one-trip && npm run build:s-kartami:two-trips && npm run build:s-kartami:three-plus",
-    "build:s-kartami:inactive": "vite build --config s-kartami/vite.config.ts --mode inactive",
-    "build:s-kartami:one-trip": "vite build --config s-kartami/vite.config.ts --mode one-trip",
-    "build:s-kartami:two-trips": "vite build --config s-kartami/vite.config.ts --mode two-trips",
-    "build:s-kartami:three-plus": "vite build --config s-kartami/vite.config.ts --mode three-plus",
-    "build:unified": "node scripts/typograf.mjs bez-kart/src && node scripts/typograf.mjs s-kartami/src && tsc -p unified/tsconfig.json && vite build --config unified/vite.config.ts --mode unified",
-    "typograf": "node scripts/typograf.mjs bez-kart/src && node scripts/typograf.mjs s-kartami/src",
-    "typecheck": "tsc -p bez-kart/tsconfig.json && tsc -p s-kartami/tsconfig.json && tsc -p unified/tsconfig.json",
-    "test": "vitest run shared tests --environment jsdom && vitest run --config bez-kart/vitest.config.ts && vitest run --config s-kartami/vitest.config.ts && vitest run --config unified/vitest.config.ts"
+    "dev": "node scripts/typograf.mjs unified/src && vite --config unified/vite.config.ts --mode unified",
+    "build": "node scripts/typograf.mjs unified/src && tsc -p unified/tsconfig.json && vite build --config unified/vite.config.ts --mode unified",
+    "typograf": "node scripts/typograf.mjs unified/src",
+    "typecheck": "tsc -p unified/tsconfig.json",
+    "test": "vitest run tests --environment node && vitest run --config unified/vitest.config.ts"
   },
   "dependencies": {
     "petite-vue": "^0.4.1",

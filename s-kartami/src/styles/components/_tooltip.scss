@@ -1,4 +1,0 @@
-@use 'patterns/tooltip' as shared-tooltip;
-@use '../abstracts/tokens' as tokens;
-
-@include shared-tooltip.styles('s-kartami', tokens.$breakpoint-desktop);

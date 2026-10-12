@@ -1,0 +1,75 @@
+@use 'abstracts/mixins' as mixins;
+@use '../abstracts/tokens' as tokens;
+
+.in-da-club-prospect-segment {
+  min-width: 0;
+  padding: tokens.$space-xl 0;
+}
+
+.in-da-club-prospect-segment__title {
+  margin: 0 0 28px;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 38px;
+  padding-inline: tokens.$space-md;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    padding-inline: 0;
+  }
+}
+
+.in-da-club-prospect-segment__content {
+  display: grid;
+  gap: tokens.$layout-gap;
+  min-width: 0;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 100px));
+  }
+}
+
+.in-da-club-prospect-segment__featured {
+  min-height: 340px;
+  padding-inline: tokens.$space-md;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-column: var(--block-grid-column);
+    grid-row: var(--block-grid-row);
+    min-height: 330px;
+    padding: 0;
+  }
+}
+
+.in-da-club-prospect-segment__list {
+  min-height: 220px;
+  list-style: none;
+  margin: 0;
+  padding-inline: 16px;
+  scroll-padding-inline: 16px;
+
+  @include mixins.scroll-snap(
+          $gap: tokens.$layout-gap,
+          $item-selector: '> li',
+          $item-size: 90%,
+          $hide-scrollbar: true
+  );
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    display: contents;
+  }
+}
+
+.in-da-club-prospect-segment__list--scroll-locked {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+.in-da-club-prospect-segment__item {
+  @media (min-width: tokens.$breakpoint-desktop) {
+    grid-column: var(--block-grid-column);
+    grid-row: var(--block-grid-row);
+    scroll-snap-align: none;
+  }
+}

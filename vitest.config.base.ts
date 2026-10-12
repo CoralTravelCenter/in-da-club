@@ -12,8 +12,10 @@ export function createVitestConfig(appName: string, configUrl: string) {
         },
         define: {
             __PUBLIC_ASSETS_BASE__: JSON.stringify('http://localhost:5173'),
-            __BEZ_KART_ASSETS_BASE__: JSON.stringify('http://localhost:5173'),
-            __S_KARTAMI_ASSETS_BASE__: JSON.stringify('http://localhost:5174'),
+            __NO_CARD_ASSETS_BASE__: JSON.stringify('http://localhost:5175/assets/no-card'),
+            __CARDHOLDER_ASSETS_BASE__: JSON.stringify('http://localhost:5175/assets/cardholder'),
+            __SHARED_ASSETS_BASE__: JSON.stringify('http://localhost:5175/assets/shared'),
+            __INTRO_ASSETS_BASE__: JSON.stringify('http://localhost:5175/assets/intro'),
         },
         test: {
             environment: 'node',
