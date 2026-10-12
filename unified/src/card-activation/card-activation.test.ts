@@ -4,7 +4,6 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {requestCardActivation} from './card-activation';
 import {activateCard, getBonusProfile, normalizePhone, refreshUser, registerCard, sendVerificationCode} from './api/customer-api';
 import {sendBonusAccountActivation, sendBonusAccountRegistration} from './api/mindbox';
-import {applyConsents} from './model/consents';
 import {formatBirthdate, getProfile} from './model/profile';
 
 vi.mock('./model/profile', () => ({
@@ -20,7 +19,6 @@ vi.mock('./api/customer-api', () => ({
     registerCard: vi.fn(),
     sendVerificationCode: vi.fn(),
 }));
-vi.mock('./model/consents', () => ({applyConsents: vi.fn()}));
 vi.mock('./api/mindbox', () => ({
     sendBonusAccountActivation: vi.fn(),
     sendBonusAccountRegistration: vi.fn(),
@@ -63,7 +61,6 @@ describe('card activation markup and flow', () => {
         vi.mocked(formatBirthdate).mockReturnValue('1990-01-02');
         vi.mocked(normalizePhone).mockReturnValue('79990000000');
         vi.mocked(registerCard).mockResolvedValue();
-        vi.mocked(applyConsents).mockResolvedValue();
         vi.mocked(sendVerificationCode).mockResolvedValue();
         vi.mocked(activateCard).mockResolvedValue();
         vi.mocked(refreshUser).mockResolvedValue(true);
@@ -305,7 +302,6 @@ describe('card activation markup and flow', () => {
         expect(registerCard).toHaveBeenCalledOnce();
         expect(registerCard).toHaveBeenCalledWith(expect.objectContaining({birthDate: '1990-01-02', city: 'Москва'}));
         expect(sendBonusAccountRegistration).toHaveBeenCalledWith('Москва', 42);
-        expect(applyConsents).toHaveBeenCalledOnce();
         expect(sendVerificationCode).toHaveBeenCalledWith('79990000000');
         expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('2');
 
@@ -518,21 +514,6 @@ describe('card activation markup and flow', () => {
         await vi.advanceTimersByTimeAsync(0);
         expect(resend.dataset.state).toBe('cooldown');
         vi.useRealTimers();
-    });
-
-    it('после ошибки согласий повторяет попытку без повторной регистрации', async () => {
-        vi.mocked(applyConsents).mockRejectedValueOnce(new Error('Ошибка согласий'));
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const form = dialog.querySelector<HTMLFormElement>('form')!;
-        fillRequiredFields(form);
-        submit(form);
-
-        await vi.waitFor(() => expect(dialog.querySelector('[role="alert"]')?.textContent).toBe('Ошибка согласий'));
-        submit(form);
-        await vi.waitFor(() => expect(dialog.querySelector('.in-da-club-activation__verify')).toBeTruthy());
-        expect(registerCard).toHaveBeenCalledOnce();
-        expect(applyConsents).toHaveBeenCalledTimes(2);
     });
 
 });

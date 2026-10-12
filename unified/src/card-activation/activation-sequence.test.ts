@@ -2,9 +2,6 @@
 
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {requestCardActivation} from './card-activation';
-import {applyConsents} from './model/consents';
-
-vi.mock('./model/consents', () => ({applyConsents: vi.fn()}));
 
 class TestPopup extends HTMLElement {
     show(): void {}
@@ -58,9 +55,6 @@ describe('card activation request sequence', () => {
         window.localStorage.setItem('user', JSON.stringify(initialProfile));
         Object.assign(window, {mindbox});
         mindbox.mockClear();
-        vi.mocked(applyConsents).mockReset().mockImplementation(async () => {
-            trace.push('Consents');
-        });
     });
 
     afterEach(() => {
@@ -105,7 +99,6 @@ describe('card activation request sequence', () => {
         expect(trace).toEqual([
             '/endpoints/Customer/BonusRegister',
             'Mindbox:Website.BonusAccountRegistration',
-            'Consents',
             '/endpoints/Customer/BonusSendVerificationCode',
             '/endpoints/Customer/BonusActivation',
             '/endpoints/Customer/RefreshLogin',

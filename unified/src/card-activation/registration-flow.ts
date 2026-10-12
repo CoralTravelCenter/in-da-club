@@ -1,6 +1,5 @@
 import {normalizePhone, registerCard, type RegistrationData} from './api/customer-api';
 import {sendBonusAccountRegistration} from './api/mindbox';
-import {applyConsents} from './model/consents';
 import type {UserProfile} from './model/profile';
 import {typographed} from '@/shared/runtime/typography';
 import {
@@ -18,8 +17,6 @@ export function renderRegistration(dialog: CoralPopupElement, profile: UserProfi
     stage.replaceChildren(form);
 
     let completedRegistration: RegistrationData | null = null;
-    let consentsApplied = false;
-    const acceptedDocuments = new Map<string, boolean>();
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
         if (!validateRegistrationForm(form)) return;
@@ -54,11 +51,6 @@ export function renderRegistration(dialog: CoralPopupElement, profile: UserProfi
                 await registerCard(registration);
                 sendBonusAccountRegistration(registration.city, profile.nameId);
                 completedRegistration = registration;
-                consentsApplied = false;
-            }
-            if (!consentsApplied) {
-                await applyConsents(registration, acceptedDocuments);
-                consentsApplied = true;
             }
             await renderVerification(dialog, registration, profile.nameId);
         } catch (error) {
