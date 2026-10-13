@@ -15,6 +15,8 @@ const registration: RegistrationData = {
     isConsentToEmail: true,
     isConsentToAdditional: false,
     mobilePhone: '79990000000',
+    Promo: 'TEST_PROMO',
+    FromPageUrl: '/club',
 };
 
 const documents = [

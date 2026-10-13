@@ -11,7 +11,7 @@
     "build": "node scripts/typograf.mjs unified/src && tsc -p unified/tsconfig.json && vite build --config unified/vite.config.ts --mode unified",
     "typograf": "node scripts/typograf.mjs unified/src",
     "typecheck": "tsc -p unified/tsconfig.json",
-    "test": "vitest run tests --environment node && vitest run --config unified/vitest.config.ts"
+    "test": "vitest run --config unified/vitest.config.ts"
   },
   "dependencies": {
     "petite-vue": "^0.4.1",

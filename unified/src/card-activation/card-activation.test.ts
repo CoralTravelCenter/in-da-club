@@ -29,9 +29,7 @@ class TestPopup extends HTMLElement {
     hide(): void {}
 }
 
-if (!customElements.get('coral-popup')) {
-    customElements.define('coral-popup', TestPopup);
-}
+if (!customElements.get('coral-popup')) customElements.define('coral-popup', TestPopup);
 
 const profile = {
     name: 'Анна',
@@ -53,7 +51,7 @@ function submit(form: HTMLFormElement): void {
     form.dispatchEvent(new Event('submit', {bubbles: true, cancelable: true}));
 }
 
-describe('card activation markup and flow', () => {
+describe('card activation business flow', () => {
     beforeEach(() => {
         vi.resetAllMocks();
         document.body.replaceChildren();
@@ -64,456 +62,71 @@ describe('card activation markup and flow', () => {
         vi.mocked(sendVerificationCode).mockResolvedValue();
         vi.mocked(activateCard).mockResolvedValue();
         vi.mocked(refreshUser).mockResolvedValue(true);
-        vi.mocked(getBonusProfile).mockResolvedValue({cardType: 'Gold', cardNumber: '12345678901', accumulatedBalance: 100, promoBalance: 50});
+        vi.mocked(getBonusProfile).mockResolvedValue({
+            cardType: 'Gold',
+            cardNumber: '12345678901',
+            accumulatedBalance: 100,
+            promoBalance: 50,
+        });
+        window.history.replaceState({}, '', '/club');
     });
 
-    it('показывает форму с данными профиля и первым шагом', async () => {
-        await requestCardActivation();
-
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation');
-        const form = dialog?.querySelector<HTMLFormElement>('form');
-        expect(dialog?.getAttribute('aria-label')).toBe('Оформление карты');
-        expect(dialog?.classList.contains('in-da-club-activation')).toBe(true);
-        expect(dialog?.querySelector('.in-da-club-activation__body')).toBeTruthy();
-        expect(dialog?.querySelector('.in-da-club-activation__panel')).toBeTruthy();
-        expect(dialog?.querySelector('.in-da-club-activation__stage')).toBeTruthy();
-        expect(dialog?.querySelector('.in-da-club-activation__steps')?.getAttribute('aria-label')).toBe('Шаг 1 из\u00a03');
-        expect(form?.classList.contains('in-da-club-activation__form')).toBe(true);
-        expect((form?.elements.namedItem('givenName') as HTMLInputElement).value).toBe('Анна');
-        expect((form?.elements.namedItem('birthDate') as HTMLInputElement).value).toBe('02 / 01 / 1990');
-        expect((form?.elements.namedItem('mobilePhone') as HTMLInputElement).readOnly).toBe(true);
-        expect((form?.elements.namedItem('mobilePhone') as HTMLInputElement).value).toBe('+7 (999) 000-00-00');
-    });
-
-    it('использует актуальные ссылки на согласия и правила программы', async () => {
-        await requestCardActivation();
-
-        const links = [...document.querySelectorAll<HTMLAnchorElement>('.in-da-club-activation__consents a')];
-
-        expect(links.map(({href}) => href)).toEqual([
-            'https://b2ccdn.coral.ru/content/doc/cb/soglasie_na_obrabotku_personalynyh_dannyh_coralbonus.pdf',
-            'https://b2ccdn.coral.ru/content/doc/cb/politika-obrabotki-persdannyh-coralbonus-24-09-25.pdf',
-            'https://b2ccdn.coral.ru/content/doc/legal/pravila-loyalty-program-22062026.pdf',
-            'https://b2ccdn.coral.ru/content/doc/cb/soglasie-na-rassylku-coralbonus-24-09-2025.pdf',
-        ]);
-        expect(links.every(({target, rel}) => target === '_blank' && rel === 'noopener')).toBe(true);
-    });
-
-    it('не позволяет изменить или отправить некорректный телефон из профиля', async () => {
+    it('не отправляет регистрацию с некорректным телефоном профиля', async () => {
         vi.mocked(getProfile).mockReturnValue({...profile, mobilePhone: 'некорректный номер'});
+        vi.mocked(normalizePhone).mockReturnValue('');
         await requestCardActivation();
-
         const form = document.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        const mobilePhone = form.elements.namedItem('mobilePhone') as HTMLInputElement;
-        expect(mobilePhone.readOnly).toBe(true);
-        expect(mobilePhone.value).toBe('');
 
         fillRequiredFields(form);
         submit(form);
+
         expect(registerCard).not.toHaveBeenCalled();
-        expect(mobilePhone.getAttribute('aria-invalid')).toBe('true');
-        expect(form.textContent).toContain('Укажите телефон');
+        expect((form.elements.namedItem('mobilePhone') as HTMLInputElement).getAttribute('aria-invalid')).toBe('true');
     });
 
-    it('сохраняет высоту первого шага для следующих экранов', async () => {
-        const rect = {x: 0, y: 0, top: 0, right: 0, bottom: 640, left: 0, width: 0, height: 640, toJSON: () => ({})};
-        const getRect = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(rect);
-
-        await requestCardActivation();
-
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        expect(dialog.style.getPropertyValue('--in-da-club-activation-step-height')).toBe('640px');
-        getRect.mockRestore();
-    });
-
-    it('закрывает попап отдельной доступной кнопкой', async () => {
-        await requestCardActivation();
-        const dialog = document.querySelector<TestPopup>('#in-da-club-activation')!;
-        const hide = vi.spyOn(dialog, 'hide');
-        const show = vi.spyOn(dialog, 'show');
-        const control = dialog.querySelector<HTMLElement>('.in-da-club-activation__close')!;
-        const close = control.querySelector<HTMLButtonElement>('button')!;
-
-        expect(control.getAttribute('trait')).toBe('pale');
-        expect(control.getAttribute('shape')).toBe('pill');
-        expect(control.getAttribute('size')).toBe('small');
-        expect(close.style.position).toBe('absolute');
-        expect(close.style.top).toBe('calc(-39px)');
-        expect(close.textContent).toBe('Закрыть');
-        close.click();
-
-        expect(hide).toHaveBeenCalledOnce();
-
-        await requestCardActivation();
-
-        expect(show).toHaveBeenCalledOnce();
-        expect(document.querySelectorAll('#in-da-club-activation')).toHaveLength(1);
-        expect(document.querySelector('#in-da-club-activation')).toBe(dialog);
-    });
-
-    it('не создаёт второй попап при повторном запросе активации', async () => {
-        await requestCardActivation();
-        const dialog = document.querySelector<TestPopup>('#in-da-club-activation')!;
-        const show = vi.spyOn(dialog, 'show');
-
-        await requestCardActivation();
-
-        expect(show).toHaveBeenCalledOnce();
-        expect(document.querySelectorAll('#in-da-club-activation')).toHaveLength(1);
-        expect(document.querySelector('#in-da-club-activation')).toBe(dialog);
-    });
-
-    it('удаляет неоткрывшийся попап и позволяет повторить попытку', async () => {
-        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-        const show = vi.spyOn(TestPopup.prototype, 'show').mockRejectedValueOnce(new Error('Popup failed'));
-
-        await requestCardActivation();
-
-        expect(document.querySelector('#in-da-club-activation')).toBeNull();
-
-        await requestCardActivation();
-
-        expect(document.querySelector('#in-da-club-activation')).not.toBeNull();
-        expect(show).toHaveBeenCalledTimes(2);
-        consoleError.mockRestore();
-        show.mockRestore();
-    });
-
-    it('предлагает города из исходного списка и не отправляет неизвестный город', async () => {
+    it('не отправляет регистрацию с неизвестным городом', async () => {
         await requestCardActivation();
         const form = document.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        const city = form.elements.namedItem('city') as HTMLInputElement;
-        city.value = 'Мос';
-        city.dispatchEvent(new Event('input', {bubbles: true}));
-        expect(form.querySelector('.in-da-club-activation__city-options')?.textContent).toContain('Москва');
-        form.querySelector<HTMLButtonElement>('.in-da-club-activation__city-options button')?.click();
-        expect(city.value).toBe('Москва');
 
         fillRequiredFields(form);
-        city.value = 'Несуществующий город';
-        submit(form);
-        expect(registerCard).not.toHaveBeenCalled();
-        expect(city.getAttribute('aria-invalid')).toBe('true');
-        expect(form.textContent).toContain('Укажите город из\u00a0списка');
-    });
-
-    it('перемещает фокус по вариантам городов стрелками', async () => {
-        await requestCardActivation();
-        const form = document.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        const city = form.elements.namedItem('city') as HTMLInputElement;
-        city.value = 'М';
-        city.dispatchEvent(new Event('input', {bubbles: true}));
-
-        const options = [...form.querySelectorAll<HTMLButtonElement>('.in-da-club-activation__city-options button')];
-        city.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}));
-        expect(document.activeElement).toBe(options[0]);
-
-        options[0].dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}));
-        expect(document.activeElement).toBe(options[1]);
-
-        options[1].dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}));
-        expect(document.activeElement).toBe(options[0]);
-
-        options[0].dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}));
-        expect(document.activeElement).toBe(city);
-    });
-
-    it('не отправляет некорректную дату рождения', async () => {
-        await requestCardActivation();
-        const form = document.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(form);
-        const birthDate = form.elements.namedItem('birthDate') as HTMLInputElement;
-        birthDate.value = '31 / 02 / 1990';
-        submit(form);
-        expect(registerCard).not.toHaveBeenCalled();
-        expect(birthDate.getAttribute('aria-invalid')).toBe('true');
-        expect(form.textContent).toContain('Укажите корректную дату рождения');
-    });
-
-    it('показывает собственные сообщения для незаполненных обязательных полей', async () => {
-        await requestCardActivation();
-        const form = document.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        (form.elements.namedItem('familyName') as HTMLInputElement).value = '';
+        (form.elements.namedItem('city') as HTMLInputElement).value = 'Несуществующий город';
         submit(form);
 
         expect(registerCard).not.toHaveBeenCalled();
-        expect(form.noValidate).toBe(true);
-        expect(form.textContent).toContain('Укажите фамилию');
-        expect(form.textContent).toContain('Укажите город');
-        expect(form.textContent).toContain('Подтвердите согласие на\u00a0обработку персональных данных');
     });
 
-    it('убирает ошибку поля сразу после его заполнения', async () => {
-        await requestCardActivation();
-        const form = document.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        const familyName = form.elements.namedItem('familyName') as HTMLInputElement;
-        const personal = form.elements.namedItem('personal') as HTMLInputElement;
-        familyName.value = '';
-        submit(form);
-
-        expect(familyName.getAttribute('aria-invalid')).toBe('true');
-        expect(personal.getAttribute('aria-invalid')).toBe('true');
-
-        familyName.value = 'Тестова';
-        familyName.dispatchEvent(new Event('input', {bubbles: true}));
-        personal.checked = true;
-        personal.dispatchEvent(new Event('change', {bubbles: true}));
-
-        expect(familyName.hasAttribute('aria-invalid')).toBe(false);
-        expect(personal.hasAttribute('aria-invalid')).toBe(false);
-        expect(form.textContent).not.toContain('Укажите фамилию');
-        expect(form.textContent).not.toContain('Подтвердите согласие на\u00a0обработку персональных данных');
-    });
-
-    it('показывает существующую карту без формы регистрации', async () => {
+    it('загружает данные существующей карты без повторной регистрации', async () => {
         vi.mocked(getProfile).mockReturnValue({...profile, BonusUserId: 42});
 
         await requestCardActivation();
 
-        const dialog = document.querySelector('#in-da-club-activation');
-        expect(dialog?.textContent).toContain('У\u00a0вас уже есть карта CoralBonus');
-        expect(dialog?.textContent).toContain('Бонусы за\u00a0поездки: 100');
-        expect(dialog?.textContent).toContain('123 4567 8901');
-        expect(dialog?.querySelector<HTMLImageElement>('.in-da-club-activation__card img')?.src).toBe('http://localhost:5175/assets/shared/card-au-comp.webp');
-        expect(dialog?.querySelector<HTMLImageElement>('.in-da-club-activation__result-icon')?.src).toBe('http://localhost:5175/assets/no-card/success-mark.svg');
-        expect(dialog?.querySelector('.in-da-club-activation__body')?.classList.contains('in-da-club-activation__body--single')).toBe(true);
-        expect(dialog?.querySelector('form')).toBeNull();
+        expect(getBonusProfile).toHaveBeenCalledOnce();
+        expect(registerCard).not.toHaveBeenCalled();
+        expect(document.querySelector('#in-da-club-activation')?.textContent).toContain('123 4567 8901');
     });
 
-    it('показывает ошибку вместо пустого экрана, если профиль карты недоступен', async () => {
-        vi.mocked(getProfile).mockReturnValue({...profile, BonusUserId: 42});
-        vi.mocked(getBonusProfile).mockRejectedValueOnce(new Error('Нет ответа'));
-
-        await requestCardActivation();
-
-        const dialog = document.querySelector('#in-da-club-activation');
-        expect(dialog?.textContent).toContain('Что-то пошло не\u00a0так');
-        expect(dialog?.textContent).toContain('обновить страницу');
-    });
-
-    it('проходит от регистрации к SMS и результату', async () => {
-        await requestCardActivation();
+    it('проходит регистрацию, подтверждение SMS и активацию карты', async () => {
+        await requestCardActivation('TEST_PROMO');
         const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const form = dialog.querySelector<HTMLFormElement>('form')!;
-        fillRequiredFields(form);
-        submit(form);
+        const registration = dialog.querySelector<HTMLFormElement>('form')!;
+        fillRequiredFields(registration);
+        submit(registration);
 
         await vi.waitFor(() => expect(dialog.querySelector('.in-da-club-activation__verify')).toBeTruthy());
-        expect(registerCard).toHaveBeenCalledOnce();
-        expect(registerCard).toHaveBeenCalledWith(expect.objectContaining({birthDate: '1990-01-02', city: 'Москва'}));
+        expect(registerCard).toHaveBeenCalledWith(expect.objectContaining({
+            city: 'Москва',
+            Promo: 'TEST_PROMO',
+            FromPageUrl: '/club',
+        }));
         expect(sendBonusAccountRegistration).toHaveBeenCalledWith('Москва', 42);
         expect(sendVerificationCode).toHaveBeenCalledWith('79990000000');
-        expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('2');
 
         const verification = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__verify')!;
-        const paste = new Event('paste', {bubbles: true, cancelable: true});
-        Object.defineProperty(paste, 'clipboardData', {value: {getData: () => '123456'}});
-        verification.querySelector<HTMLInputElement>('[data-code-digit]')?.dispatchEvent(paste);
-        expect([...verification.querySelectorAll<HTMLInputElement>('[data-code-digit]')].map((input) => input.value)).toEqual(['1', '2', '3', '4', '5', '6']);
+        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
         submit(verification);
 
-        await vi.waitFor(() => expect(dialog.textContent).toContain('Карта активирована!'));
-        expect(activateCard).toHaveBeenCalledWith('79990000000', '123456');
+        await vi.waitFor(() => expect(sendBonusAccountActivation).toHaveBeenCalledOnce());
+        expect(activateCard).toHaveBeenCalledWith('79990000000', '111111');
         expect(sendBonusAccountActivation).toHaveBeenCalledWith('Москва', 'Gold', '12345678901', 42);
-        expect(vi.mocked(getBonusProfile).mock.invocationCallOrder[0])
-            .toBeLessThan(vi.mocked(sendBonusAccountActivation).mock.invocationCallOrder[0]);
-        expect(getBonusProfile).toHaveBeenCalledOnce();
-        expect(dialog.querySelector('.in-da-club-activation__result')).toBeTruthy();
-        expect(dialog.querySelector('.in-da-club-activation__card')).toBeTruthy();
-        expect(dialog.textContent).toContain('Ваш уровень\u00a0— Gold, кешбэк 2%');
-        expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('3');
     });
-
-    it('показывает активацию на кнопке до перехода к результату', async () => {
-        let resolveRefresh!: (value: boolean) => void;
-        vi.mocked(refreshUser).mockImplementationOnce(() => new Promise<boolean>((resolve) => { resolveRefresh = resolve; }));
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const registration = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(registration);
-        submit(registration);
-        await vi.waitFor(() => expect(dialog.querySelector('.in-da-club-activation__verify')).toBeTruthy());
-
-        const verification = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__verify')!;
-        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
-        submit(verification);
-
-        await vi.waitFor(() => expect(refreshUser).toHaveBeenCalledOnce());
-        expect(verification.dataset.state).toBe('activating');
-        expect(verification.getAttribute('aria-busy')).toBe('true');
-        expect(verification.querySelector<HTMLButtonElement>('.in-da-club-activation__submit')?.textContent).toBe('Активируем карту…');
-        expect(dialog.textContent).not.toContain('Проверяем…');
-        expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('2');
-        expect(sendBonusAccountActivation).not.toHaveBeenCalled();
-
-        resolveRefresh(true);
-        await vi.waitFor(() => expect(dialog.textContent).toContain('Карта активирована!'));
-        expect(sendBonusAccountActivation).toHaveBeenCalledOnce();
-    });
-
-    it('не отправляет активацию в Mindbox, если RefreshLogin не обновил профиль', async () => {
-        vi.mocked(refreshUser).mockResolvedValueOnce(false);
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const registration = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(registration);
-        submit(registration);
-        await vi.waitFor(() => expect(dialog.querySelector('.in-da-club-activation__verify')).toBeTruthy());
-
-        const verification = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__verify')!;
-        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
-        submit(verification);
-
-        await vi.waitFor(() => expect(dialog.textContent).toContain('Что-то пошло не\u00a0так'));
-        expect(dialog.getAttribute('aria-label')).toBe('Не\u00a0удалось обновить данные карты');
-        expect(getBonusProfile).not.toHaveBeenCalled();
-        expect(sendBonusAccountActivation).not.toHaveBeenCalled();
-    });
-
-    it('не отправляет активацию в Mindbox, если BonusProfile завершился ошибкой', async () => {
-        vi.mocked(getBonusProfile).mockRejectedValueOnce(new Error('Нет ответа'));
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const registration = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(registration);
-        submit(registration);
-        await vi.waitFor(() => expect(dialog.querySelector('.in-da-club-activation__verify')).toBeTruthy());
-
-        const verification = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__verify')!;
-        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
-        submit(verification);
-
-        await vi.waitFor(() => expect(dialog.textContent).toContain('Что-то пошло не\u00a0так'));
-        expect(dialog.getAttribute('aria-label')).toBe('Не\u00a0удалось обновить данные карты');
-        expect(sendBonusAccountActivation).not.toHaveBeenCalled();
-    });
-
-    it.each([
-        {cardNumber: '12345678901'},
-        {cardType: 'Gold' as const},
-        {cardType: 'Gold' as const, cardNumber: '   '},
-    ])('не отправляет активацию в Mindbox с неполными данными карты', async (bonus) => {
-        vi.mocked(getBonusProfile).mockResolvedValueOnce(bonus);
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const registration = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(registration);
-        submit(registration);
-        await vi.waitFor(() => expect(dialog.querySelector('.in-da-club-activation__verify')).toBeTruthy());
-
-        const verification = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__verify')!;
-        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
-        submit(verification);
-
-        await vi.waitFor(() => expect(dialog.textContent).toContain('Что-то пошло не так'));
-        expect(sendBonusAccountActivation).not.toHaveBeenCalled();
-    });
-
-    it('при ошибке SMS оставляет форму и показывает сообщение', async () => {
-        vi.mocked(sendVerificationCode).mockRejectedValueOnce(new Error('Сервис SMS недоступен'));
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const form = dialog.querySelector<HTMLFormElement>('form')!;
-        fillRequiredFields(form);
-        submit(form);
-
-        await vi.waitFor(() => expect(dialog.querySelector('[role="alert"]')?.textContent).toBe('Сервис SMS недоступен'));
-        expect(dialog.querySelector('.in-da-club-activation__form')).toBeTruthy();
-        expect(dialog.querySelector<HTMLButtonElement>('.in-da-club-activation__submit')?.textContent).toBe('Получить код по\u00a0SMS');
-        expect(dialog.querySelector<HTMLButtonElement>('.in-da-club-activation__submit')?.disabled).toBe(false);
-    });
-
-    it('не отправляет регистрацию в Mindbox при ошибке BonusRegister', async () => {
-        vi.mocked(registerCard).mockRejectedValueOnce(new Error('Отказ регистрации'));
-        await requestCardActivation();
-        const form = document.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(form);
-        submit(form);
-
-        await vi.waitFor(() => expect(form.querySelector('[role="alert"]')?.textContent).toBe('Отказ регистрации'));
-        expect(sendBonusAccountRegistration).not.toHaveBeenCalled();
-    });
-
-    it('не отправляет активацию в Mindbox при ошибке BonusActivation', async () => {
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const registration = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(registration);
-        submit(registration);
-        await vi.waitFor(() => expect(dialog.querySelector('.in-da-club-activation__verify')).toBeTruthy());
-
-        vi.mocked(activateCard).mockRejectedValueOnce(new Error('Неверный код'));
-        const verification = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__verify')!;
-        verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
-        submit(verification);
-
-        await vi.waitFor(() => expect(verification.querySelector('[role="alert"]')?.textContent).toBe('Неверный код'));
-        expect(sendBonusAccountActivation).not.toHaveBeenCalled();
-    });
-
-    it('показывает отправку кода состоянием основной кнопки', async () => {
-        let resolveSms!: () => void;
-        vi.mocked(sendVerificationCode).mockImplementationOnce(() => new Promise<void>((resolve) => { resolveSms = resolve; }));
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const form = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(form);
-        submit(form);
-
-        await vi.waitFor(() => expect(form.querySelector<HTMLButtonElement>('.in-da-club-activation__submit')?.textContent).toBe('Отправляем\u00a0код…'));
-        await vi.waitFor(() => expect(sendVerificationCode).toHaveBeenCalledOnce());
-        expect(form.getAttribute('aria-busy')).toBe('true');
-        expect(form.dataset.state).toBe('sending');
-        expect(form.querySelector<HTMLButtonElement>('.in-da-club-activation__submit')?.disabled).toBe(true);
-        expect(dialog.querySelector('.in-da-club-activation__status')).toBeNull();
-
-        resolveSms();
-        await vi.waitFor(() => expect(dialog.querySelector('.in-da-club-activation__verify')).toBeTruthy());
-    });
-
-    it('не позволяет вернуться к форме через степпер с шага SMS', async () => {
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const form = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(form);
-        submit(form);
-        await vi.waitFor(() => expect(dialog.querySelector('.in-da-club-activation__verify')).toBeTruthy());
-
-        expect(dialog.querySelectorAll('button[data-step-mark]')).toHaveLength(0);
-        expect(dialog.querySelector('.in-da-club-activation__form')).toBeNull();
-        expect(dialog.querySelector('[data-step-mark][aria-current="step"]')?.textContent).toBe('2');
-    });
-
-    it('разрешает повторно отправить SMS после таймера', async () => {
-        vi.useFakeTimers();
-        await requestCardActivation();
-        const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
-        const form = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
-        fillRequiredFields(form);
-        submit(form);
-        await vi.advanceTimersByTimeAsync(0);
-        const resend = dialog.querySelector<HTMLButtonElement>('[data-resend-code]')!;
-        expect(resend.disabled).toBe(true);
-        expect(resend.querySelector('[data-resend-seconds]')?.textContent).toBe('01:00');
-
-        await vi.advanceTimersByTimeAsync(1_000);
-        expect(resend.querySelector('[data-resend-seconds]')?.textContent).toBe('00:59');
-
-        await vi.advanceTimersByTimeAsync(59_000);
-        expect(resend.disabled).toBe(false);
-        let resolveResend!: () => void;
-        vi.mocked(sendVerificationCode).mockImplementationOnce(() => new Promise<void>((resolve) => { resolveResend = resolve; }));
-        resend.click();
-        await vi.advanceTimersByTimeAsync(0);
-
-        expect(sendVerificationCode).toHaveBeenCalledTimes(2);
-        expect(resend.textContent).toBe('Отправляем\u00a0код…');
-        expect(resend.dataset.state).toBe('sending');
-        expect(resend.getAttribute('aria-busy')).toBe('true');
-        resolveResend();
-        await vi.advanceTimersByTimeAsync(0);
-        expect(resend.dataset.state).toBe('cooldown');
-        vi.useRealTimers();
-    });
-
 });

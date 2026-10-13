@@ -1,7 +1,8 @@
 import {cities} from '../model/cities';
 import {formatBirthdate, type UserProfile} from '../model/profile';
 import {ACTIVATION_DIALOG_ID} from './activation-view';
-import {typographed} from '@/shared/runtime/typography';
+import {content} from '@/content/content';
+import {textToSafeHtml} from '@/shared/runtime/text';
 
 const knownCities = new Set<string>(cities);
 
@@ -83,15 +84,15 @@ export function validateRegistrationForm(form: HTMLFormElement): boolean {
     const city = form.elements.namedItem('city') as HTMLInputElement;
     const birthDate = form.elements.namedItem('birthDate') as HTMLInputElement;
     const fields: Array<[HTMLInputElement | null, string]> = [
-        [form.elements.namedItem('familyName') as HTMLInputElement, typographed`Укажите фамилию`],
-        [form.elements.namedItem('givenName') as HTMLInputElement, typographed`Укажите имя`],
-        [form.querySelector<HTMLInputElement>('input[name="gender"]:checked'), typographed`Выберите пол`],
-        [birthDate, typographed`Укажите дату рождения`],
-        [city, typographed`Укажите город`],
-        [form.elements.namedItem('email') as HTMLInputElement, typographed`Укажите электронную почту`],
-        [form.elements.namedItem('mobilePhone') as HTMLInputElement, typographed`Укажите телефон`],
-        [form.elements.namedItem('personal') as HTMLInputElement, typographed`Подтвердите согласие на обработку персональных данных`],
-        [form.elements.namedItem('loyalty') as HTMLInputElement, typographed`Подтвердите согласие с правилами программы`],
+        [form.elements.namedItem('familyName') as HTMLInputElement, content.activation.validation.surnameRequired],
+        [form.elements.namedItem('givenName') as HTMLInputElement, content.activation.validation.nameRequired],
+        [form.querySelector<HTMLInputElement>('input[name="gender"]:checked'), content.activation.validation.genderRequired],
+        [birthDate, content.activation.validation.birthdateRequired],
+        [city, content.activation.validation.cityRequired],
+        [form.elements.namedItem('email') as HTMLInputElement, content.activation.validation.emailRequired],
+        [form.elements.namedItem('mobilePhone') as HTMLInputElement, content.activation.validation.phoneRequired],
+        [form.elements.namedItem('personal') as HTMLInputElement, content.activation.validation.personalConsentRequired],
+        [form.elements.namedItem('loyalty') as HTMLInputElement, content.activation.validation.loyaltyConsentRequired],
     ];
     for (const [field, message] of fields) {
         if (!field || (field.type === 'checkbox' ? !field.checked : !field.value.trim())) {
@@ -99,12 +100,12 @@ export function validateRegistrationForm(form: HTMLFormElement): boolean {
             if (target) showFieldError(target, message);
         }
     }
-    if (birthDate.value && !parseBirthdate(birthDate.value)) showFieldError(birthDate, typographed`Укажите корректную дату рождения`);
-    if (city.value && !knownCities.has(city.value.trim())) showFieldError(city, typographed`Укажите город из списка`);
+    if (birthDate.value && !parseBirthdate(birthDate.value)) showFieldError(birthDate, content.activation.validation.birthdateInvalid);
+    if (city.value && !knownCities.has(city.value.trim())) showFieldError(city, content.activation.validation.cityInvalid);
     const email = form.elements.namedItem('email') as HTMLInputElement;
-    if (email.value && !email.validity.valid) showFieldError(email, typographed`Укажите корректную электронную почту`);
+    if (email.value && !email.validity.valid) showFieldError(email, content.activation.validation.emailInvalid);
     const mobilePhone = form.elements.namedItem('mobilePhone') as HTMLInputElement;
-    if (mobilePhone.value && !isValidPhone(mobilePhone.value)) showFieldError(mobilePhone, typographed`Укажите корректный номер телефона`);
+    if (mobilePhone.value && !isValidPhone(mobilePhone.value)) showFieldError(mobilePhone, content.activation.validation.phoneInvalid);
     const firstInvalid = form.querySelector<HTMLInputElement>('[aria-invalid="true"]');
     firstInvalid?.focus();
     return !firstInvalid;
@@ -182,19 +183,19 @@ export function createRegistrationForm(profile: UserProfile): HTMLFormElement {
     form.className = 'in-da-club-activation__form';
     form.noValidate = true;
     form.innerHTML = `
-        <h2 id="${ACTIVATION_DIALOG_ID}-title">${typographed`Оформление карты`}</h2>
-        <label><span>${typographed`Фамилия`} <b>*</b></span><input name="familyName" required autocomplete="family-name"></label>
-        <label><span>${typographed`Имя`} <b>*</b></span><input name="givenName" required autocomplete="given-name"></label>
-        <div class="in-da-club-activation__row"><fieldset><legend>${typographed`Пол`} <b>*</b></legend><div class="in-da-club-activation__gender-options"><label><input type="radio" name="gender" value="0" required><span>М</span></label><label><input type="radio" name="gender" value="1"><span>Ж</span></label></div></fieldset><label><span>${typographed`Дата рождения`} <b>*</b></span><input name="birthDate" required inputmode="numeric" placeholder="ДД / ММ / ГГГГ" autocomplete="bday"></label></div>
-        <div class="in-da-club-activation__city"><label for="in-da-club-city"><span>${typographed`Город`} <b>*</b></span></label><input id="in-da-club-city" name="city" required autocomplete="address-level2" aria-autocomplete="list" aria-controls="in-da-club-city-options" aria-expanded="false"><ul id="in-da-club-city-options" class="in-da-club-activation__city-options" role="listbox" hidden></ul></div>
-        <label><span>${typographed`Электронная почта`} <b>*</b></span><input type="email" name="email" required readonly autocomplete="email"></label>
-        <label><span>${typographed`Телефон`} <b>*</b></span><input type="tel" name="mobilePhone" required readonly inputmode="tel" autocomplete="tel"></label>
+        <h2 id="${ACTIVATION_DIALOG_ID}-title">${textToSafeHtml(content.activation.registration.title)}</h2>
+        <label><span>${textToSafeHtml(content.activation.registration.surname)} <b>*</b></span><input name="familyName" required autocomplete="family-name"></label>
+        <label><span>${textToSafeHtml(content.activation.registration.name)} <b>*</b></span><input name="givenName" required autocomplete="given-name"></label>
+        <div class="in-da-club-activation__row"><fieldset><legend>${textToSafeHtml(content.activation.registration.gender)} <b>*</b></legend><div class="in-da-club-activation__gender-options"><label><input type="radio" name="gender" value="0" required><span>${textToSafeHtml(content.activation.registration.genderMale)}</span></label><label><input type="radio" name="gender" value="1"><span>${textToSafeHtml(content.activation.registration.genderFemale)}</span></label></div></fieldset><label><span>${textToSafeHtml(content.activation.registration.birthdate)} <b>*</b></span><input name="birthDate" required inputmode="numeric" placeholder="${textToSafeHtml(content.activation.registration.birthdatePlaceholder)}" autocomplete="bday"></label></div>
+        <div class="in-da-club-activation__city"><label for="in-da-club-city"><span>${textToSafeHtml(content.activation.registration.city)} <b>*</b></span></label><input id="in-da-club-city" name="city" required autocomplete="address-level2" aria-autocomplete="list" aria-controls="in-da-club-city-options" aria-expanded="false"><ul id="in-da-club-city-options" class="in-da-club-activation__city-options" role="listbox" hidden></ul></div>
+        <label><span>${textToSafeHtml(content.activation.registration.email)} <b>*</b></span><input type="email" name="email" required readonly autocomplete="email"></label>
+        <label><span>${textToSafeHtml(content.activation.registration.phone)} <b>*</b></span><input type="tel" name="mobilePhone" required readonly inputmode="tel" autocomplete="tel"></label>
         <div class="in-da-club-activation__consents">
-            <label><input class="visually-hidden" type="checkbox" name="personal" required><span class="in-da-club-activation__checkbox" aria-hidden="true"></span><span><b>*</b> <a href="https://b2ccdn.coral.ru/content/doc/cb/soglasie_na_obrabotku_personalynyh_dannyh_coralbonus.pdf" target="_blank" rel="noopener">${typographed`Даю согласие на обработку персональных данных.`}</a> <a href="https://b2ccdn.coral.ru/content/doc/cb/politika-obrabotki-persdannyh-coralbonus-24-09-25.pdf" target="_blank" rel="noopener">${typographed`Политика обработки персональных данных`}</a></span></label>
-            <label><input class="visually-hidden" type="checkbox" name="loyalty" required><span class="in-da-club-activation__checkbox" aria-hidden="true"></span><span><b>*</b> ${typographed`Ознакомлен и согласен с`} <a href="https://b2ccdn.coral.ru/content/doc/legal/pravila-loyalty-program-22062026.pdf" target="_blank" rel="noopener">${typographed`Правилами Программы лояльности`}</a></span></label>
-            <label><input class="visually-hidden" type="checkbox" name="offers"><span class="in-da-club-activation__checkbox" aria-hidden="true"></span><span><a href="https://b2ccdn.coral.ru/content/doc/cb/soglasie-na-rassylku-coralbonus-24-09-2025.pdf" target="_blank" rel="noopener">${typographed`Даю согласие на получение новостей, акций, специальных предложений, в том числе по турам.`}</a></span></label>
+            <label><input class="visually-hidden" type="checkbox" name="personal" required><span class="in-da-club-activation__checkbox" aria-hidden="true"></span><span><b>*</b> <a href="${textToSafeHtml(content.activation.links.personalConsent)}" target="_blank" rel="noopener">${textToSafeHtml(content.activation.registration.personalConsent)}</a> <a href="${textToSafeHtml(content.activation.links.personalPolicy)}" target="_blank" rel="noopener">${textToSafeHtml(content.activation.registration.personalPolicy)}</a></span></label>
+            <label><input class="visually-hidden" type="checkbox" name="loyalty" required><span class="in-da-club-activation__checkbox" aria-hidden="true"></span><span><b>*</b> ${textToSafeHtml(content.activation.registration.loyaltyConsentPrefix)} <a href="${textToSafeHtml(content.activation.links.loyaltyRules)}" target="_blank" rel="noopener">${textToSafeHtml(content.activation.registration.loyaltyRules)}</a></span></label>
+            <label><input class="visually-hidden" type="checkbox" name="offers"><span class="in-da-club-activation__checkbox" aria-hidden="true"></span><span><a href="${textToSafeHtml(content.activation.links.offersConsent)}" target="_blank" rel="noopener">${textToSafeHtml(content.activation.registration.offersConsent)}</a></span></label>
         </div>
-        <button class="in-da-club-activation__submit" type="submit">${typographed`Получить код по SMS`}</button>`;
+        <button class="in-da-club-activation__submit" type="submit">${textToSafeHtml(content.activation.registration.submit)}</button>`;
     const setValue = (name: string, value: string): void => {
         const input = form.elements.namedItem(name);
         if (input instanceof HTMLInputElement) input.value = value;

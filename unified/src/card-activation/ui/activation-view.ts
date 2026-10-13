@@ -1,4 +1,5 @@
-import {typographed} from '@/shared/runtime/typography';
+import {content} from '@/content/content';
+import {textToSafeHtml} from '@/shared/runtime/text';
 
 export interface CoralPopupElement extends HTMLElement {
     show: () => Promise<void> | void;
@@ -9,7 +10,7 @@ export const ACTIVATION_DIALOG_ID = 'in-da-club-activation';
 
 export function setStep(dialog: CoralPopupElement, step: number): void {
     const steps = dialog.querySelector<HTMLElement>('.in-da-club-activation__steps');
-    steps?.setAttribute('aria-label', `Шаг ${step + 1} из 3`);
+    steps?.setAttribute('aria-label', `${content.activation.steps.label} ${step + 1} ${content.activation.steps.of}${content.activation.steps.separator}3`);
     dialog.querySelectorAll<HTMLElement>('[data-step-mark]').forEach((mark, index) => {
         mark.dataset.state = index < step ? 'complete' : index === step ? 'current' : 'upcoming';
         if (index === step) mark.setAttribute('aria-current', 'step');
@@ -33,15 +34,15 @@ export function createDialog(): CoralPopupElement {
     const dialog = document.createElement('coral-popup') as CoralPopupElement;
     dialog.id = ACTIVATION_DIALOG_ID;
     dialog.className = 'in-da-club-activation';
-    dialog.setAttribute('aria-label', typographed`Оформление карты`);
+    dialog.setAttribute('aria-label', content.activation.dialog.title);
     dialog.innerHTML = `
         <coral-button class="in-da-club-activation__close" trait="pale" shape="pill" size="small">
-            <button type="button" style="position: absolute; z-index: 1; top: calc(-31px - 8px); right: 0;">${typographed`Закрыть`}</button>
+            <button type="button" style="position: absolute; z-index: 1; top: calc(-31px - 8px); right: 0;">${textToSafeHtml(content.activation.dialog.close)}</button>
         </coral-button>
         <div class="in-da-club-activation__body">
             <div class="in-da-club-activation__banner" aria-hidden="true"></div>
             <div class="in-da-club-activation__panel">
-                <div class="in-da-club-activation__steps" role="group" aria-label="${typographed`Шаг 1 из 3`}">
+                <div class="in-da-club-activation__steps" role="group" aria-label="${textToSafeHtml(content.activation.steps.label)} 1 ${textToSafeHtml(content.activation.steps.of)}${textToSafeHtml(content.activation.steps.separator)}3">
                     <span data-step-mark data-state="current" aria-current="step">1</span><i></i>
                     <span data-step-mark data-state="upcoming">2</span><i></i>
                     <span data-step-mark data-state="upcoming">3</span>

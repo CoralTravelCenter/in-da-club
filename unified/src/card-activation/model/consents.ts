@@ -1,6 +1,6 @@
 import type {RegistrationData} from '../api/customer-api';
 import {request, requestJson} from '../api/http';
-import {typographed} from '@/shared/runtime/typography';
+import {content} from '@/content/content';
 
 interface ConsentDocument {
     docId: number;
@@ -11,8 +11,8 @@ interface ConsentDocument {
 
 const DOCUMENT_LIST_URL = 'https://apishar.coral.school/consents/api/documentlist/coral.ru';
 const ACCEPT_URL = 'https://apishar.coral.school/consents/api/accept';
-const LOAD_ERROR = typographed`Не удалось загрузить документы согласий`;
-const SAVE_ERROR = typographed`Не удалось сохранить согласия`;
+const LOAD_ERROR = content.activation.errors.loadConsents;
+const SAVE_ERROR = content.activation.errors.saveConsents;
 
 function isConsentDocument(value: unknown): value is ConsentDocument {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return false;

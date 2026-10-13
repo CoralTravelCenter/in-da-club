@@ -1,6 +1,7 @@
 import {getBonusProfile} from './api/customer-api';
 import {getProfile, waitForLogin, type UserProfile} from './model/profile';
-import {typographed} from '@/shared/runtime/typography';
+import {content} from '@/content/content';
+import {textToSafeHtml} from '@/shared/runtime/text';
 import {
     createDialog,
     type CoralPopupElement,
@@ -26,13 +27,13 @@ function rememberFirstStepHeight(dialog: CoralPopupElement): void {
 async function showExistingCard(profile: UserProfile): Promise<void> {
     const dialog = createDialog();
     activeDialog = dialog;
-    dialog.setAttribute('aria-label', typographed`У вас уже есть карта CoralBonus`);
+    dialog.setAttribute('aria-label', content.activation.dialog.existingCard);
     dialog.querySelector('.in-da-club-activation__body')?.classList.add('in-da-club-activation__body--single');
     dialog.querySelector('.in-da-club-activation__banner')?.remove();
     dialog.querySelector('.in-da-club-activation__steps')?.remove();
     const stage = dialog.querySelector<HTMLElement>('.in-da-club-activation__stage');
     if (stage) {
-        stage.innerHTML = `<div class="in-da-club-activation__status" role="status">${typographed`Загружаем данные карты…`}</div>`;
+        stage.innerHTML = `<div class="in-da-club-activation__status" role="status">${textToSafeHtml(content.activation.dialog.loadingCard)}</div>`;
     }
     await openPopup(dialog);
     if (stage) {
@@ -46,7 +47,7 @@ async function showExistingCard(profile: UserProfile): Promise<void> {
 
 let activationPending = false;
 
-export async function requestCardActivation(): Promise<void> {
+export async function requestCardActivation(promo = ''): Promise<void> {
     if (activationPending) return;
     activationPending = true;
     try {
@@ -72,7 +73,7 @@ export async function requestCardActivation(): Promise<void> {
         }
         const dialog = createDialog();
         activeDialog = dialog;
-        renderRegistration(dialog, profile);
+        renderRegistration(dialog, profile, promo);
         await openPopup(dialog);
         rememberFirstStepHeight(dialog);
     } catch (error) {

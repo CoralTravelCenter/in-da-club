@@ -1,32 +1,27 @@
 import {renderSegment} from '@/benefits/member/render-segment';
+import {content as copy} from '@/content/content';
 import {getSegmentConfig} from '@/segmentation/member-config';
 import type {CustomerContext} from '@/segmentation/member.types';
-import {typographed} from '@/shared/runtime/typography';
+import {appendTextWithBreaks} from '@/shared/runtime/text';
 
 export function renderUnifiedShell(container: HTMLElement): HTMLElement {
     const title = document.createElement('h2');
     const content = document.createElement('div');
 
+    container.dataset.inDaClubRoot = '';
     title.className = 'unified-title';
-    title.textContent = typographed`Клуб «Море возможностей»`;
+    title.textContent = copy.common.clubTitle;
     content.className = 'unified-content';
     container.replaceChildren(title, content);
 
     return content;
 }
 
-function appendTextWithBreaks(element: HTMLElement, text: string): void {
-    text.split(/<br\s*\/?>/i).forEach((part, index) => {
-        if (index > 0) element.append(document.createElement('br'));
-        element.append(document.createTextNode(part));
-    });
-}
-
 export function renderLoadingState(container: HTMLElement, customer: CustomerContext): void {
     const config = getSegmentConfig('inactive', customer);
     container.replaceChildren(renderSegment({
         ...config,
-        ariaLabel: 'Загрузка преимуществ клуба',
+        ariaLabel: copy.common.loading.benefitsLabel,
         blocks: config.blocks.map((block) => ({...block, isLoading: 'card'})),
     }));
 }
@@ -45,14 +40,14 @@ export function renderErrorState(container: HTMLElement, retry: () => void): voi
     card.setAttribute('role', 'alert');
     title.id = 'unified-error-title';
     title.className = 'unified-error__title';
-    appendTextWithBreaks(title, 'Не удалось загрузить данные клуба');
+    appendTextWithBreaks(title, copy.common.error.title);
     description.className = 'unified-error__description';
-    appendTextWithBreaks(description, 'Попробуйте ещё раз.<br> Если ошибка повторится, обновите страницу позже.');
+    appendTextWithBreaks(description, copy.common.error.description);
     action.className = 'unified-error__action';
     action.setAttribute('trait', 'vivid');
     action.setAttribute('shape', 'pill');
     button.type = 'button';
-    button.textContent = 'Повторить';
+    button.textContent = copy.common.error.retry;
     button.addEventListener('click', retry);
 
     action.append(button);

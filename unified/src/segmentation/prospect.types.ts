@@ -15,17 +15,6 @@ export type BlockId =
   | 'private-sales'
   | 'manager';
 
-export interface BlockPresentation {
-  placement: {
-    mobile: 'featured' | 'list';
-    desktop: { column: string; row: string };
-  };
-  background?: {
-    mobile: { src: string; size: string; position: string };
-    desktop?: { src: string; size: string; position: string };
-  };
-}
-
 interface ContentBlockBaseConfig {
   id: BlockId;
   description: string;
@@ -35,16 +24,11 @@ interface ContentBlockBaseConfig {
   };
   href?: string;
   badge?: string;
-  action?:
-    | {
-        label: string;
-        type: 'activate-card';
-      }
-      | {
-        label: string;
-        type: 'referral-link';
-        href: string;
-      };
+  action?: {
+    label: string;
+    type: 'activate-card';
+    promo?: string;
+  };
   media?: {
     type: 'video';
     src: string;
@@ -94,3 +78,5 @@ export interface SegmentContentConfig {
     description: string;
   };
 }
+import type {BlockPresentation} from './presentation.types';
+export type {BlockPresentation} from './presentation.types';

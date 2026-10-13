@@ -1,7 +1,7 @@
 import {normalizePhone, registerCard, type RegistrationData} from './api/customer-api';
 import {sendBonusAccountRegistration} from './api/mindbox';
 import type {UserProfile} from './model/profile';
-import {typographed} from '@/shared/runtime/typography';
+import {content} from '@/content/content';
 import {
     showMessage,
     type CoralPopupElement,
@@ -9,7 +9,7 @@ import {
 import {createRegistrationForm, parseBirthdate, validateRegistrationForm} from './ui/registration-view';
 import {renderVerification} from './verification-flow';
 
-export function renderRegistration(dialog: CoralPopupElement, profile: UserProfile): void {
+export function renderRegistration(dialog: CoralPopupElement, profile: UserProfile, promo: string): void {
     const stage = dialog.querySelector<HTMLElement>('.in-da-club-activation__stage');
     if (!stage) return;
 
@@ -36,12 +36,14 @@ export function renderRegistration(dialog: CoralPopupElement, profile: UserProfi
             isConsentToEmail: data.get('loyalty') === 'on',
             isConsentToAdditional: data.get('offers') === 'on',
             mobilePhone: normalizePhone(String(data.get('mobilePhone') ?? '')),
+            Promo: promo,
+            FromPageUrl: location.pathname,
         };
 
         try {
             if (submit) {
                 submit.disabled = true;
-                submit.textContent = typographed`Отправляем код…`;
+                submit.textContent = content.activation.registration.submitting;
             }
             form.dataset.state = 'sending';
             form.setAttribute('aria-busy', 'true');
@@ -54,12 +56,12 @@ export function renderRegistration(dialog: CoralPopupElement, profile: UserProfi
             }
             await renderVerification(dialog, registration, profile.nameId);
         } catch (error) {
-            showMessage(form, error instanceof Error ? error.message : typographed`Не удалось оформить карту`);
+            showMessage(form, error instanceof Error ? error.message : content.activation.errors.register);
             delete form.dataset.state;
             form.removeAttribute('aria-busy');
             if (submit) {
                 submit.disabled = false;
-                submit.textContent = typographed`Получить код по SMS`;
+                submit.textContent = content.activation.registration.submit;
             }
         }
     });

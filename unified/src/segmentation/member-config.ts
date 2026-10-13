@@ -1,85 +1,44 @@
-import type {BlockId, BlockPresentation, CardLevel, ContentBlockConfig, ContentBlockDefinition, CustomerContext, SegmentConfig, SegmentId} from './member.types';
-import {typographed} from '@/shared/runtime/typography';
-import promotionTerms from './promotion-terms.json';
+import {getMemberBlockPresentation, memberMedia} from './member-presentation';
+import type {CardLevel, ContentBlockConfig, ContentBlockDefinition, CustomerContext, SegmentConfig, SegmentId} from './member.types';
+import {content} from '@/content/content';
 
-const CARD_IMAGE: Record<CardLevel, string> = {Silver: 'card-ag-comp.webp', Gold: 'card-au-comp.webp', Platinum: 'card-pt-comp.webp'};
-const SHARED_CLIENT_MEDIA = __SHARED_ASSETS_BASE__;
 const INACTIVE_CLIENT_MEDIA = __INTRO_ASSETS_BASE__;
 const CASHBACK: Record<CardLevel, number> = {Silver: 1, Gold: 2, Platinum: 3};
-const segmentMedia = (folder: string, file: string): string => `${__CARDHOLDER_ASSETS_BASE__}/clients/${folder}/${file}`;
-const placement = (mobile: 'featured' | 'list', column: string, row: string, background?: BlockPresentation['background']): BlockPresentation => ({placement: {mobile, desktop: {column, row}}, background});
-const bg = (src: string, size: string, position: string, desktop: Partial<{src: string; size: string; position: string}> = {}): NonNullable<BlockPresentation['background']> => ({mobile: {src, size, position}, desktop: {src: desktop.src ?? src, size: desktop.size ?? size, position: desktop.position ?? position}});
-const shared = (file: string): string => `${SHARED_CLIENT_MEDIA}/${file}`;
-
-const PRESENTATION: Record<SegmentId, Partial<Record<BlockId, BlockPresentation>>> = {
-    inactive: {
-        greeting: placement('featured', '1', '1 / span 2'),
-        'welcome-bonus': placement('list', '2', '1', bg(`${INACTIVE_CLIENT_MEDIA}/hello-bonus.webp`, 'auto 100%', 'right bottom')),
-        'card-level': placement('featured', '3', '1'),
-        manager: placement('list', '2', '2', bg(shared('manager.webp'), 'auto 65%', 'right bottom', {size: 'auto 80%'})),
-        cashback: placement('list', '1', '3', bg(shared('cashback.webp'), 'min(45%, 180px) auto', 'right bottom', {size: 'min(30%, 180px) auto', position: 'calc(100% - 32px) 0%'})),
-        'birthday-bonus': placement('list', '2', '3', bg(shared('birthday.webp'), 'auto 100%', 'right bottom', {src: shared('birthday-d.webp')})),
-        'private-sales': placement('list', '3', '2 / span 2', bg(shared('closed-promo.webp'), 'auto 70%', 'right bottom', {src: shared('closed-promo-d.webp'), size: 'auto 60%'})),
-    },
-    'one-trip': {
-        'birthday-bonus': placement('list', '1', '1', bg(segmentMedia('one-trip', 'present.png'), 'auto 100%', 'right bottom')),
-        greeting: placement('featured', '2', '1 / span 2'),
-        'club-launch': placement('list', '3', '1', bg(segmentMedia('one-trip', 'launch.png'), 'auto 70%', 'right bottom', {size: 'auto 100%'})),
-        cashback: placement('list', '1', '2 / span 2', bg(segmentMedia('one-trip', 'cashback.png'), 'auto 85%', 'right bottom')),
-        'card-level': placement('featured', '2', '3'),
-        'travel-more': placement('list', '3', '2 / span 2', bg(segmentMedia('one-trip', 'stars.png'), '80% auto', 'right bottom', {size: '100% auto', position: 'center bottom'})),
-    },
-    'two-trips': {},
-    'three-plus': {},
-};
-
-for (const [id, folder] of [['two-trips', 'two-trips'], ['three-plus', 'three-plus']] as const) {
-    PRESENTATION[id] = {
-        balance: placement('list', '1', '1 / span 2', bg(segmentMedia(folder, 'balance.png'), id === 'three-plus' ? '100% auto' : 'cover', 'center bottom')),
-        greeting: placement('featured', '2', '1 / span 2'),
-        cashback: placement('list', '3', '1', bg(segmentMedia(folder, 'cashback.png'), 'auto 75%', 'right center')),
-        'club-launch': placement('list', '1', '3', bg(segmentMedia(folder, 'club-launch.png'), 'auto 90%', 'right bottom')),
-        'card-level': placement('featured', '2', '3'),
-        'birthday-bonus': placement('list', '3', '2 / span 2', bg(segmentMedia(folder, 'birthday-bonus.png'), 'auto 95%', 'right bottom')),
-        manager: placement('list', '1', '4', bg(segmentMedia(folder, 'manager.png'), 'auto 90%', 'right bottom')),
-        'private-sales': placement('list', '2', '4', bg(segmentMedia(folder, 'private-sales.png'), 'auto 95%', 'right bottom')),
-        'travel-more': placement('list', '3', '4', bg(segmentMedia(folder, 'travel-more.png'), 'auto 90%', 'right bottom')),
-    };
-}
-const BIRTHDAY_TOOLTIP = promotionTerms.cardholder.birthdayBonus;
-const CLUB_LAUNCH_TOOLTIP = promotionTerms.cardholder.clubLaunchBonus;
-const WELCOME_TOOLTIP = promotionTerms.cardholder.welcomeBonus;
+const BIRTHDAY_TOOLTIP = content.promotionTerms.cardholder.birthdayBonus;
+const CLUB_LAUNCH_TOOLTIP = content.promotionTerms.cardholder.clubLaunchBonus;
+const WELCOME_TOOLTIP = content.promotionTerms.cardholder.welcomeBonus;
+const copy = content.member.blocks;
 
 function cardBlock(level: CardLevel): ContentBlockDefinition {
-    return {id: 'card-level', badge: level, description: typographed`Уровень карты CoralBonus`, image: {src: `${SHARED_CLIENT_MEDIA}/${CARD_IMAGE[level]}`, alt: `Карта CoralBonus ${level}`}};
+    return {id: 'card-level', badge: level, description: copy.cardLevel};
 }
 function birthdayBlock(): ContentBlockDefinition {
-    return {id: 'birthday-bonus', value: typographed`10 000`, description: typographed`Бонусов на День рождения`, tooltip: BIRTHDAY_TOOLTIP};
+    return {id: 'birthday-bonus', value: content.prospect.blocks.regularClientBonus, description: copy.birthdayBonus, tooltip: BIRTHDAY_TOOLTIP};
 }
 function clubLaunchBlock(description: string): ContentBlockDefinition {
-    return {id: 'club-launch', value: typographed`10 000`, description, tooltip: CLUB_LAUNCH_TOOLTIP};
+    return {id: 'club-launch', value: content.prospect.blocks.regularClientBonus, description, tooltip: CLUB_LAUNCH_TOOLTIP};
 }
 function cashbackBlock(level: CardLevel, inactive = false): ContentBlockDefinition {
-    return {id: 'cashback', value: `${inactive ? 3 : CASHBACK[level]}%`, valuePrefix: inactive ? typographed`до` : undefined, description: inactive ? typographed`Кешбэк бонусами за каждое бронирование` : level === 'Platinum' ? typographed`Повышенный кешбэк бонусами` : typographed`Кешбэк бонусами за каждое бронирование`};
+    return {id: 'cashback', value: `${inactive ? 3 : CASHBACK[level]}%`, valuePrefix: inactive ? copy.upTo : undefined, description: inactive ? copy.cashback : level === 'Platinum' ? copy.cashbackIncreased : copy.cashback};
 }
-const managerBlock: ContentBlockDefinition = {id: 'manager', title: typographed`Персональный менеджер`, description: typographed`Всегда на связи с вами`};
+const managerBlock: ContentBlockDefinition = {id: 'manager', title: copy.managerTitle, description: copy.managerDescription};
 const privateSalesBlock: ContentBlockDefinition = {
     id: 'private-sales',
-    title: typographed`Закрытые акции`,
-    description: typographed`Досрочный доступ к предложениям`,
-    action: {label: typographed`Смотреть`, href: '/poleznaya-informatsiya/offers/more-vozmozhnostej/'},
+    title: copy.privateSalesTitle,
+    description: copy.privateSalesDescription,
+    action: {label: copy.privateSalesAction, href: content.member.links.offers},
 };
 
 function inactiveBlocks(customer: CustomerContext): ContentBlockDefinition[] {
-    const hasDisplayName = customer.displayName !== 'Имя, фамилия';
+    const hasDisplayName = customer.displayName !== content.common.fallbackDisplayName;
 
     return [
         {
             id: 'greeting',
-            title: hasDisplayName ? typographed`,<br>скучаем по вам!` : typographed`Скучаем по вам`,
+            title: hasDisplayName ? copy.inactiveGreetingNamed : copy.inactiveGreetingFallback,
             titleAccent: hasDisplayName ? customer.displayName : undefined,
-            description: typographed`Как насчёт отправиться<br>в путешествие?`,
-            action: {label: typographed`Выбрать тур`, href: '/'},
+            description: copy.inactiveDescription,
+            action: {label: copy.chooseTour, href: content.member.links.tours},
             media: {
                 type: 'video',
                 variant: 'diamond',
@@ -87,37 +46,37 @@ function inactiveBlocks(customer: CustomerContext): ContentBlockDefinition[] {
                 safariSrc: `${INACTIVE_CLIENT_MEDIA}/club.mov`,
             },
         },
-        {id: 'welcome-bonus', value: typographed`5 000`, description: typographed`Приветственных бонусов`, tooltip: WELCOME_TOOLTIP},
+        {id: 'welcome-bonus', value: copy.welcomeBonusValue, description: copy.welcomeBonusDescription, tooltip: WELCOME_TOOLTIP},
         cardBlock(customer.cardLevel), managerBlock, cashbackBlock(customer.cardLevel, true), birthdayBlock(), privateSalesBlock,
     ];
 }
 function oneTripBlocks(customer: CustomerContext): ContentBlockDefinition[] {
     return [
-        {...birthdayBlock(), description: typographed`Бонусов<br>на День рождения`},
+        {...birthdayBlock(), description: copy.birthdayBonusWithBreak},
         {
             id: 'greeting',
             titleAccent: `${customer.displayName},`,
-            title: typographed`<br>теперь вы в клубе<br>«Море возможностей»!`,
+            title: copy.joinedClub,
             description: customer.cardLevel === 'Platinum'
-                ? typographed`Вам доступны<br>`
-                : typographed`Ваши привилегии готовы<br>к использованию`,
-            descriptionAccent: customer.cardLevel === 'Platinum' ? typographed`все` : undefined,
-            descriptionSuffix: customer.cardLevel === 'Platinum' ? '\u00a0привилегии' : undefined,
+                ? copy.allAvailablePrefix
+                : copy.privilegesReady,
+            descriptionAccent: customer.cardLevel === 'Platinum' ? copy.all : undefined,
+            descriptionSuffix: customer.cardLevel === 'Platinum' ? copy.privilegesSuffix : undefined,
             media: {
                 type: 'video',
                 variant: 'shell',
-                src: segmentMedia('one-trip', 'shell.webm'),
-                safariSrc: segmentMedia('one-trip', 'shell.mov'),
+                src: memberMedia('one-trip', 'shell.webm'),
+                safariSrc: memberMedia('one-trip', 'shell.mov'),
             },
         },
-        clubLaunchBlock(typographed`Бонусов<br>в честь запуска клуба`),
-        {...cashbackBlock(customer.cardLevel), description: typographed`Кешбэк бонусами<br>за каждое бронирование`},
-        {...cardBlock(customer.cardLevel), description: typographed`Уровень карты<br>CoralBonus`},
+        clubLaunchBlock(copy.clubLaunch),
+        {...cashbackBlock(customer.cardLevel), description: copy.cashbackWithBreak},
+        {...cardBlock(customer.cardLevel), description: copy.cardLevelWithBreak},
         {
             id: 'travel-more',
             title: customer.cardLevel === 'Platinum'
-                ? typographed`Путешествуйте больше`
-                : typographed`Путешествуйте больше —<br>повышайте уровень карты`,
+                ? copy.travelMore
+                : copy.travelMoreLevel,
             description: '',
         },
     ];
@@ -127,35 +86,35 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
         const cardLevel = customer.cardLevel === 'Silver' ? 'Gold' : customer.cardLevel;
 
         return [
-            {id: 'balance', description: typographed`Бонусов на карте`},
+            {id: 'balance', description: copy.balance},
             {
                 id: 'greeting',
-                title: typographed`Поздравляем,<br>`,
+                title: copy.congratulations,
                 titleAccent: `${customer.displayName}!`,
                 titleAccentAfter: true,
-                description: typographed`Вы достигли уровня карты`,
+                description: copy.reachedLevel,
                 descriptionStrong: cardLevel,
                 media: {
                     type: 'video',
                     variant: 'wave',
-                    src: segmentMedia('two-trips', 'wave.webm'),
-                    safariSrc: segmentMedia('two-trips', 'wave.mov'),
+                    src: memberMedia('two-trips', 'wave.webm'),
+                    safariSrc: memberMedia('two-trips', 'wave.mov'),
                 },
             },
-            {...cashbackBlock(cardLevel), description: typographed`Кешбэк бонусами<br>за каждое бронирование`},
-            clubLaunchBlock(typographed`Бонусов в честь<br>запуска Клуба`),
-            {...cardBlock(cardLevel), description: typographed`Уровень карты<br>CoralBonus`},
+            {...cashbackBlock(cardLevel), description: copy.cashbackWithBreak},
+            clubLaunchBlock(copy.clubLaunchAlternate),
+            {...cardBlock(cardLevel), description: copy.cardLevelWithBreak},
             birthdayBlock(),
-            {...managerBlock, title: typographed`Персональный<br>менеджер`, description: typographed`Всегда на связи<br>с вами`},
-            {...privateSalesBlock, description: typographed`Досрочный доступ<br>к предложениям`},
+            {...managerBlock, title: copy.managerTitleWithBreak, description: copy.managerDescriptionWithBreak},
+            {...privateSalesBlock, description: copy.privateSalesDescriptionWithBreak},
             cardLevel === 'Platinum' ? {
                 id: 'travel-more',
-                title: typographed`Путешествуйте чаще —`,
-                description: typographed`сохраняйте уровень карты<br>и привилегии`,
+                title: copy.travelOften,
+                description: copy.keepLevel,
             } : {
                 id: 'travel-more',
-                title: typographed`Больше путешествий —`,
-                description: typographed`выше уровень карты. Откройте<br>расширенные привилегии клуба<br>«Море возможностей»`,
+                title: copy.moreTravel,
+                description: copy.openPrivileges,
             },
         ];
     }
@@ -163,36 +122,39 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
     const cardLevel: CardLevel = 'Platinum';
 
     return [
-        {id: 'balance', description: typographed`Доступно к списанию`},
+        {id: 'balance', description: copy.availableToSpend},
         {
             id: 'greeting',
             titleAccent: `${customer.displayName},`,
-            title: typographed`<br>вы — исключительный<br>клиент для нас!`,
-            description: typographed`Вам доступны все привилегии<br>клуба «Море возможностей»`,
-            action: {label: typographed`Войти в личный кабинет`, href: '/account/', target: '_blank'},
+            title: copy.exceptionalClient,
+            description: copy.allPrivileges,
+            action: {label: copy.accountAction, href: content.member.links.account, target: '_blank'},
             media: {
                 type: 'video',
                 variant: 'pearl-shell',
-                src: segmentMedia('three-plus', 'pearl-shell.webm'),
-                safariSrc: segmentMedia('three-plus', 'pearl-shell.mov'),
+                src: memberMedia('three-plus', 'pearl-shell.webm'),
+                safariSrc: memberMedia('three-plus', 'pearl-shell.mov'),
             },
         },
         cashbackBlock(cardLevel),
-        clubLaunchBlock(typographed`Бонусов в честь<br>запуска клуба`),
-        {...cardBlock(cardLevel), description: typographed`Уровень карты<br>CoralBonus`},
+        clubLaunchBlock(copy.clubLaunchLowercase),
+        {...cardBlock(cardLevel), description: copy.cardLevelWithBreak},
         birthdayBlock(),
-        {...managerBlock, title: typographed`Персональный<br>менеджер`, description: typographed`Всегда на связи<br>с вами`},
-        {...privateSalesBlock, description: typographed`Досрочный доступ<br>к предложениям`},
-        {id: 'travel-more', title: typographed`Индивидуальный подход`, description: typographed`Ваши бронирования —<br>в приоритете для нас`},
+        {...managerBlock, title: copy.managerTitleWithBreak, description: copy.managerDescriptionWithBreak},
+        {...privateSalesBlock, description: copy.privateSalesDescriptionWithBreak},
+        {id: 'travel-more', title: copy.individualApproach, description: copy.bookingsPriority},
     ];
 }
 
 export function getSegmentConfig(id: SegmentId, customer: CustomerContext): SegmentConfig {
     const definitions = id === 'inactive' ? inactiveBlocks(customer) : id === 'one-trip' ? oneTripBlocks(customer) : activeBlocks(customer, id === 'three-plus');
     const blocks = definitions.map((block): ContentBlockConfig => {
-        const presentation = PRESENTATION[id][block.id];
+        const presentation = getMemberBlockPresentation(id, block.id, block.badge as CardLevel | undefined);
         if (!presentation) throw new Error(`Не задано представление карточки ${block.id} для сегмента ${id}`);
-        return {...block, presentation};
+        return {
+            ...block,
+            presentation,
+        };
     });
-    return {id, ariaLabel: id === 'inactive' ? typographed`Преимущества клуба для неактивного клиента` : typographed`Преимущества клуба для держателя карты`, blocks};
+    return {id, ariaLabel: id === 'inactive' ? content.member.segmentLabels.inactive : content.member.segmentLabels.active, blocks};
 }

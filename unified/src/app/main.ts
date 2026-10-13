@@ -8,7 +8,7 @@ import {mountWhenAvailable} from '@/shared/runtime/mount-when-available';
 import {createClientRouter} from './client-router';
 import {getDevPreview} from './dev-preview';
 import {renderErrorState, renderLoadingState, renderUnifiedShell} from './render-state';
-import '@/styles/main.scss';
+import '@/styles/app.scss';
 
 const ROOT_SELECTOR = import.meta.env.DEV
     ? '#monkey-app'

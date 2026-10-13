@@ -14,6 +14,8 @@ const registration: RegistrationData = {
     isConsentToEmail: true,
     isConsentToAdditional: false,
     mobilePhone: '79990000000',
+    Promo: 'TEST_PROMO',
+    FromPageUrl: '/club',
 };
 
 function response(body: unknown, ok = true, status = 200): Response {

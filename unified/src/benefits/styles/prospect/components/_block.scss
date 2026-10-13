@@ -27,6 +27,21 @@
   }
 }
 
+.in-da-club-prospect-block__title,
+.in-da-club-prospect-block__description {
+  margin: 0;
+}
+
+@media (min-width: tokens.$breakpoint-desktop) {
+  .in-da-club-prospect-block--video .in-da-club-prospect-block__title {
+    max-width: 80%;
+  }
+
+  .in-da-club-prospect-block--video .in-da-club-prospect-block__description {
+    max-width: 58%;
+  }
+}
+
 .in-da-club-prospect-block__video {
   position: absolute;
   right: 0;
@@ -37,8 +52,8 @@
 
   @media (min-width: tokens.$breakpoint-desktop) {
     bottom: 0;
-    width: min(55%, 200px);
-    height: min(55%, 200px);
+    width: min(70%, 280px);
+    height: min(70%, 280px);
   }
 }
 
@@ -50,5 +65,33 @@
   padding: 9px 12px;
   background: rgba(210, 233, 251, 0.8);
   border-radius: 16px;
-  color: #E84E0F;
+  color: tokens.$color-accent-orange;
+}
+
+@media (min-width: tokens.$breakpoint-desktop) {
+  .in-da-club-prospect-block__title {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  .in-da-club-prospect-segment__item[data-block-id='birthday-bonus']
+  .in-da-club-prospect-block[data-has-background] {
+    background-position: right center;
+    background-size: 82% auto;
+  }
+}
+
+.in-da-club-prospect-block__action > button {
+  min-height: 44px;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .in-da-club-prospect-block__action > button {
+    transition: none;
+  }
 }

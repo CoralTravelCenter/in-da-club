@@ -1,4 +1,5 @@
 import {getCachedCustomerContext, getCustomerContext} from '@/customer/customer-context';
+import {content} from '@/content/content';
 import {getSegmentConfig} from '@/segmentation/member-config';
 import type {CardLevel, CustomerContext, SegmentConfig, SegmentId} from '@/segmentation/member.types';
 import {renderSegment} from './member/render-segment';
@@ -26,7 +27,7 @@ function withLoadingBlocks(config: SegmentConfig, shouldLoadDisplayName: boolean
             if (!shouldLoadDisplayName || block.id !== 'greeting') return block;
 
             return config.id === 'inactive'
-                ? {...block, isLoading: true, title: ',<br>скучаем по вам!', titleAccent: ''}
+                ? {...block, isLoading: true, title: content.member.blocks.inactiveGreetingNamed, titleAccent: ''}
                 : {...block, isLoading: true};
         }),
     };

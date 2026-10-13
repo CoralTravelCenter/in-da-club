@@ -1,6 +1,6 @@
 import {getProfile, type UserProfile} from '../model/profile';
 import {requestJson} from './http';
-import {typographed} from '@/shared/runtime/typography';
+import {content} from '@/content/content';
 
 export interface RegistrationData {
     givenName: string;
@@ -15,6 +15,8 @@ export interface RegistrationData {
     isConsentToEmail: boolean;
     isConsentToAdditional: boolean;
     mobilePhone: string;
+    Promo: string;
+    FromPageUrl: string;
 }
 
 export interface BonusProfile {
@@ -29,7 +31,7 @@ interface ApiResult {
     errorMessage?: unknown;
 }
 
-const DEFAULT_REQUEST_ERROR = typographed`Не удалось выполнить запрос. Попробуйте ещё раз`;
+const DEFAULT_REQUEST_ERROR = content.activation.errors.request;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
     return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -108,14 +110,14 @@ export function normalizePhone(value: string): string {
 }
 
 export async function registerCard(data: RegistrationData): Promise<void> {
-    await runOperation('/endpoints/Customer/BonusRegister', data, typographed`Не удалось оформить карту`);
+    await runOperation('/endpoints/Customer/BonusRegister', data, content.activation.errors.register);
 }
 
 export async function sendVerificationCode(mobilePhone: string): Promise<void> {
     await runOperation(
         '/endpoints/Customer/BonusSendVerificationCode',
         {mobilePhone},
-        typographed`Не удалось отправить код. Проверьте подключение к интернету и попробуйте ещё раз`,
+        content.activation.errors.sendCode,
     );
 }
 
@@ -123,13 +125,13 @@ export async function activateCard(mobilePhone: string, activationCode: string):
     await runOperation(
         '/endpoints/Customer/BonusActivation',
         {mobilePhone, activationCode},
-        typographed`Неверный код или срок его действия истёк. Попробуйте ещё раз`,
+        content.activation.errors.activate,
     );
 }
 
 export async function getBonusProfile(): Promise<BonusProfile> {
     const result = getResult(await postJson('/endpoints/Customer/BonusProfile', {}));
-    if (!result) throw new Error(typographed`Не удалось загрузить данные карты`);
+    if (!result) throw new Error(content.activation.errors.loadCard);
     return normalizeBonusProfile(result);
 }
 

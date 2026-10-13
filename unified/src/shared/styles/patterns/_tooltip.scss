@@ -48,8 +48,10 @@
 
   .#{$namespace}-tooltip-trigger {
     display: flex;
-    width: 24px;
-    height: 24px;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
     margin-top: auto;
     padding: 0;
     cursor: pointer;
@@ -58,8 +60,8 @@
 
     @media (min-width: $breakpoint-desktop) {
       position: absolute;
-      top: 12px;
-      right: 12px;
+      top: 4px;
+      right: 4px;
       margin-top: 0;
     }
   }
