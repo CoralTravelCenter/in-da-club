@@ -1,19 +1,21 @@
 import {content as copy} from '@/content/content';
+import type {TooltipContentItem} from '@/content/content.types';
 import {addLockableTarget, disablePageScroll, enablePageScroll} from 'scroll-lock';
 
 const TOOLTIP_ICON_URL = 'https://b2ccdn.coral.ru/content/info.svg';
 const TOOLTIP_CLOSE_ICON_URL = 'https://b2ccdn.coral.ru/content/cross.svg';
+const BLOCK_VIDEOS_ENABLED = false;
 
 addLockableTarget(document.documentElement);
 
 export interface BlockBackground {
-    mobile: {src: string; size: string; position: string};
-    desktop?: {src: string; size: string; position: string};
+    mobile: {src: string};
+    desktop?: {src: string};
 }
 
 export interface BlockTooltip {
     title: string;
-    content: string[];
+    content: TooltipContentItem[];
 }
 
 export interface BlockVideo {
@@ -28,11 +30,7 @@ export function applyBlockBackground(block: HTMLElement, background?: BlockBackg
     const {mobile, desktop = mobile} = background;
     block.dataset.hasBackground = '';
     block.style.setProperty('--block-background-mobile', `url("${mobile.src}")`);
-    block.style.setProperty('--block-background-size-mobile', mobile.size);
-    block.style.setProperty('--block-background-position-mobile', mobile.position);
     block.style.setProperty('--block-background-desktop', `url("${desktop.src}")`);
-    block.style.setProperty('--block-background-size-desktop', desktop.size);
-    block.style.setProperty('--block-background-position-desktop', desktop.position);
 }
 
 export function appendBlockVideo(
@@ -41,6 +39,8 @@ export function appendBlockVideo(
     blockClass: string,
     videoClass: string,
 ): void {
+    if (!BLOCK_VIDEOS_ENABLED) return;
+
     const video = document.createElement('video');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isSafari = /safari/i.test(navigator.userAgent)
@@ -115,7 +115,13 @@ export function createBlockTooltip(
 
     for (const line of tooltip.content) {
         const paragraph = document.createElement('span');
-        paragraph.textContent = line;
+        if (typeof line === 'string') {
+            paragraph.textContent = line;
+        } else {
+            const label = document.createElement('strong');
+            label.textContent = line.label;
+            paragraph.append(label, document.createTextNode(`\u00a0${line.text}`));
+        }
         text.append(paragraph);
     }
 

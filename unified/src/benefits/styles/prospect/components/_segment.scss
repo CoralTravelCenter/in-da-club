@@ -39,7 +39,6 @@
 }
 
 .in-da-club-prospect-segment__list {
-  min-height: 220px;
   list-style: none;
   margin: 0;
   padding-inline: 16px;
@@ -79,8 +78,7 @@
       'welcome-bonus club cashback'
       'manager club private-sales'
       'manager club private-sales'
-      'manager birthday-bonus private-sales'
-  ;
+      'manager birthday-bonus private-sales';
     grid-template-rows: repeat(4, auto);
     align-items: stretch;
     gap: tokens.$layout-gap;

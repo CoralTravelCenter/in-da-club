@@ -26,6 +26,7 @@
   .#{$namespace}-block__content {
     display: flex;
     flex-direction: column;
+    align-items: start;
     gap: 12px;
     height: 100%;
   }
@@ -82,13 +83,18 @@
   .#{$namespace}-block[data-has-background] {
     background-image: var(--block-background-mobile);
     background-repeat: no-repeat;
-    background-position: var(--block-background-position-mobile);
-    background-size: var(--block-background-size-mobile);
+    background-position: right bottom;
+    background-size: contain;
 
     @media (min-width: $breakpoint-desktop) {
       background-image: var(--block-background-desktop);
-      background-position: var(--block-background-position-desktop);
-      background-size: var(--block-background-size-desktop);
     }
+  }
+
+  .#{$namespace}-block:is(
+    [data-block-id='welcome-bonus'],
+    [data-block-id='birthday-bonus']
+  )[data-has-background] {
+    background-size: cover;
   }
 }

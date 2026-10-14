@@ -4,7 +4,7 @@ export interface BlockPresentation {
         desktop: {column: string; row: string};
     };
     background?: {
-        mobile: {src: string; size: string; position: string};
-        desktop?: {src: string; size: string; position: string};
+        mobile: {src: string};
+        desktop?: {src: string};
     };
 }

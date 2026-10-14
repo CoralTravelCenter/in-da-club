@@ -12,7 +12,7 @@ import '@/styles/app.scss';
 
 const ROOT_SELECTOR = import.meta.env.DEV
     ? '#monkey-app'
-    : '[data-in-da-club-root]';
+    : '[data-bez-kart-root]';
 
 mountWhenAvailable({
     selector: ROOT_SELECTOR,

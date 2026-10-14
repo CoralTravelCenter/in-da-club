@@ -97,7 +97,7 @@ describe('bootstrap', () => {
             expect(container.querySelector('[data-block-id="greeting"] .in-da-club-member-block__skeleton--name')).not.toBeNull();
             expect(container.querySelector('[data-block-id="cashback"] .in-da-club-member-block__skeleton--value')).not.toBeNull();
             expect(container.querySelector('[data-block-id="card-level"] .in-da-club-member-block__skeleton--badge')).not.toBeNull();
-            expect(container.querySelector('[data-block-id="card-level"] .in-da-club-member-block__skeleton--image')).toBeNull();
+            expect(container.querySelector('[data-block-id="card-level"] .in-da-club-member-block__skeleton--image')).not.toBeNull();
             expect(container.querySelector('[data-block-id="travel-more"].in-da-club-member-block--loading')).toBeNull();
 
             resolveFetch({ok: true, json: async () => ({result: {cardType: 'Gold'}})});

@@ -2,14 +2,20 @@
 @use '../abstracts/tokens' as tokens;
 
 @include shared-block.styles(
-  $namespace: 'in-da-club-prospect',
-  $breakpoint-desktop: tokens.$breakpoint-desktop,
-  $color-surface: tokens.$color-surface,
-  $color-text: tokens.$color-text,
-  $radius-card: tokens.$radius-card,
-  $space-md: tokens.$space-md,
-  $space-lg: tokens.$space-lg
+        $namespace: 'in-da-club-prospect',
+        $breakpoint-desktop: tokens.$breakpoint-desktop,
+        $color-surface: tokens.$color-surface,
+        $color-text: tokens.$color-text,
+        $radius-card: tokens.$radius-card,
+        $space-md: tokens.$space-md,
+        $space-lg: tokens.$space-lg
 );
+
+.in-da-club-prospect-block:is(
+  [data-block-id='cashback']
+)[data-has-background] {
+  background-position: right center;
+}
 
 .in-da-club-prospect-block--video {
   overflow: hidden;
@@ -51,9 +57,11 @@
   object-fit: cover;
 
   @media (min-width: tokens.$breakpoint-desktop) {
-    bottom: 0;
-    width: min(70%, 280px);
-    height: min(70%, 280px);
+    right: -10%;
+    bottom: -50px;
+    width: 60%;
+    height: auto;
+    object-fit: contain;
   }
 }
 
@@ -72,12 +80,6 @@
   .in-da-club-prospect-block__title {
     font-size: 28px;
     line-height: 34px;
-  }
-
-  .in-da-club-prospect-segment__item[data-block-id='birthday-bonus']
-  .in-da-club-prospect-block[data-has-background] {
-    background-position: right center;
-    background-size: 82% auto;
   }
 }
 

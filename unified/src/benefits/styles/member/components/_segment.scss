@@ -1,8 +1,26 @@
 @use 'abstracts/mixins' as mixins;
 @use '../abstracts/tokens' as tokens;
 
-#section-row-21:has(.in-da-club-member-segment[data-client='active']:is([data-ride='1'], [data-ride='2'])) {
+.row-outer-container:has(
+  .in-da-club-member-segment:is(
+    [data-segment-id='one-trip'],
+    [data-segment-id='two-trips']
+  )
+) {
   background: #fff !important;
+
+  .ant-col {
+    background: #fff !important;
+  }
+}
+
+.corallium:has(
+  .in-da-club-member-segment:is(
+    [data-segment-id='one-trip'],
+    [data-segment-id='two-trips']
+  )
+) {
+  background: #fff;
 }
 
 .in-da-club-member-segment {
@@ -11,12 +29,48 @@
 
 .in-da-club-member-segment__content {
   display: grid;
-  gap: tokens.$layout-gap;
+  gap: 16px;
   min-width: 0;
 
   @media (min-width: tokens.$breakpoint-desktop) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: repeat(3, minmax(165px, auto));
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, auto);
+    align-items: stretch;
+  }
+}
+
+@media (min-width: tokens.$breakpoint-desktop) {
+  .in-da-club-member-segment[data-segment-id='inactive'] .in-da-club-member-segment__content {
+    grid-template-areas:
+      'greeting welcome-bonus card-level'
+      'greeting manager private-sales'
+      'cashback birthday-bonus private-sales'
+      '. . .';
+  }
+
+  .in-da-club-member-segment[data-segment-id='one-trip'] .in-da-club-member-segment__content {
+    grid-template-areas:
+      'birthday-bonus greeting club-launch'
+      'cashback greeting travel-more'
+      'cashback card-level travel-more'
+      '. . .';
+  }
+
+  .in-da-club-member-segment[data-segment-id='two-trips'] .in-da-club-member-segment__content {
+    grid-template-areas:
+      'balance greeting cashback'
+      'balance greeting birthday-bonus'
+      'club-launch card-level birthday-bonus'
+      'manager private-sales travel-more';
+    grid-template-rows: repeat(4, minmax(130px, auto));
+  }
+
+  .in-da-club-member-segment[data-segment-id='three-plus'] .in-da-club-member-segment__content {
+    grid-template-areas:
+      'balance greeting cashback'
+      'balance greeting birthday-bonus'
+      'club-launch card-level birthday-bonus'
+      'manager private-sales travel-more';
   }
 }
 
@@ -25,8 +79,6 @@
   padding-inline: tokens.$space-md;
 
   @media (min-width: tokens.$breakpoint-desktop) {
-    grid-column: var(--block-grid-column);
-    grid-row: var(--block-grid-row);
     min-height: 0;
     padding: 0;
   }
@@ -76,8 +128,6 @@
   min-width: 0;
 
   @media (min-width: tokens.$breakpoint-desktop) {
-    grid-column: var(--block-grid-column);
-    grid-row: var(--block-grid-row);
     scroll-snap-align: none;
   }
 }
@@ -93,9 +143,19 @@
 
 
 
-.in-da-club-member-segment[data-client='active']:is([data-ride='2'], [data-ride='3']) .in-da-club-member-segment__content {
+.in-da-club-member-segment__featured,
+.in-da-club-member-segment__item {
   @media (min-width: tokens.$breakpoint-desktop) {
-    grid-template-rows: repeat(4, minmax(165px, auto));
+    &[data-block-id='balance'] { grid-area: balance; }
+    &[data-block-id='greeting'] { grid-area: greeting; }
+    &[data-block-id='welcome-bonus'] { grid-area: welcome-bonus; }
+    &[data-block-id='card-level'] { grid-area: card-level; }
+    &[data-block-id='manager'] { grid-area: manager; }
+    &[data-block-id='cashback'] { grid-area: cashback; }
+    &[data-block-id='birthday-bonus'] { grid-area: birthday-bonus; }
+    &[data-block-id='private-sales'] { grid-area: private-sales; }
+    &[data-block-id='club-launch'] { grid-area: club-launch; }
+    &[data-block-id='travel-more'] { grid-area: travel-more; }
   }
 }
 

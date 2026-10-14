@@ -1,10 +1,13 @@
 import {typographed} from '@/shared/runtime/typography';
-import type {ContentConfig} from './content.types';
+import type {ContentConfig, TooltipContentItem} from './content.types';
 
 export const content = {
     common: {
         clubTitle: typographed`Клуб «Море возможностей»`,
         fallbackDisplayName: typographed`Имя, фамилия`,
+        links: {
+            club: '/coralbonus/club/',
+        },
         tooltip: {
             openLabel: typographed`Показать дополнительную информацию`,
             closeLabel: typographed`Закрыть подсказку`,
@@ -35,7 +38,7 @@ export const content = {
             activateCard: typographed`Оформить карту`,
             cashback: typographed`Кешбэк бонусами<br> за каждое бронирование`,
             clubTitle: typographed`Вступайте в клуб «Море возможностей»`,
-            clubDescription: typographed`Получайте больше привилегий на отдых`,
+            clubDescription: typographed`Получайте больше привилегий<br> на отдых`,
             upTo: typographed`до`,
             birthdayBonus: typographed`Бонусов<br> на День рождения`,
             privateSalesTitle: typographed`Закрытые акции`,
@@ -204,62 +207,104 @@ export const content = {
             birthdayBonus: {
                 title: typographed`Условия акции «Бонусы на день рождения»:`,
                 content: [
-                    typographed`Начисление: за 90 дней до Дня рождения (для новых участников Клуба, с момента выпуска карты, но не ранее, чем за 90 дней до Дня рождения)`,
-                    typographed`Действуют: сразу и еще 14 дней после Дня рождения`,
-                    typographed`Дата бронирования: до 31.12.2026`,
-                    typographed`Дата начала тура: нет ограничений`,
-                    typographed`Минимальная стоимость тура: 200 000 ₽`,
-                    typographed`Страны: Все, кроме РФ, СНГ, Абхазии и Грузии`,
-                    typographed`Интервал между датой бронирования и датой начала тура: 3+ дня`,
-                ] as string[],
+                    {
+                        label: typographed`Начисление бонусов:`,
+                        text: typographed`за 90 дней до дня рождения. Новым участникам — после выпуска карты, но не ранее чем за 90 дней до дня рождения.`,
+                    },
+                    {
+                        label: typographed`Действуют:`,
+                        text: typographed`с момента начисления и ещё 14 дней после дня рождения.`
+                    },
+                    {label: typographed`Забронировать тур:`, text: typographed`до 31.12.2026.`},
+                    {label: typographed`Дата начала тура:`, text: typographed`без ограничений.`},
+                    {label: typographed`Минимальная стоимость тура:`, text: typographed`200 000 ₽.`},
+                    {
+                        label: typographed`Направления:`,
+                        text: typographed`все страны, кроме России, стран СНГ, Абхазии и Грузии.`
+                    },
+                    {
+                        label: typographed`До начала тура:`,
+                        text: typographed`бронирование необходимо оформить не менее чем за 3 дня.`
+                    },
+                ] as TooltipContentItem[],
             },
             welcomeBonus: {
                 title: typographed`Условия акции «Приветственные бонусы»:`,
                 content: [
-                    typographed`Дата бронирования: до 31.12.2026`,
-                    typographed`Дата начала тура: нет ограничений`,
-                    typographed`Страны: Все, кроме РФ, СНГ, Абхазии и Грузии`,
-                    typographed`Срок действия бонусов: 90 дней`,
-                    typographed`Интервал между датой бронирования и датой начала тура: 3+ дня`,
-                    typographed`Условие списания: не больше 2% от стоимости тура`,
-                ] as string[],
+                    {label: typographed`Забронировать тур:`, text: typographed`до 31.12.2026.`},
+                    {label: typographed`Дата начала тура:`, text: typographed`без ограничений.`},
+                    {
+                        label: typographed`Направления:`,
+                        text: typographed`все страны, кроме России, стран СНГ, Абхазии и Грузии.`
+                    },
+                    {label: typographed`Бонусы действуют:`, text: typographed`90 дней.`},
+                    {
+                        label: typographed`До начала тура:`,
+                        text: typographed`бронирование необходимо оформить не менее чем за 3 дня.`
+                    },
+                    {label: typographed`Оплата бонусами:`, text: typographed`до 2% стоимости тура.`},
+                ] as TooltipContentItem[],
             },
         },
         cardholder: {
             birthdayBonus: {
                 title: typographed`Условия акции «Бонусы на день рождения»:`,
                 content: [
-                    typographed`Начисление: за 90 дней до Дня рождения (для новых участников Клуба, с момента выпуска карты, но не ранее, чем за 90 дней до Дня рождения)`,
-                    typographed`Действуют: сразу и еще 14 дней после Дня рождения`,
-                    typographed`Дата бронирования: до 31.12.2026`,
-                    typographed`Дата начала тура: нет ограничений`,
-                    typographed`Минимальная стоимость тура: 200 000 ₽`,
-                    typographed`Страны: Все, кроме РФ, СНГ, Абхазии и Грузии`,
-                    typographed`Интервал между датой бронирования и датой начала тура: 3+ дня`,
-                ] as string[],
+                    {
+                        label: typographed`Начисление бонусов:`,
+                        text: typographed`за 90 дней до дня рождения. Новым участникам — после выпуска карты, но не ранее чем за 90 дней до дня рождения.`,
+                    },
+                    {
+                        label: typographed`Действуют:`,
+                        text: typographed`с момента начисления и ещё 14 дней после дня рождения.`
+                    },
+                    {label: typographed`Забронировать тур:`, text: typographed`до 31.12.2026.`},
+                    {label: typographed`Дата начала тура:`, text: typographed`без ограничений.`},
+                    {label: typographed`Минимальная стоимость тура:`, text: typographed`200 000 ₽.`},
+                    {
+                        label: typographed`Направления:`,
+                        text: typographed`все страны, кроме России, стран СНГ, Абхазии и Грузии.`
+                    },
+                    {
+                        label: typographed`До начала тура:`,
+                        text: typographed`бронирование необходимо оформить не менее чем за 3 дня.`
+                    },
+                ] as TooltipContentItem[],
             },
             clubLaunchBonus: {
                 title: typographed`Условия акции «Бонусы в честь запуска клуба»:`,
                 content: [
-                    typographed`Дата активации карты: до 31.12.2026`,
-                    typographed`Дата бронирования: до 31.12.2026`,
-                    typographed`Дата начала тура: нет ограничений`,
-                    typographed`Страны: Все, кроме РФ, СНГ, Абхазии и Грузии`,
-                    typographed`Срок действия бонусов: 180 дней`,
-                    typographed`Интервал между датой бронирования и датой начала тура: 3 дня`,
-                    typographed`Условие списания: не больше 2% от стоимости тура`,
-                ] as string[],
+                    {label: typographed`Активировать карту:`, text: typographed`до 31.12.2026.`},
+                    {label: typographed`Забронировать тур:`, text: typographed`до 31.12.2026.`},
+                    {label: typographed`Дата начала тура:`, text: typographed`без ограничений.`},
+                    {
+                        label: typographed`Направления:`,
+                        text: typographed`все страны, кроме России, стран СНГ, Абхазии и Грузии.`
+                    },
+                    {label: typographed`Бонусы действуют:`, text: typographed`180 дней.`},
+                    {
+                        label: typographed`До начала тура:`,
+                        text: typographed`бронирование необходимо оформить не менее чем за 3 дня.`
+                    },
+                    {label: typographed`Оплата бонусами:`, text: typographed`до 2% стоимости тура.`},
+                ] as TooltipContentItem[],
             },
             welcomeBonus: {
                 title: typographed`Условия акции «Приветственные бонусы»:`,
                 content: [
-                    typographed`Дата активации карты: с 01.07.2026 по 31.12.2026`,
-                    typographed`Дата бронирования: с 01.07.2026 по 31.12.2026`,
-                    typographed`Дата начала тура: с 03.07.2026, без ограничений`,
-                    typographed`Страны: Все, кроме РФ, СНГ, Абхазии и Грузии`,
-                    typographed`Срок действия бонусов: 90 дней`,
-                    typographed`Интервал между датой бронирования и датой начала тура: 3 дня`,
-                ] as string[],
+                    {label: typographed`Активировать карту:`, text: typographed`с 01.07.2026 по 31.12.2026.`},
+                    {label: typographed`Забронировать тур:`, text: typographed`с 01.07.2026 по 31.12.2026.`},
+                    {label: typographed`Дата начала тура:`, text: typographed`с 03.07.2026, далее без ограничений.`},
+                    {
+                        label: typographed`Направления:`,
+                        text: typographed`все страны, кроме России, стран СНГ, Абхазии и Грузии.`
+                    },
+                    {label: typographed`Бонусы действуют:`, text: typographed`90 дней.`},
+                    {
+                        label: typographed`До начала тура:`,
+                        text: typographed`бронирование необходимо оформить не менее чем за 3 дня.`
+                    },
+                ] as TooltipContentItem[],
             },
         },
     },

@@ -3,6 +3,7 @@ import type {CardLevel, ContentBlockConfig, ContentBlockDefinition, CustomerCont
 import {content} from '@/content/content';
 
 const INACTIVE_CLIENT_MEDIA = __INTRO_ASSETS_BASE__;
+const SHARED_CLIENT_MEDIA = __SHARED_ASSETS_BASE__;
 const CASHBACK: Record<CardLevel, number> = {Silver: 1, Gold: 2, Platinum: 3};
 const BIRTHDAY_TOOLTIP = content.promotionTerms.cardholder.birthdayBonus;
 const CLUB_LAUNCH_TOOLTIP = content.promotionTerms.cardholder.clubLaunchBonus;
@@ -10,7 +11,17 @@ const WELCOME_TOOLTIP = content.promotionTerms.cardholder.welcomeBonus;
 const copy = content.member.blocks;
 
 function cardBlock(level: CardLevel): ContentBlockDefinition {
-    return {id: 'card-level', badge: level, description: copy.cardLevel};
+    const file = `${level.toLowerCase()}.png`;
+    return {
+        id: 'card-level',
+        badge: level,
+        description: copy.cardLevel,
+        image: {
+            src: `${SHARED_CLIENT_MEDIA}/cards/mobile/${file}`,
+            desktopSrc: `${SHARED_CLIENT_MEDIA}/cards/desktop/${file}`,
+            alt: '',
+        },
+    };
 }
 function birthdayBlock(): ContentBlockDefinition {
     return {id: 'birthday-bonus', value: content.prospect.blocks.regularClientBonus, description: copy.birthdayBonus, tooltip: BIRTHDAY_TOOLTIP};
@@ -62,6 +73,7 @@ function oneTripBlocks(customer: CustomerContext): ContentBlockDefinition[] {
                 : copy.privilegesReady,
             descriptionAccent: customer.cardLevel === 'Platinum' ? copy.all : undefined,
             descriptionSuffix: customer.cardLevel === 'Platinum' ? copy.privilegesSuffix : undefined,
+            action: {label: copy.accountAction, href: content.member.links.account, target: '_blank'},
             media: {
                 type: 'video',
                 variant: 'shell',
@@ -94,6 +106,7 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
                 titleAccentAfter: true,
                 description: copy.reachedLevel,
                 descriptionStrong: cardLevel,
+                action: {label: copy.accountAction, href: content.member.links.account, target: '_blank'},
                 media: {
                     type: 'video',
                     variant: 'wave',
@@ -149,7 +162,7 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
 export function getSegmentConfig(id: SegmentId, customer: CustomerContext): SegmentConfig {
     const definitions = id === 'inactive' ? inactiveBlocks(customer) : id === 'one-trip' ? oneTripBlocks(customer) : activeBlocks(customer, id === 'three-plus');
     const blocks = definitions.map((block): ContentBlockConfig => {
-        const presentation = getMemberBlockPresentation(id, block.id, block.badge as CardLevel | undefined);
+        const presentation = getMemberBlockPresentation(id, block.id);
         if (!presentation) throw new Error(`Не задано представление карточки ${block.id} для сегмента ${id}`);
         return {
             ...block,

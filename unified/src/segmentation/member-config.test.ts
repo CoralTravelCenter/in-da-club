@@ -35,4 +35,17 @@ describe('getSegmentConfig', () => {
         expect(config.blocks.find(({id}) => id === 'cashback')?.value).toBe('2%');
         expect(config.blocks.find(({id}) => id === 'card-level')?.badge).toBe('Gold');
     });
+
+    it.each(['one-trip', 'two-trips', 'three-plus'] as const)(
+        'добавляет переход в личный кабинет в приветственный блок сегмента %s',
+        (segmentId) => {
+            const config = getSegmentConfig(segmentId, {displayName: 'Анна', cardLevel: 'Platinum'});
+
+            expect(config.blocks.find(({id}) => id === 'greeting')?.action).toEqual({
+                label: 'Войти в\u00a0личный кабинет',
+                href: '/account/',
+                target: '_blank',
+            });
+        },
+    );
 });

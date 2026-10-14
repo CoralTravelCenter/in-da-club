@@ -17,7 +17,7 @@ export interface ContentBlockDefinition {
     descriptionStrong?: string;
     descriptionSuffix?: string;
     badge?: string;
-    image?: { src: string; alt: string };
+    image?: {src: string; desktopSrc?: string; alt: string};
     media?: {
         type: 'video';
         variant: 'diamond' | 'shell' | 'wave' | 'pearl-shell';
@@ -26,9 +26,10 @@ export interface ContentBlockDefinition {
         poster?: string;
     };
     action?: {label: string; href: string; target?: '_blank'};
-    tooltip?: { title: string; content: string[] };
+    tooltip?: {title: string; content: TooltipContentItem[]};
 }
 export type ContentBlockConfig = ContentBlockDefinition & {presentation: BlockPresentation};
 export interface SegmentConfig { id: SegmentId; ariaLabel: string; blocks: ContentBlockConfig[]; }
 import type {BlockPresentation} from './presentation.types';
+import type {TooltipContentItem} from '@/content/content.types';
 export type {BlockPresentation} from './presentation.types';

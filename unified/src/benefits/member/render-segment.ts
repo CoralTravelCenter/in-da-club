@@ -22,10 +22,6 @@ export function renderSegment(config: SegmentConfig): HTMLElement {
     list.setAttribute('role', 'list');
     for (const blockConfig of config.blocks) {
         const {placement} = blockConfig.presentation;
-        const setDesktopPlacement = (element: HTMLElement): void => {
-            element.style.setProperty('--block-grid-column', placement.desktop.column);
-            element.style.setProperty('--block-grid-row', placement.desktop.row);
-        };
         if (placement.mobile === 'featured') {
             const featured = document.createElement('div');
             featured.className = 'in-da-club-member-segment__featured';
@@ -33,7 +29,6 @@ export function renderSegment(config: SegmentConfig): HTMLElement {
                 featured.classList.add('in-da-club-member-segment__featured--card-level');
             }
             featured.dataset.blockId = blockConfig.id;
-            setDesktopPlacement(featured);
             featured.append(renderBlock(blockConfig));
             content.append(featured);
             continue;
@@ -42,7 +37,6 @@ export function renderSegment(config: SegmentConfig): HTMLElement {
         const item = document.createElement('li');
         item.className = 'in-da-club-member-segment__item';
         item.dataset.blockId = blockConfig.id;
-        setDesktopPlacement(item);
         item.append(renderBlock(blockConfig));
         list.append(item);
     }

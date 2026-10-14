@@ -1,3 +1,5 @@
+import type {TooltipContentItem} from '@/content/content.types';
+
 export const SEGMENT_IDS = [
   'new-client',
   'regular-1',
@@ -20,7 +22,7 @@ interface ContentBlockBaseConfig {
   description: string;
   tooltip?: {
     title: string;
-    content: string[];
+    content: TooltipContentItem[];
   };
   href?: string;
   badge?: string;

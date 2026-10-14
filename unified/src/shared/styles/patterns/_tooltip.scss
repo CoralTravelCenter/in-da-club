@@ -1,11 +1,15 @@
 @mixin styles($namespace, $breakpoint-desktop) {
-  .#{$namespace}-tooltip { margin: 0; }
+  .#{$namespace}-tooltip {
+    margin: 0;
+  }
 
   .#{$namespace}-tooltip__title {
     margin: 0;
     font-size: 14px;
 
-    @media (min-width: $breakpoint-desktop) { font-size: 16px; }
+    @media (min-width: $breakpoint-desktop) {
+      font-size: 16px;
+    }
   }
 
   .#{$namespace}-tooltip__text {
@@ -14,8 +18,6 @@
     gap: 4px;
     margin: 0;
     font-size: 14px;
-
-    @media (min-width: $breakpoint-desktop) { font-size: 16px; }
   }
 
   .#{$namespace}-tooltip__content[popover] {
@@ -27,7 +29,7 @@
     width: auto;
     height: auto;
     margin: 0;
-    padding: 24px 32px 20px 16px;
+    padding: 16px 32px 16px 16px;
     overflow-y: auto;
     border: none;
     border-radius: 18px;

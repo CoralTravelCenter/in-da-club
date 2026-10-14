@@ -110,11 +110,20 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
         if (config.isLoading && config.id === 'card-level') {
             content.append(createSkeleton('image'));
         } else {
+            const picture = document.createElement('picture');
             const image = document.createElement('img');
+            picture.className = 'in-da-club-member-block__image-container';
             image.className = 'in-da-club-member-block__image';
             image.src = config.image.src;
             image.alt = config.image.alt;
-            content.append(image);
+            if (config.image.desktopSrc) {
+                const source = document.createElement('source');
+                source.media = '(min-width: 768px)';
+                source.srcset = config.image.desktopSrc;
+                picture.append(source);
+            }
+            picture.append(image);
+            content.append(picture);
         }
     }
     if (config.action) {

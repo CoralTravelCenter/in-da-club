@@ -1,12 +1,15 @@
 type TextGroup<Key extends string> = Record<Key, string>;
 
+export type TooltipContentItem = string | {label: string; text: string};
+
 export interface PromotionTerms {
     title: string;
-    content: string[];
+    content: TooltipContentItem[];
 }
 
 export interface ContentConfig {
     common: TextGroup<'clubTitle' | 'fallbackDisplayName'> & {
+        links: TextGroup<'club'>;
         tooltip: TextGroup<'openLabel' | 'closeLabel'>;
         loading: TextGroup<'benefitsLabel'>;
         error: TextGroup<'title' | 'description' | 'retry'>;

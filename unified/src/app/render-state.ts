@@ -5,14 +5,30 @@ import type {CustomerContext} from '@/segmentation/member.types';
 import {appendTextWithBreaks} from '@/shared/runtime/text';
 
 export function renderUnifiedShell(container: HTMLElement): HTMLElement {
-    const title = document.createElement('h2');
+    const section = document.createElement('section');
+    const title = document.createElement('div');
+    const heading = document.createElement('h2');
+    const titleLink = document.createElement('a');
     const content = document.createElement('div');
 
     container.dataset.inDaClubRoot = '';
-    title.className = 'unified-title';
-    title.textContent = copy.common.clubTitle;
+
+    section.className = 'coral-custom-section';
+
+    titleLink.className = 'corallium__title-link';
+    titleLink.href = copy.common.links.club;
+    titleLink.target = '_blank';
+    titleLink.rel = 'noopener';
+    titleLink.textContent = copy.common.clubTitle;
+
+    title.className = 'coral-custom-section__headline';
+    heading.append(titleLink);
+    title.append(heading);
+
     content.className = 'unified-content';
-    container.replaceChildren(title, content);
+
+    section.append(title, content);
+    container.replaceChildren(section);
 
     return content;
 }

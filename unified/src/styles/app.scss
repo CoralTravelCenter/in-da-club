@@ -2,24 +2,24 @@
 @use '../card-activation/styles';
 @use '../benefits/styles/member' as cards;
 
-.unified-title {
-  margin: 0 0 28px;
-  padding: 40px 16px 0;
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 38px;
+.corallium__title-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 160ms ease;
+
+  &:hover {
+    color: #077dad;
+  }
+
+  &:active {
+    color: #0063b3;
+  }
 }
 
 .unified-content > .in-da-club-prospect-segment,
 .unified-content > .in-da-club-member-segment,
 .unified-content > .unified-error {
   padding-top: 0;
-}
-
-@media (min-width: 768px) {
-  .unified-title {
-    padding-inline: 0;
-  }
 }
 
 .unified-error {
