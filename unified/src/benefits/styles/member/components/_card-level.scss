@@ -1,0 +1,51 @@
+@use 'abstracts/tokens' as tokens;
+
+[data-card-level='silver'] .in-da-club-member-block__badge {
+  color: #72777b;
+}
+
+[data-card-level='gold'] .in-da-club-member-block__badge {
+  color: #bd7d24;
+}
+
+[data-card-level='platinum'] .in-da-club-member-block__badge {
+  color: #a58b72;
+}
+
+[data-card-level] .in-da-club-member-block__content {
+  display: grid;
+  grid-template-areas:
+    'badge image'
+    'description image';
+  grid-template-columns: minmax(0, 1fr) minmax(0, 147px);
+  grid-template-rows: auto 1fr;
+  column-gap: tokens.$space-md;
+}
+
+[data-card-level] .in-da-club-member-block__badge {
+  position: static;
+  grid-area: badge;
+  align-self: start;
+}
+
+[data-card-level] .in-da-club-member-block__description {
+  grid-area: description;
+  align-self: start;
+  max-width: none;
+}
+
+[data-card-level] .in-da-club-member-block__image-container {
+  grid-area: image;
+  align-self: center;
+  justify-self: end;
+  width: min(80%, 147px);
+  height: auto;
+  aspect-ratio: 147 / 88;
+}
+
+[data-card-level] .in-da-club-member-block__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

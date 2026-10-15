@@ -1,4 +1,4 @@
-import {getProfile} from '../model/profile';
+import {getStoredProfile} from '@/customer/profile-storage';
 
 type MindboxOperation = 'Website.BonusAccountRegistration' | 'Website.BonusAccountActivation';
 type MindboxMode = 'async' | 'sync';
@@ -41,7 +41,7 @@ function sendBonusAccountOperation(
     additionalCustomFields: {bonusLevel?: string; bonusAccountNumber?: string} = {},
     explicitClientId?: unknown,
 ): void {
-    const nameId = explicitClientId ?? getProfile()?.nameId;
+    const nameId = explicitClientId ?? getStoredProfile()?.nameId;
     const clientId = (typeof nameId === 'string' || typeof nameId === 'number') && nameId
         ? String(nameId)
         : '';

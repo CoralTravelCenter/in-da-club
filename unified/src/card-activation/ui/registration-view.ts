@@ -1,42 +1,9 @@
 import {cities} from '../model/cities';
-import {formatBirthdate, type UserProfile} from '../model/profile';
+import type {UserProfile} from '@/customer/profile-storage';
+import {displayBirthdate, displayPhone, isKnownCity, isValidPhone, parseBirthdate} from '../model/registration';
 import {ACTIVATION_DIALOG_ID} from './activation-view';
 import {content} from '@/content/content';
 import {textToSafeHtml} from '@/shared/runtime/text';
-
-const knownCities = new Set<string>(cities);
-
-function isValidPhone(value: string): boolean {
-    const digits = value.replace(/\D/g, '');
-    return digits.length === 10 || (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8')));
-}
-
-function displayPhone(value?: string): string {
-    const digits = (value ?? '').replace(/\D/g, '');
-    const national = digits.length === 10
-        ? digits
-        : digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))
-            ? digits.slice(1)
-            : '';
-    return national
-        ? `+7 (${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6, 8)}-${national.slice(8)}`
-        : '';
-}
-
-function displayBirthdate(value?: string): string {
-    const isoDate = formatBirthdate(value);
-    const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    return match ? `${match[3]} / ${match[2]} / ${match[1]}` : '';
-}
-
-export function parseBirthdate(value: string): string | null {
-    const match = value.match(/^(\d{2})\s*\/\s*(\d{2})\s*\/\s*(\d{4})$/);
-    if (!match) return null;
-    const [, day, month, year] = match;
-    const date = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
-    if (date.getUTCFullYear() !== Number(year) || date.getUTCMonth() !== Number(month) - 1 || date.getUTCDate() !== Number(day)) return null;
-    return `${year}-${month}-${day}`;
-}
 
 function clearValidationErrors(form: HTMLFormElement): void {
     form.querySelectorAll('.in-da-club-activation__field-error').forEach((error) => error.remove());
@@ -101,7 +68,7 @@ export function validateRegistrationForm(form: HTMLFormElement): boolean {
         }
     }
     if (birthDate.value && !parseBirthdate(birthDate.value)) showFieldError(birthDate, content.activation.validation.birthdateInvalid);
-    if (city.value && !knownCities.has(city.value.trim())) showFieldError(city, content.activation.validation.cityInvalid);
+    if (city.value && !isKnownCity(city.value)) showFieldError(city, content.activation.validation.cityInvalid);
     const email = form.elements.namedItem('email') as HTMLInputElement;
     if (email.value && !email.validity.valid) showFieldError(email, content.activation.validation.emailInvalid);
     const mobilePhone = form.elements.namedItem('mobilePhone') as HTMLInputElement;

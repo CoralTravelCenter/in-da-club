@@ -1,6 +1,7 @@
 import type {SegmentConfig} from '@/segmentation/prospect.types';
 import {content as copy} from '@/content/content';
-import { renderBlock } from './render-block';
+import {registerCleanup} from '@/shared/runtime/dom-lifecycle';
+import {renderBlock} from './render-block';
 
 const DESKTOP_MEDIA_QUERY = '(min-width: 768px)';
 
@@ -46,8 +47,7 @@ export function renderSegment(
   let featured: HTMLElement | undefined;
 
   for (const blockConfig of config.blocks) {
-    const {placement} = blockConfig.presentation;
-    if (placement.mobile === 'featured') {
+    if (blockConfig.presentation.mobilePlacement === 'featured') {
       featured = document.createElement('div');
       featured.className = 'in-da-club-prospect-segment__featured';
       featured.dataset.blockId = blockConfig.id;
@@ -67,10 +67,10 @@ export function renderSegment(
     if (isDesktop) {
       for (const blockConfig of config.blocks) {
         const wrapper = renderedBlocks.get(blockConfig.id);
-        const target = desktopColumns.get(blockConfig.presentation.placement.desktop.column);
+        const target = desktopColumns.get(blockConfig.presentation.desktopColumn);
         if (!wrapper || !target) continue;
 
-        if (blockConfig.presentation.placement.mobile === 'featured') {
+        if (blockConfig.presentation.mobilePlacement === 'featured') {
           target.column.prepend(wrapper);
         } else {
           target.list.append(wrapper);
@@ -82,15 +82,17 @@ export function renderSegment(
     }
 
     mobileList.replaceChildren(...config.blocks
-      .filter(({presentation}) => presentation.placement.mobile === 'list')
+      .filter(({presentation}) => presentation.mobilePlacement === 'list')
       .map(({id}) => renderedBlocks.get(id))
       .filter((element): element is HTMLElement => element !== undefined));
     content.replaceChildren(...featured ? [featured, mobileList] : [mobileList]);
   };
 
   const desktopMedia = window.matchMedia(DESKTOP_MEDIA_QUERY);
+  const handleLayoutChange = (event: MediaQueryListEvent): void => syncLayout(event.matches);
   syncLayout(desktopMedia.matches);
-  desktopMedia.addEventListener?.('change', (event) => syncLayout(event.matches));
+  desktopMedia.addEventListener?.('change', handleLayoutChange);
+  registerCleanup(container, () => desktopMedia.removeEventListener?.('change', handleLayoutChange));
 
   if (showTitle) container.append(title);
   container.append(content);

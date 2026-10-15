@@ -3,7 +3,7 @@
 import {describe, expect, it, vi} from 'vitest';
 import type {BonusProfile} from '@/customer/bonus-profile';
 import type {CustomerContext, SegmentId} from '@/segmentation/member.types';
-import {createClientRouter, isLoggedIn, segmentFromBonusTripCount, segmentFromReservationTripCount, type ReactiveStorage} from './client-router';
+import {createClientRouter, type ReactiveStorage} from './client-router';
 
 type ChangeListener = (key: string | null, newValue: string | null, oldValue: string | null) => void;
 
@@ -50,39 +50,6 @@ function bonusProfile(overrides: Partial<BonusProfile> = {}): BonusProfile {
 }
 
 describe('client routing', () => {
-    it.each([
-        [null, false],
-        ['', false],
-        ['{invalid', false],
-        [JSON.stringify({isLoggedIn: false}), false],
-        [JSON.stringify({isLoggedIn: true}), true],
-        [JSON.stringify({isLoggedIn: 'true'}), true],
-    ])('detects authorization from localStorage user', (storedUser, expected) => {
-        expect(isLoggedIn(storedUser)).toBe(expected);
-    });
-
-    it.each([
-        [null, 'inactive'],
-        [0, 'inactive'],
-        [0.5, 'inactive'],
-        [1, 'one-trip'],
-        [2, 'two-trips'],
-        [3, 'three-plus'],
-        [8, 'three-plus'],
-    ] as const)('maps bonusTripCount=%s to %s', (bonusTripCount, expected) => {
-        expect(segmentFromBonusTripCount(bonusTripCount)).toBe(expected);
-    });
-
-    it.each([
-        [0, 'new-client'],
-        [1, 'regular-1'],
-        [2, 'regular-2'],
-        [3, 'regular-3'],
-        [8, 'regular-3'],
-    ] as const)('maps reservation trip count=%s to %s', (tripCount, expected) => {
-        expect(segmentFromReservationTripCount(tripCount)).toBe(expected);
-    });
-
     it('shows the new-client config without requesting BonusProfile for a guest', async () => {
         const storage = new StorageStub(JSON.stringify({isLoggedIn: false}));
         const loadBonusProfile = vi.fn<() => Promise<BonusProfile>>();

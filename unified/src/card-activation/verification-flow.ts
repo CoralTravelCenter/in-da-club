@@ -1,6 +1,6 @@
-import {activateCard, getBonusProfile, refreshUser, sendVerificationCode, type RegistrationData} from './api/customer-api';
-import {sendBonusAccountActivation} from './api/mindbox';
-import {getProfile} from './model/profile';
+import {sendVerificationCode} from './api/customer-api';
+import {activateBonusAccount, loadActivatedAccount} from './activation-operations';
+import type {RegistrationData} from './model/registration';
 import {content} from '@/content/content';
 import {textToSafeHtml} from '@/shared/runtime/text';
 import {
@@ -45,20 +45,15 @@ function createResendCooldown(button: HTMLButtonElement): ResendCooldown {
     return {start, stop};
 }
 
-async function renderSuccess(dialog: CoralPopupElement, city: string, clientId: unknown): Promise<void> {
+async function renderSuccess(
+    dialog: CoralPopupElement,
+    data: RegistrationData,
+    clientId: unknown,
+): Promise<void> {
     const stage = dialog.querySelector<HTMLElement>('.in-da-club-activation__stage');
     if (!stage) return;
     try {
-        if (!await refreshUser()) {
-            throw new Error(content.activation.errors.refreshCard);
-        }
-        const bonus = await getBonusProfile();
-        if (!bonus.cardType || !bonus.cardNumber?.trim()) {
-            throw new Error(content.activation.errors.loadCard);
-        }
-        const profile = getProfile();
-        if (!profile) throw new Error(content.activation.errors.refreshCard);
-        sendBonusAccountActivation(city, bonus.cardType, bonus.cardNumber, clientId);
+        const {bonus, profile} = await loadActivatedAccount(data, clientId);
         setStep(dialog, 2);
         dialog.setAttribute('aria-label', content.activation.dialog.activated);
         showSuccessResult(stage, bonus, profile);
@@ -113,9 +108,9 @@ export async function renderVerification(dialog: CoralPopupElement, data: Regist
             form.dataset.state = 'activating';
             form.setAttribute('aria-busy', 'true');
             form.querySelector('.in-da-club-activation__error')?.remove();
-            await activateCard(data.mobilePhone, code);
+            await activateBonusAccount(data.mobilePhone, code);
             cooldown.stop();
-            await renderSuccess(dialog, data.city, clientId);
+            await renderSuccess(dialog, data, clientId);
         } catch (error) {
             showMessage(form, error instanceof Error ? error.message : content.activation.errors.activateCard);
             delete form.dataset.state;

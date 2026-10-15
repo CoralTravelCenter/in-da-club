@@ -1,30 +1,9 @@
-import {getProfile, type UserProfile} from '../model/profile';
+import type {RegistrationData} from '../model/registration';
+import {getStoredProfile, setStoredProfile, type UserProfile} from '@/customer/profile-storage';
 import {requestJson} from './http';
 import {content} from '@/content/content';
 
-export interface RegistrationData {
-    givenName: string;
-    familyName: string;
-    middleName: string;
-    email: string;
-    gender: number;
-    birthDate: string;
-    city: string;
-    isConsentToPersonalData: boolean;
-    isConsentToSms: boolean;
-    isConsentToEmail: boolean;
-    isConsentToAdditional: boolean;
-    mobilePhone: string;
-    Promo: string;
-    FromPageUrl: string;
-}
-
-export interface BonusProfile {
-    cardType?: 'Silver' | 'Gold' | 'Platinum';
-    cardNumber?: string;
-    accumulatedBalance?: number;
-    promoBalance?: number;
-}
+export {normalizePhone, type RegistrationData} from '../model/registration';
 
 interface ApiResult {
     isSuccess?: boolean | 'True' | 'true';
@@ -67,28 +46,6 @@ async function runOperation(url: string, body: object, fallbackError: string): P
     }
 }
 
-function optionalNumber(value: unknown): number | undefined {
-    if (typeof value === 'number' && Number.isFinite(value)) return value;
-    if (typeof value === 'string' && value.trim()) {
-        const parsed = Number(value);
-        if (Number.isFinite(parsed)) return parsed;
-    }
-    return undefined;
-}
-
-function normalizeBonusProfile(result: Record<string, unknown>): BonusProfile {
-    const cardType = ['Silver', 'Gold', 'Platinum'].includes(String(result.cardType))
-        ? result.cardType as BonusProfile['cardType']
-        : undefined;
-
-    return {
-        cardType,
-        cardNumber: typeof result.cardNumber === 'string' ? result.cardNumber : undefined,
-        accumulatedBalance: optionalNumber(result.accumulatedBalance),
-        promoBalance: optionalNumber(result.promoBalance),
-    };
-}
-
 function decodeJwtPayload(token: string): UserProfile | null {
     try {
         const encoded = token.split('.')[1];
@@ -101,12 +58,6 @@ function decodeJwtPayload(token: string): UserProfile | null {
     } catch {
         return null;
     }
-}
-
-export function normalizePhone(value: string): string {
-    const digits = value.replace(/\D/g, '');
-    if (digits.length === 10) return `7${digits}`;
-    return digits.length === 11 && digits.startsWith('8') ? `7${digits.slice(1)}` : digits;
 }
 
 export async function registerCard(data: RegistrationData): Promise<void> {
@@ -129,22 +80,16 @@ export async function activateCard(mobilePhone: string, activationCode: string):
     );
 }
 
-export async function getBonusProfile(): Promise<BonusProfile> {
-    const result = getResult(await postJson('/endpoints/Customer/BonusProfile', {}));
-    if (!result) throw new Error(content.activation.errors.loadCard);
-    return normalizeBonusProfile(result);
-}
-
 export async function refreshUser(): Promise<boolean> {
     const result = getResult(await postJson('/endpoints/Customer/RefreshLogin', {}));
     const token = typeof result?.token === 'string' ? result.token : null;
     const decoded = token ? decodeJwtPayload(token) : null;
     if (!decoded || !decoded.BonusUserId) return false;
 
-    const current = getProfile() ?? {};
+    const current = getStoredProfile() ?? {};
     for (const [key, value] of Object.entries(decoded)) {
         if (key.startsWith('Bonus')) current[key] = value;
     }
-    window.localStorage.setItem('user', JSON.stringify(current));
-    return getProfile()?.BonusUserId === decoded.BonusUserId;
+    setStoredProfile(current);
+    return getStoredProfile()?.BonusUserId === decoded.BonusUserId;
 }

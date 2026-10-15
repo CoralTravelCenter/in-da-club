@@ -1,6 +1,6 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {applyConsents} from './consents';
-import type {RegistrationData} from '../api/customer-api';
+import type {RegistrationData} from './registration';
 
 const registration: RegistrationData = {
     givenName: 'Анна',

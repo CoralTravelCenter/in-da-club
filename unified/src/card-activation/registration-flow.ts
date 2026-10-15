@@ -1,12 +1,12 @@
-import {normalizePhone, registerCard, type RegistrationData} from './api/customer-api';
-import {sendBonusAccountRegistration} from './api/mindbox';
-import type {UserProfile} from './model/profile';
+import {registerBonusAccount} from './activation-operations';
+import {registrationDataFromForm, type RegistrationData} from './model/registration';
 import {content} from '@/content/content';
+import type {UserProfile} from '@/customer/profile-storage';
 import {
     showMessage,
     type CoralPopupElement,
 } from './ui/activation-view';
-import {createRegistrationForm, parseBirthdate, validateRegistrationForm} from './ui/registration-view';
+import {createRegistrationForm, validateRegistrationForm} from './ui/registration-view';
 import {renderVerification} from './verification-flow';
 
 export function renderRegistration(dialog: CoralPopupElement, profile: UserProfile, promo: string): void {
@@ -22,23 +22,7 @@ export function renderRegistration(dialog: CoralPopupElement, profile: UserProfi
         if (!validateRegistrationForm(form)) return;
         const submit = form.querySelector<HTMLButtonElement>('[type="submit"]');
         if (submit?.disabled) return;
-        const data = new FormData(form);
-        const registration: RegistrationData = {
-            givenName: String(data.get('givenName') ?? '').trim(),
-            familyName: String(data.get('familyName') ?? '').trim(),
-            middleName: '',
-            email: String(data.get('email') ?? ''),
-            gender: Number(data.get('gender')),
-            birthDate: parseBirthdate(String(data.get('birthDate') ?? ''))!,
-            city: String(data.get('city') ?? '').trim(),
-            isConsentToPersonalData: data.get('personal') === 'on',
-            isConsentToSms: data.get('loyalty') === 'on',
-            isConsentToEmail: data.get('loyalty') === 'on',
-            isConsentToAdditional: data.get('offers') === 'on',
-            mobilePhone: normalizePhone(String(data.get('mobilePhone') ?? '')),
-            Promo: promo,
-            FromPageUrl: location.pathname,
-        };
+        const registration = registrationDataFromForm(new FormData(form), promo, location.pathname);
 
         try {
             if (submit) {
@@ -50,8 +34,7 @@ export function renderRegistration(dialog: CoralPopupElement, profile: UserProfi
             form.querySelector('.in-da-club-activation__error')?.remove();
             const registrationChanged = JSON.stringify(completedRegistration) !== JSON.stringify(registration);
             if (registrationChanged) {
-                await registerCard(registration);
-                sendBonusAccountRegistration(registration.city, profile.nameId);
+                await registerBonusAccount(registration, profile.nameId);
                 completedRegistration = registration;
             }
             await renderVerification(dialog, registration, profile.nameId);

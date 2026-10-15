@@ -1,5 +1,6 @@
-import {getBonusProfile} from './api/customer-api';
-import {getProfile, waitForLogin, type UserProfile} from './model/profile';
+import {loadIssuedBonusProfile} from './activation-operations';
+import {waitForLogin} from './login-wait';
+import {getStoredProfile, type UserProfile} from '@/customer/profile-storage';
 import {content} from '@/content/content';
 import {textToSafeHtml} from '@/shared/runtime/text';
 import {
@@ -38,7 +39,7 @@ async function showExistingCard(profile: UserProfile): Promise<void> {
     await openPopup(dialog);
     if (stage) {
         try {
-            showExistingCardResult(stage, await getBonusProfile(), profile);
+            showExistingCardResult(stage, await loadIssuedBonusProfile(), profile);
         } catch {
             showRefreshRequiredResult(stage);
         }
@@ -56,7 +57,7 @@ export async function requestCardActivation(promo = ''): Promise<void> {
             return;
         }
 
-        let profile = getProfile();
+        let profile = getStoredProfile();
         if (!profile) {
             const loginButton = document.querySelector<HTMLElement>(LOGIN_BUTTON_SELECTOR);
             if (!loginButton) {

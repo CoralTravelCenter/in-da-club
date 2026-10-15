@@ -39,11 +39,6 @@ interface ViteConfigOptions<SegmentId extends string> {
     outputDir?: string;
 }
 
-const PRODUCTION_ASSETS_BASE = {
-    noCard: 'https://b2ccdn.coral.ru/content/in-da-club/bez-kart',
-    cardholder: 'https://b2ccdn.coral.ru/content/in-da-club/s-kartami',
-} as const;
-
 export function createViteConfig<const SegmentId extends string>({
     appName,
     configUrl,
@@ -64,20 +59,9 @@ export function createViteConfig<const SegmentId extends string>({
 
     return defineConfig(({command, mode}) => {
         const segmentId = isSegmentId(mode) ? mode : defaultSegment;
-        const publicAssetsBase = command === 'serve' ? devAssetsBase : productionAssetsBase;
-        const noCardAssetsBase = command === 'serve'
-            ? `${devAssetsBase}/assets/no-card`
-            : PRODUCTION_ASSETS_BASE.noCard;
-        const cardholderAssetsBase = command === 'serve'
-            ? `${devAssetsBase}/assets/cardholder`
-            : PRODUCTION_ASSETS_BASE.cardholder;
-        const sharedAssetsBase = command === 'serve'
-            ? `${devAssetsBase}/assets/shared`
-            : `${PRODUCTION_ASSETS_BASE.cardholder}/clients/shared`;
-        const introAssetsBase = command === 'serve'
-            ? `${devAssetsBase}/assets/intro`
-            : `${PRODUCTION_ASSETS_BASE.cardholder}/clients/inactive`;
-
+        const v2AssetsBase = command === 'serve'
+            ? `${devAssetsBase}/v2`
+            : `${productionAssetsBase}/v2`;
         return {
             root: projectRoot,
             cacheDir,
@@ -88,17 +72,13 @@ export function createViteConfig<const SegmentId extends string>({
             },
             define: {
                 __MINDBOX_SEGMENT__: JSON.stringify(segmentId),
-                __PUBLIC_ASSETS_BASE__: JSON.stringify(publicAssetsBase),
-                __NO_CARD_ASSETS_BASE__: JSON.stringify(noCardAssetsBase),
-                __CARDHOLDER_ASSETS_BASE__: JSON.stringify(cardholderAssetsBase),
-                __SHARED_ASSETS_BASE__: JSON.stringify(sharedAssetsBase),
-                __INTRO_ASSETS_BASE__: JSON.stringify(introAssetsBase),
+                __V2_ASSETS_BASE__: JSON.stringify(v2AssetsBase),
             },
             css: {
                 preprocessorOptions: {
                     scss: {
                         loadPaths: [sharedStylesDir],
-                        additionalData: `@use 'abstracts/config' with ($public-assets-base: '${noCardAssetsBase}');\n`,
+                        additionalData: `@use 'abstracts/config' with ($public-assets-base: '${v2AssetsBase}');\n`,
                     },
                 },
             },

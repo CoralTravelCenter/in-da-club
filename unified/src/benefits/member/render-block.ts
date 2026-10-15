@@ -1,5 +1,6 @@
 import type {ContentBlockConfig} from '@/segmentation/member.types';
-import {appendBlockVideo, applyBlockBackground, createBlockTooltip} from '@/benefits/shared/render-block-foundation';
+import {applyBlockBackground} from '@/benefits/shared/block-background';
+import {createBlockTooltip} from '@/benefits/shared/block-tooltip';
 import {appendTextWithBreaks} from '@/shared/runtime/text';
 
 function createSkeleton(part: 'name' | 'value' | 'badge' | 'image' | 'card'): HTMLSpanElement {
@@ -26,14 +27,6 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
     if (config.isLoading) {
         block.classList.add('in-da-club-member-block--loading');
         block.setAttribute('aria-busy', 'true');
-    }
-    if (config.media?.type === 'video') {
-        appendBlockVideo(
-            block,
-            config.media,
-            'in-da-club-member-block--video',
-            `in-da-club-member-block__video in-da-club-member-block__video--${config.media.variant}`,
-        );
     }
     if (config.badge) {
         const badge = document.createElement('span');

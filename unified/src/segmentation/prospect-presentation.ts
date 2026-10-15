@@ -1,35 +1,31 @@
-import type {BlockId} from './prospect.types';
-import type {BlockPresentation} from './presentation.types';
+import type {BlockId, BlockPresentation} from './prospect.types';
 
-const NO_CARD_BACKGROUNDS = `${__NO_CARD_ASSETS_BASE__}/backgrounds`;
-const INTRO_BACKGROUNDS = `${__INTRO_ASSETS_BASE__}/backgrounds`;
 const list = (
-    column: string,
-    row: string,
+    desktopColumn: BlockPresentation['desktopColumn'],
     background?: BlockPresentation['background'],
-): BlockPresentation => ({placement: {mobile: 'list', desktop: {column, row}}, background});
+): BlockPresentation => ({mobilePlacement: 'list', desktopColumn, background});
 const featured = (
-    column: string,
-    row: string,
+    desktopColumn: BlockPresentation['desktopColumn'],
     blockBackground?: BlockPresentation['background'],
 ): BlockPresentation => ({
-    placement: {mobile: 'featured', desktop: {column, row}},
+    mobilePlacement: 'featured',
+    desktopColumn,
     background: blockBackground,
 });
-const background = (file: string): NonNullable<BlockPresentation['background']> => ({
-    mobile: {src: `${NO_CARD_BACKGROUNDS}/mobile/${file}`},
-    desktop: {src: `${NO_CARD_BACKGROUNDS}/desktop/${file}`},
+const background = (name: string): NonNullable<BlockPresentation['background']> => ({
+    mobile: {src: `${__V2_ASSETS_BASE__}/prospect-${name}-mobile.png`},
+    desktop: {src: `${__V2_ASSETS_BASE__}/prospect-${name}-desktop.png`},
 });
-const introBackground = (file: string): NonNullable<BlockPresentation['background']> => ({
-    mobile: {src: `${INTRO_BACKGROUNDS}/mobile/${file}`},
-    desktop: {src: `${INTRO_BACKGROUNDS}/desktop/${file}`},
+const introBackground = (): NonNullable<BlockPresentation['background']> => ({
+    mobile: {src: `${__V2_ASSETS_BASE__}/intro-greeting-mobile.png`},
+    desktop: {src: `${__V2_ASSETS_BASE__}/intro-greeting-desktop.png`},
 });
 
 export const PROSPECT_BLOCK_PRESENTATION = {
-    club: featured('2', '1 / span 3', introBackground('greeting.png')),
-    'welcome-bonus': list('1', '1 / span 2', background('coins.png')),
-    manager: list('1', '3 / span 3', background('messenger.png')),
-    'birthday-bonus': list('2', '4 / span 2', background('gift.png')),
-    cashback: list('3', '1 / span 2', background('cashback.png')),
-    'private-sales': list('3', '3 / span 3', background('offers.png')),
+    club: featured('2', introBackground()),
+    'welcome-bonus': list('1', background('coins')),
+    manager: list('1', background('messenger')),
+    'birthday-bonus': list('2', background('gift')),
+    cashback: list('3', background('cashback')),
+    'private-sales': list('3', background('offers')),
 } satisfies Record<BlockId, BlockPresentation>;

@@ -1,15 +1,11 @@
-import type {BonusProfile} from '../api/customer-api';
-import type {UserProfile} from '../model/profile';
+import type {BonusProfile} from '@/customer/bonus-profile';
+import type {UserProfile} from '@/customer/profile-storage';
 import {ACTIVATION_DIALOG_ID} from './activation-view';
 import {content} from '@/content/content';
 import {textToSafeHtml} from '@/shared/runtime/text';
 
 function assetUrl(path: string): string {
-    return `${__NO_CARD_ASSETS_BASE__}/${path}`;
-}
-
-function cardAssetUrl(path: string): string {
-    return `${__SHARED_ASSETS_BASE__}/${path}`;
+    return `${__V2_ASSETS_BASE__}/${path}`;
 }
 
 function appendCard(stage: HTMLElement, bonus: BonusProfile, profile: UserProfile): void {
@@ -18,12 +14,12 @@ function appendCard(stage: HTMLElement, bonus: BonusProfile, profile: UserProfil
     const level = Number(profile.BonusLevel);
     const cardType = bonus.cardType ?? 'Silver';
     const visual = [
-        'card-ag-comp.webp',
-        'card-au-comp.webp',
-        'card-pt-comp.webp',
+        'activation-card-ag-comp.webp',
+        'activation-card-au-comp.webp',
+        'activation-card-pt-comp.webp',
     ][Number.isInteger(level) && level >= 1 && level <= 3 ? level - 1 : Math.max(0, ['Silver', 'Gold', 'Platinum'].indexOf(cardType))];
     const image = document.createElement('img');
-    image.src = cardAssetUrl(visual);
+    image.src = assetUrl(visual);
     image.alt = `${content.activation.result.cardAlt} ${cardType}`;
     const number = document.createElement('span');
     const digits = (bonus.cardNumber ?? '').replace(/\D/g, '');
@@ -34,7 +30,7 @@ function appendCard(stage: HTMLElement, bonus: BonusProfile, profile: UserProfil
 export function showSuccessResult(stage: HTMLElement, bonus: BonusProfile, profile: UserProfile): void {
     stage.innerHTML = `
         <div class="in-da-club-activation__result">
-            <img class="in-da-club-activation__result-icon" src="${assetUrl('success-mark.svg')}" alt="">
+            <img class="in-da-club-activation__result-icon" src="${assetUrl('activation-success-mark.svg')}" alt="">
             <h2 id="${ACTIVATION_DIALOG_ID}-title">${textToSafeHtml(content.activation.result.successTitle)}</h2>
             <p>${textToSafeHtml(content.activation.result.levelPrefix)} <strong data-card-level></strong>, ${textToSafeHtml(content.activation.result.cashback)} <strong data-card-cashback></strong> ${textToSafeHtml(content.activation.result.cashbackSuffix)}</p>
             <div class="in-da-club-activation__card"></div>
@@ -49,7 +45,7 @@ export function showSuccessResult(stage: HTMLElement, bonus: BonusProfile, profi
 export function showRefreshRequiredResult(stage: HTMLElement): void {
     stage.innerHTML = `
         <div class="in-da-club-activation__result">
-            <img class="in-da-club-activation__result-icon" src="${assetUrl('fail-mark.svg')}" alt="">
+            <img class="in-da-club-activation__result-icon" src="${assetUrl('activation-fail-mark.svg')}" alt="">
             <h2 id="${ACTIVATION_DIALOG_ID}-title">${textToSafeHtml(content.activation.result.failureTitle)}</h2>
             <p>${textToSafeHtml(content.activation.result.failureDescription)}</p>
         </div>`;
@@ -58,7 +54,7 @@ export function showRefreshRequiredResult(stage: HTMLElement): void {
 export function showExistingCardResult(stage: HTMLElement, bonus: BonusProfile, profile: UserProfile): void {
     stage.innerHTML = `
         <div class="in-da-club-activation__result">
-            <img class="in-da-club-activation__result-icon" src="${assetUrl('success-mark.svg')}" alt="">
+            <img class="in-da-club-activation__result-icon" src="${assetUrl('activation-success-mark.svg')}" alt="">
             <h2 id="${ACTIVATION_DIALOG_ID}-title">${textToSafeHtml(content.activation.result.existingCardTitle)}</h2>
             <div class="in-da-club-activation__card"></div>
             <p>${textToSafeHtml(content.activation.result.tripBalance)} <strong data-trip-balance></strong></p>

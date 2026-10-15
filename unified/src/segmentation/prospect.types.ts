@@ -17,6 +17,15 @@ export type BlockId =
   | 'private-sales'
   | 'manager';
 
+export interface BlockPresentation {
+  mobilePlacement: 'featured' | 'list';
+  desktopColumn: '1' | '2' | '3';
+  background?: {
+    mobile: {src: string};
+    desktop?: {src: string};
+  };
+}
+
 interface ContentBlockBaseConfig {
   id: BlockId;
   description: string;
@@ -30,12 +39,6 @@ interface ContentBlockBaseConfig {
     label: string;
     type: 'activate-card';
     promo?: string;
-  };
-  media?: {
-    type: 'video';
-    src: string;
-    safariSrc?: string;
-    poster?: string;
   };
 }
 
@@ -66,19 +69,10 @@ export interface SegmentContentConfig {
     description: string;
   };
   club: {
-    level: string;
     action: NonNullable<ContentBlockConfig['action']>;
-    media: {
-      type: 'video';
-      src: string;
-      safariSrc?: string;
-      poster?: string;
-    };
   };
   cashback: {
     percent: number;
     description: string;
   };
 }
-import type {BlockPresentation} from './presentation.types';
-export type {BlockPresentation} from './presentation.types';

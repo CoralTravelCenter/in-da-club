@@ -1,4 +1,4 @@
-import type {RegistrationData} from '../api/customer-api';
+import type {RegistrationData} from './registration';
 import {request, requestJson} from '../api/http';
 import {content} from '@/content/content';
 

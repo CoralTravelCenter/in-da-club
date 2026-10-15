@@ -21,8 +21,7 @@ export function renderSegment(config: SegmentConfig): HTMLElement {
     list.className = 'in-da-club-member-segment__list';
     list.setAttribute('role', 'list');
     for (const blockConfig of config.blocks) {
-        const {placement} = blockConfig.presentation;
-        if (placement.mobile === 'featured') {
+        if (blockConfig.presentation.mobilePlacement === 'featured') {
             const featured = document.createElement('div');
             featured.className = 'in-da-club-member-segment__featured';
             if (blockConfig.id === 'card-level') {

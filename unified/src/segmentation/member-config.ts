@@ -1,9 +1,7 @@
-import {getMemberBlockPresentation, memberMedia} from './member-presentation';
+import {getMemberBlockPresentation} from './member-presentation';
 import type {CardLevel, ContentBlockConfig, ContentBlockDefinition, CustomerContext, SegmentConfig, SegmentId} from './member.types';
 import {content} from '@/content/content';
 
-const INACTIVE_CLIENT_MEDIA = __INTRO_ASSETS_BASE__;
-const SHARED_CLIENT_MEDIA = __SHARED_ASSETS_BASE__;
 const CASHBACK: Record<CardLevel, number> = {Silver: 1, Gold: 2, Platinum: 3};
 const BIRTHDAY_TOOLTIP = content.promotionTerms.cardholder.birthdayBonus;
 const CLUB_LAUNCH_TOOLTIP = content.promotionTerms.cardholder.clubLaunchBonus;
@@ -11,14 +9,13 @@ const WELCOME_TOOLTIP = content.promotionTerms.cardholder.welcomeBonus;
 const copy = content.member.blocks;
 
 function cardBlock(level: CardLevel): ContentBlockDefinition {
-    const file = `${level.toLowerCase()}.png`;
     return {
         id: 'card-level',
         badge: level,
         description: copy.cardLevel,
         image: {
-            src: `${SHARED_CLIENT_MEDIA}/cards/mobile/${file}`,
-            desktopSrc: `${SHARED_CLIENT_MEDIA}/cards/desktop/${file}`,
+            src: `${__V2_ASSETS_BASE__}/member-card-${level.toLowerCase()}-mobile.png`,
+            desktopSrc: `${__V2_ASSETS_BASE__}/member-card-${level.toLowerCase()}-desktop.png`,
             alt: '',
         },
     };
@@ -50,12 +47,6 @@ function inactiveBlocks(customer: CustomerContext): ContentBlockDefinition[] {
             titleAccent: hasDisplayName ? customer.displayName : undefined,
             description: copy.inactiveDescription,
             action: {label: copy.chooseTour, href: content.member.links.tours},
-            media: {
-                type: 'video',
-                variant: 'diamond',
-                src: `${INACTIVE_CLIENT_MEDIA}/club.webm`,
-                safariSrc: `${INACTIVE_CLIENT_MEDIA}/club.mov`,
-            },
         },
         {id: 'welcome-bonus', value: copy.welcomeBonusValue, description: copy.welcomeBonusDescription, tooltip: WELCOME_TOOLTIP},
         cardBlock(customer.cardLevel), managerBlock, cashbackBlock(customer.cardLevel, true), birthdayBlock(), privateSalesBlock,
@@ -74,12 +65,6 @@ function oneTripBlocks(customer: CustomerContext): ContentBlockDefinition[] {
             descriptionAccent: customer.cardLevel === 'Platinum' ? copy.all : undefined,
             descriptionSuffix: customer.cardLevel === 'Platinum' ? copy.privilegesSuffix : undefined,
             action: {label: copy.accountAction, href: content.member.links.account, target: '_blank'},
-            media: {
-                type: 'video',
-                variant: 'shell',
-                src: memberMedia('one-trip', 'shell.webm'),
-                safariSrc: memberMedia('one-trip', 'shell.mov'),
-            },
         },
         clubLaunchBlock(copy.clubLaunch),
         {...cashbackBlock(customer.cardLevel), description: copy.cashbackWithBreak},
@@ -107,12 +92,6 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
                 description: copy.reachedLevel,
                 descriptionStrong: cardLevel,
                 action: {label: copy.accountAction, href: content.member.links.account, target: '_blank'},
-                media: {
-                    type: 'video',
-                    variant: 'wave',
-                    src: memberMedia('two-trips', 'wave.webm'),
-                    safariSrc: memberMedia('two-trips', 'wave.mov'),
-                },
             },
             {...cashbackBlock(cardLevel), description: copy.cashbackWithBreak},
             clubLaunchBlock(copy.clubLaunchAlternate),
@@ -142,12 +121,6 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
             title: copy.exceptionalClient,
             description: copy.allPrivileges,
             action: {label: copy.accountAction, href: content.member.links.account, target: '_blank'},
-            media: {
-                type: 'video',
-                variant: 'pearl-shell',
-                src: memberMedia('three-plus', 'pearl-shell.webm'),
-                safariSrc: memberMedia('three-plus', 'pearl-shell.mov'),
-            },
         },
         cashbackBlock(cardLevel),
         clubLaunchBlock(copy.clubLaunchLowercase),

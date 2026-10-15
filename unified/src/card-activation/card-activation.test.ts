@@ -2,22 +2,26 @@
 
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {requestCardActivation} from './card-activation';
-import {activateCard, getBonusProfile, normalizePhone, refreshUser, registerCard, sendVerificationCode} from './api/customer-api';
+import {activateCard, refreshUser, registerCard, sendVerificationCode} from './api/customer-api';
 import {sendBonusAccountActivation, sendBonusAccountRegistration} from './api/mindbox';
-import {formatBirthdate, getProfile} from './model/profile';
+import {requestBonusProfileStrict} from '@/customer/bonus-profile';
+import {getStoredProfile} from '@/customer/profile-storage';
 
-vi.mock('./model/profile', () => ({
-    formatBirthdate: vi.fn(),
-    getProfile: vi.fn(),
+vi.mock('./login-wait', () => ({
     waitForLogin: vi.fn(),
 }));
 vi.mock('./api/customer-api', () => ({
     activateCard: vi.fn(),
-    getBonusProfile: vi.fn(),
-    normalizePhone: vi.fn(),
     refreshUser: vi.fn(),
     registerCard: vi.fn(),
     sendVerificationCode: vi.fn(),
+}));
+vi.mock('@/customer/bonus-profile', () => ({
+    requestBonusProfileStrict: vi.fn(),
+}));
+vi.mock('@/customer/profile-storage', () => ({
+    getStoredProfile: vi.fn(),
+    setStoredProfile: vi.fn(),
 }));
 vi.mock('./api/mindbox', () => ({
     sendBonusAccountActivation: vi.fn(),
@@ -55,25 +59,28 @@ describe('card activation business flow', () => {
     beforeEach(() => {
         vi.resetAllMocks();
         document.body.replaceChildren();
-        vi.mocked(getProfile).mockReturnValue(profile);
-        vi.mocked(formatBirthdate).mockReturnValue('1990-01-02');
-        vi.mocked(normalizePhone).mockReturnValue('79990000000');
+        vi.mocked(getStoredProfile).mockReturnValue(profile);
         vi.mocked(registerCard).mockResolvedValue();
         vi.mocked(sendVerificationCode).mockResolvedValue();
         vi.mocked(activateCard).mockResolvedValue();
         vi.mocked(refreshUser).mockResolvedValue(true);
-        vi.mocked(getBonusProfile).mockResolvedValue({
+        vi.mocked(requestBonusProfileStrict).mockResolvedValue({
             cardType: 'Gold',
             cardNumber: '12345678901',
+            totalTravel: 0,
+            bonusTripCount: 0,
+            countryVisited: 0,
+            balance: 0,
             accumulatedBalance: 100,
             promoBalance: 50,
+            lastPeriodBonus: 0,
+            bonusOperations: [],
         });
         window.history.replaceState({}, '', '/club');
     });
 
     it('не отправляет регистрацию с некорректным телефоном профиля', async () => {
-        vi.mocked(getProfile).mockReturnValue({...profile, mobilePhone: 'некорректный номер'});
-        vi.mocked(normalizePhone).mockReturnValue('');
+        vi.mocked(getStoredProfile).mockReturnValue({...profile, mobilePhone: 'некорректный номер'});
         await requestCardActivation();
         const form = document.querySelector<HTMLFormElement>('.in-da-club-activation__form')!;
 
@@ -96,11 +103,11 @@ describe('card activation business flow', () => {
     });
 
     it('загружает данные существующей карты без повторной регистрации', async () => {
-        vi.mocked(getProfile).mockReturnValue({...profile, BonusUserId: 42});
+        vi.mocked(getStoredProfile).mockReturnValue({...profile, BonusUserId: 42});
 
         await requestCardActivation();
 
-        expect(getBonusProfile).toHaveBeenCalledOnce();
+        expect(requestBonusProfileStrict).toHaveBeenCalledOnce();
         expect(registerCard).not.toHaveBeenCalled();
         expect(document.querySelector('#in-da-club-activation')?.textContent).toContain('123 4567 8901');
     });

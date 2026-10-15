@@ -1,28 +1,10 @@
 import {normalizeCardLevel, requestBonusProfile} from './bonus-profile';
+import {getStoredProfile} from './profile-storage';
 import {content} from '@/content/content';
 import type {CustomerContext} from '@/segmentation/member.types';
 
-interface StoredProfile {
-    name?: unknown;
-    surname?: unknown;
-    BonusLevel?: unknown;
-    BonusUserId?: unknown;
-}
-
-function readStoredProfile(): StoredProfile {
-    try {
-        const stored = window.localStorage.getItem('user');
-        const parsed: unknown = stored ? JSON.parse(stored) : null;
-
-        return parsed && typeof parsed === 'object' && !Array.isArray(parsed)
-            ? parsed as StoredProfile
-            : {};
-    } catch {
-        return {};
-    }
-}
-
-function getDisplayName(profile: StoredProfile): string {
+function getDisplayName(profile: ReturnType<typeof getStoredProfile>): string {
+    if (!profile) return content.common.fallbackDisplayName;
     return [profile.name, profile.surname]
         .filter((part): part is string => typeof part === 'string' && part.trim().length > 0)
         .map((part) => part.trim())
@@ -34,16 +16,16 @@ export function getCachedCustomerContext(): {
     hasDisplayName: boolean;
     shouldRequestBonusProfile: boolean;
 } {
-    const profile = readStoredProfile();
+    const profile = getStoredProfile();
     const displayName = getDisplayName(profile);
 
     return {
         customer: {
             displayName,
-            cardLevel: normalizeCardLevel(profile.BonusLevel) ?? 'Silver',
+            cardLevel: normalizeCardLevel(profile?.BonusLevel) ?? 'Silver',
         },
         hasDisplayName: displayName !== content.common.fallbackDisplayName,
-        shouldRequestBonusProfile: Boolean(profile.BonusUserId),
+        shouldRequestBonusProfile: Boolean(profile?.BonusUserId),
     };
 }
 

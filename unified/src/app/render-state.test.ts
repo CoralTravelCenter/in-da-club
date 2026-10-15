@@ -11,6 +11,7 @@ describe('renderUnifiedShell', () => {
 
         const section = container.querySelector<HTMLElement>('section.corallium');
         const link = container.querySelector<HTMLAnchorElement>('.corallium__title-link');
+        expect(container.hasAttribute('data-in-da-club-root')).toBe(true);
         expect(section?.querySelector(':scope > h2')).not.toBeNull();
         expect(section?.querySelector('.unified-content')).not.toBeNull();
         expect(link?.textContent).toBe('Клуб «Море возможностей»');

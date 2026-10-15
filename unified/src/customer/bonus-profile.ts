@@ -55,8 +55,11 @@ function normalizeBonusProfile(value: unknown): BonusProfile | null {
     };
 }
 
-export async function requestBonusProfileStrict(signal?: AbortSignal): Promise<BonusProfile | null> {
-    const timeoutSignal = AbortSignal.timeout(BONUS_PROFILE_TIMEOUT_MS);
+export async function requestBonusProfileStrict(
+    signal?: AbortSignal,
+    timeoutMs = BONUS_PROFILE_TIMEOUT_MS,
+): Promise<BonusProfile | null> {
+    const timeoutSignal = AbortSignal.timeout(timeoutMs);
     const requestSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal;
     const response = await fetch(BONUS_PROFILE_URL, {
         method: 'POST',

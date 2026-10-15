@@ -1,5 +1,5 @@
 @use 'abstracts/mixins' as mixins;
-@use '../abstracts/tokens' as tokens;
+@use 'abstracts/tokens' as tokens;
 
 .in-da-club-prospect-segment {
   min-width: 0;
@@ -45,10 +45,10 @@
   scroll-padding-inline: 16px;
 
   @include mixins.scroll-snap(
-          $gap: tokens.$layout-gap,
-          $item-selector: '> li',
-          $item-size: 90%,
-          $hide-scrollbar: true
+    $gap: tokens.$layout-gap,
+    $item-selector: '> li',
+    $item-size: 90%,
+    $hide-scrollbar: true
   );
 
   @media (min-width: tokens.$breakpoint-desktop) {

@@ -1,0 +1,25 @@
+.row-outer-container:has(
+  .in-da-club-member-segment:is(
+    [data-segment-id='one-trip'],
+    [data-segment-id='two-trips']
+  )
+) {
+  background: #fff !important;
+
+  .ant-col {
+    background: #fff !important;
+  }
+
+  .layout-container-limit {
+    background: #fff !important;
+  }
+}
+
+.coral-custom-section:has(
+  .in-da-club-member-segment:is(
+    [data-segment-id='one-trip'],
+    [data-segment-id='two-trips']
+  )
+) {
+  background: #fff;
+}

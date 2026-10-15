@@ -1,5 +1,6 @@
 import type {ContentBlockConfig} from '@/segmentation/prospect.types';
-import {appendBlockVideo, applyBlockBackground, createBlockTooltip} from '@/benefits/shared/render-block-foundation';
+import {applyBlockBackground} from '@/benefits/shared/block-background';
+import {createBlockTooltip} from '@/benefits/shared/block-tooltip';
 import {appendTextWithBreaks} from '@/shared/runtime/text';
 
 function appendBadge(content: HTMLElement, badge: string): void {
@@ -83,15 +84,6 @@ export function renderBlock(
 
     if (block instanceof HTMLAnchorElement && config.href) {
         block.href = config.href;
-    }
-
-    if (config.media?.type === 'video') {
-        appendBlockVideo(
-            block,
-            config.media,
-            'in-da-club-prospect-block--video',
-            'in-da-club-prospect-block__video',
-        );
     }
 
     const content = document.createElement('div');

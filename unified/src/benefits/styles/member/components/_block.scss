@@ -1,5 +1,6 @@
+@use 'abstracts/tokens' as tokens;
 @use 'patterns/block' as shared-block;
-@use '../abstracts/tokens' as tokens;
+@use '../abstracts/theme';
 
 @include shared-block.styles(
   $namespace: 'in-da-club-member',
@@ -11,100 +12,6 @@
   $space-lg: tokens.$space-lg
 );
 
-.in-da-club-member-segment[data-client='active'][data-ride='1'] .in-da-club-member-block {
-  background-color: tokens.$color-client-ride-1-background;
-}
-
-.in-da-club-member-segment[data-client='active'][data-ride='2'] .in-da-club-member-block {
-  background-color: tokens.$color-client-ride-2-background;
-}
-
-.in-da-club-member-segment[data-client='active'][data-ride='3'] .in-da-club-member-block {
-  background-color: tokens.$color-client-ride-3-plus-background;
-}
-
-.in-da-club-member-segment[data-segment-id='two-trips']
-  .in-da-club-member-block[data-block-id='balance'][data-has-background] {
-  background-size: cover;
-}
-
-.in-da-club-member-segment[data-segment-id='inactive']
-  .in-da-club-member-block:is(
-    [data-block-id='welcome-bonus'],
-    [data-block-id='manager'],
-    [data-block-id='birthday-bonus']
-  )[data-has-background],
-.in-da-club-member-segment[data-segment-id='one-trip']
-  .in-da-club-member-block:is(
-    [data-block-id='birthday-bonus'],
-    [data-block-id='club-launch']
-  )[data-has-background],
-.in-da-club-member-segment:is(
-  [data-segment-id='two-trips'],
-  [data-segment-id='three-plus']
-)
-  .in-da-club-member-block:is(
-    [data-block-id='club-launch'],
-    [data-block-id='manager'],
-    [data-block-id='private-sales'],
-    [data-block-id='travel-more']
-  )[data-has-background] {
-  background-position: right center;
-  background-size: cover;
-}
-
-.in-da-club-member-block--video {
-  overflow: hidden;
-  padding: 0;
-}
-
-.in-da-club-member-block--video > .in-da-club-member-block__content {
-  position: relative;
-  z-index: 1;
-  align-items: flex-start;
-  padding: tokens.$space-md;
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    padding: tokens.$space-lg;
-  }
-}
-
-.in-da-club-member-block__video {
-  position: absolute;
-  right: 0;
-  bottom: -4%;
-  width: min(55%, 300px);
-  height: min(65%, 300px);
-  object-fit: cover;
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    bottom: 0;
-  }
-}
-
-.in-da-club-member-block__video--shell {
-  position: absolute;
-  right: -30%;
-  bottom: -4%;
-  width: min(100%, 370px);
-  height: min(55%, 370px);
-  object-fit: cover;
-}
-
-.in-da-club-member-block__video--wave {
-  position: absolute;
-  right: -35%;
-  bottom: -20%;
-  width: min(115%, 400px);
-  height: min(100%, 370px);
-  object-fit: cover;
-}
-
-.in-da-club-member-block__video--pearl-shell {
-  right: -10%;
-  bottom: -6%;
-}
-
 .in-da-club-member-block__value,
 .in-da-club-member-block__badge {
   display: flex;
@@ -112,47 +19,15 @@
   gap: 4px;
   width: fit-content;
   padding: 9px 12px;
+  color: tokens.$color-accent-orange;
   background: rgba(210, 233, 251, 0.8);
   border-radius: 16px;
-  color: tokens.$color-accent-orange;
 }
 
 .in-da-club-member-block__quantity {
   @media (min-width: tokens.$breakpoint-desktop) {
     font-size: 48px;
   }
-}
-
-.in-da-club-member-segment[data-client='active'] .in-da-club-member-block__value,
-.in-da-club-member-segment[data-client='active'] .in-da-club-member-block__badge {
-  background: tokens.$color-surface;
-}
-
-.in-da-club-member-segment[data-client='active'] .in-da-club-member-block__value {
-  color: tokens.$color-client-accent;
-}
-
-.in-da-club-member-segment[data-client='active'][data-ride='3'] .in-da-club-member-block__title,
-.in-da-club-member-segment[data-client='active'][data-ride='3'] .in-da-club-member-block__quantity {
-  font-family: 'Trajan Pro 3', serif;
-  font-weight: 400;
-}
-
-.in-da-club-member-segment[data-client='active'][data-ride='3'] .in-da-club-member-block__value {
-  background: linear-gradient(329deg, #fff -60.42%, #e1e1e1 -3.11%, #fff 58.41%, #e1e1e1 108.13%);
-}
-
-.in-da-club-member-segment[data-client='active'][data-ride='3'] .in-da-club-member-block__badge {
-  background:
-    linear-gradient(
-      145deg,
-      rgb(158 137 118 / 0.12) 26.53%,
-      rgb(246 208 171 / 0.12) 54.11%,
-      rgb(196 152 111 / 0.12) 72.91%,
-      rgb(157 119 78 / 0.12) 79.56%,
-      rgb(78 38 0 / 0.12) 96.06%
-    ),
-    var(--Base-color_Base_Light, #fff);
 }
 
 .in-da-club-member-block__description {
@@ -178,137 +53,11 @@
   }
 }
 
-[data-card-level='silver'] .in-da-club-member-block__badge {
-  color: #72777b;
-}
-
-[data-card-level='gold'] .in-da-club-member-block__badge {
-  color: #bd7d24;
-}
-
-[data-card-level='platinum'] .in-da-club-member-block__badge {
-  color: #a58b72;
-}
-
-[data-card-level] .in-da-club-member-block__content {
-  display: grid;
-  grid-template-areas:
-    'badge image'
-    'description image';
-  grid-template-columns: minmax(0, 1fr) minmax(0, 147px);
-  grid-template-rows: auto 1fr;
-  column-gap: tokens.$space-md;
-}
-
-[data-card-level] .in-da-club-member-block__badge {
-  position: static;
-  grid-area: badge;
-  align-self: start;
-}
-
-[data-card-level] .in-da-club-member-block__description {
-  grid-area: description;
-  align-self: start;
-  max-width: none;
-}
-
-[data-card-level] .in-da-club-member-block__image-container {
-  grid-area: image;
-  align-self: center;
-  justify-self: end;
-  width: min(80%, 147px);
-  height: auto;
-  aspect-ratio: 147 / 88;
-}
-
-[data-card-level] .in-da-club-member-block__image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
 .in-da-club-member-block__title-accent {
-  color: tokens.$color-client-accent;
+  color: theme.$color-accent;
 }
 
 .in-da-club-member-block__description-accent {
-  color: tokens.$color-client-accent;
+  color: theme.$color-accent;
   font-weight: 600;
-}
-
-.in-da-club-member-block__skeleton {
-  display: block;
-  overflow: hidden;
-  background: linear-gradient(90deg, #e6eef4 25%, #f4f8fb 50%, #e6eef4 75%);
-  background-size: 200% 100%;
-  border-radius: 12px;
-  animation: in-da-club-member-skeleton 1.4s ease-in-out infinite;
-}
-
-.in-da-club-member-block__skeleton--name {
-  display: inline-block;
-  width: min(55vw, 210px);
-  height: 0.85em;
-  vertical-align: -0.04em;
-}
-
-.in-da-club-member-block__skeleton--value {
-  box-sizing: border-box;
-  width: 82px;
-  height: 56px;
-  padding: 0;
-  border-radius: 16px;
-}
-
-.in-da-club-member-block__skeleton--value-wide {
-  width: 116px;
-}
-
-.in-da-club-member-block__skeleton--badge {
-  box-sizing: border-box;
-  width: 112px;
-  height: 56px;
-  padding: 0;
-  border-radius: 16px;
-}
-
-[data-card-level='gold'] .in-da-club-member-block__skeleton--badge {
-  width: 88px;
-}
-
-[data-card-level='platinum'] .in-da-club-member-block__skeleton--badge {
-  width: 142px;
-}
-
-.in-da-club-member-block__skeleton--image {
-  grid-area: image;
-  align-self: center;
-  justify-self: end;
-  width: 100%;
-  max-width: 150px;
-  aspect-ratio: 1.59;
-}
-
-.in-da-club-member-block--card-loading {
-  overflow: hidden;
-  padding: 0;
-  background: none;
-}
-
-.in-da-club-member-block__skeleton--card {
-  width: 100%;
-  height: 100%;
-  min-height: 165px;
-  border-radius: tokens.$radius-card;
-}
-
-@keyframes in-da-club-member-skeleton {
-  from {
-    background-position: 200% 0;
-  }
-
-  to {
-    background-position: -200% 0;
-  }
 }

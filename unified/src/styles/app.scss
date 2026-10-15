@@ -1,67 +1,7 @@
+@use '../shared/styles/base/reset';
+@use 'global/shell';
+@use 'global/error';
+@use 'integrations/coral';
 @use '../benefits/styles/prospect';
 @use '../card-activation/styles';
-@use '../benefits/styles/member' as cards;
-
-.corallium__title-link {
-  color: inherit;
-  text-decoration: none;
-  transition: color 160ms ease;
-
-  &:hover {
-    color: #077dad;
-  }
-
-  &:active {
-    color: #0063b3;
-  }
-}
-
-.unified-content > .in-da-club-prospect-segment,
-.unified-content > .in-da-club-member-segment,
-.unified-content > .unified-error {
-  padding-top: 0;
-}
-
-.unified-error {
-  padding: 40px 16px;
-}
-
-.unified-error__card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 24px;
-  text-align: center;
-  background: #fff;
-  border-radius: 20px;
-}
-
-.unified-error__title,
-.unified-error__description {
-  margin: 0;
-}
-
-.unified-error__title {
-  font-size: 24px;
-  line-height: 27px;
-}
-
-.unified-error__description {
-  max-width: 520px;
-  font-size: 16px;
-  line-height: 22px;
-}
-
-.unified-error__action button {
-  cursor: pointer;
-  border: 0;
-  background: transparent;
-}
-
-@media (min-width: 768px) {
-  .unified-error {
-    padding-inline: 0;
-  }
-}
+@use '../benefits/styles/member';

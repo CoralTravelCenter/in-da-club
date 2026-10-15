@@ -3,6 +3,7 @@ import {content as copy} from '@/content/content';
 import {getSegmentConfig} from '@/segmentation/member-config';
 import type {CustomerContext} from '@/segmentation/member.types';
 import {appendTextWithBreaks} from '@/shared/runtime/text';
+import {replaceChildrenWithCleanup} from '@/shared/runtime/dom-lifecycle';
 
 export function renderUnifiedShell(container: HTMLElement): HTMLElement {
     const section = document.createElement('section');
@@ -28,14 +29,14 @@ export function renderUnifiedShell(container: HTMLElement): HTMLElement {
     content.className = 'unified-content';
 
     section.append(title, content);
-    container.replaceChildren(section);
+    replaceChildrenWithCleanup(container, section);
 
     return content;
 }
 
 export function renderLoadingState(container: HTMLElement, customer: CustomerContext): void {
     const config = getSegmentConfig('inactive', customer);
-    container.replaceChildren(renderSegment({
+    replaceChildrenWithCleanup(container, renderSegment({
         ...config,
         ariaLabel: copy.common.loading.benefitsLabel,
         blocks: config.blocks.map((block) => ({...block, isLoading: 'card'})),
@@ -69,5 +70,5 @@ export function renderErrorState(container: HTMLElement, retry: () => void): voi
     action.append(button);
     card.append(title, description, action);
     section.append(card);
-    container.replaceChildren(section);
+    replaceChildrenWithCleanup(container, section);
 }

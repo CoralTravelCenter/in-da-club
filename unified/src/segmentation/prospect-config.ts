@@ -8,113 +8,62 @@ import type {
 import {PROSPECT_BLOCK_PRESENTATION} from './prospect-presentation';
 import {content} from '@/content/content';
 
-const CLUB_VIDEO_URL = `${__INTRO_ASSETS_BASE__}/club.webm`;
-const CLUB_VIDEO_SAFARI_URL = `${__INTRO_ASSETS_BASE__}/club.mov`;
 const REGULAR_CLIENT_PROMOS = {
-    "new-client": 'L7C9597QDX0ZTK3J1FARHS321SFLMWQ640RK1N3G4LA3UHP99MEWEOXFDIMNPH5',
+    'new-client': 'L7C9597QDX0ZTK3J1FARHS321SFLMWQ640RK1N3G4LA3UHP99MEWEOXFDIMNPH5',
     'regular-1': 'BYWXFE5GG4A2YSHDWVY9RNP525TONI3ANLAB51Q2X4OC4W3DPIKW8S9QWSUCK9F',
     'regular-2': 'ME608I6I76IQCD7ZQ8941G6EPWVC31EOMLSXK46ZJPIXMST9AO4QOWPOWFBD06T',
     'regular-3': 'JN53CKMQHT7RU26B02EW9V7P3SK2LTPNAOT9UE5ZW2S5OXDEAOTSQSNA9WZ68E2',
 } as const;
 
-export const SEGMENT_CONTENT = {
-    'new-client': {
-        ariaLabel: content.prospect.segments.newClient,
-        bonus: {
-            title: content.prospect.blocks.newClientBonus,
-            description: content.prospect.blocks.welcomeBonus,
-        },
+function createSegmentContent(
+    id: SegmentId,
+    ariaLabel: string,
+    bonusTitle: string,
+    bonusDescription: string,
+): SegmentContentConfig {
+    return {
+        ariaLabel,
+        bonus: {title: bonusTitle, description: bonusDescription},
         club: {
-            level: 'Silver',
             action: {
                 label: content.prospect.blocks.activateCard,
                 type: 'activate-card',
-                promo: REGULAR_CLIENT_PROMOS['new-client'],
-            },
-            media: {
-                type: 'video',
-                src: CLUB_VIDEO_URL,
-                safariSrc: CLUB_VIDEO_SAFARI_URL,
+                promo: REGULAR_CLIENT_PROMOS[id],
             },
         },
         cashback: {
             percent: 3,
             description: content.prospect.blocks.cashback,
         },
-    },
-    'regular-1': {
-        ariaLabel: content.prospect.segments.regular1,
-        bonus: {
-            title: content.prospect.blocks.regularClientBonus,
-            description: content.prospect.blocks.regularWelcomeBonus,
-        },
-        club: {
-            level: 'Silver',
-            action: {
-                label: content.prospect.blocks.activateCard,
-                type: 'activate-card',
-                promo: REGULAR_CLIENT_PROMOS['regular-1'],
-            },
-            media: {
-                type: 'video',
-                src: CLUB_VIDEO_URL,
-                safariSrc: CLUB_VIDEO_SAFARI_URL,
-            },
-        },
-        cashback: {
-            percent: 3,
-            description: content.prospect.blocks.cashback,
-        },
-    },
-    'regular-2': {
-        ariaLabel: content.prospect.segments.regular2,
-        bonus: {
-            title: content.prospect.blocks.regularClientBonus,
-            description: content.prospect.blocks.regularWelcomeBonus,
-        },
-        club: {
-            level: 'Silver',
-            action: {
-                label: content.prospect.blocks.activateCard,
-                type: 'activate-card',
-                promo: REGULAR_CLIENT_PROMOS['regular-2'],
-            },
-            media: {
-                type: 'video',
-                src: CLUB_VIDEO_URL,
-                safariSrc: CLUB_VIDEO_SAFARI_URL,
-            },
-        },
-        cashback: {
-            percent: 3,
-            description: content.prospect.blocks.cashback,
-        },
-    },
-    'regular-3': {
-        ariaLabel: content.prospect.segments.regular3,
-        bonus: {
-            title: content.prospect.blocks.regularClientBonus,
-            description: content.prospect.blocks.regularWelcomeBonus,
-        },
-        club: {
-            level: 'Silver',
-            action: {
-                label: content.prospect.blocks.activateCard,
-                type: 'activate-card',
-                promo: REGULAR_CLIENT_PROMOS['regular-3'],
-            },
-            media: {
-                type: 'video',
-                src: CLUB_VIDEO_URL,
-                safariSrc: CLUB_VIDEO_SAFARI_URL,
-            },
-        },
-        cashback: {
-            percent: 3,
-            description: content.prospect.blocks.cashback,
-        },
-    },
-} satisfies Record<SegmentId, SegmentContentConfig>;
+    };
+}
+
+export const SEGMENT_CONTENT: Record<SegmentId, SegmentContentConfig> = {
+    'new-client': createSegmentContent(
+        'new-client',
+        content.prospect.segments.newClient,
+        content.prospect.blocks.newClientBonus,
+        content.prospect.blocks.welcomeBonus,
+    ),
+    'regular-1': createSegmentContent(
+        'regular-1',
+        content.prospect.segments.regular1,
+        content.prospect.blocks.regularClientBonus,
+        content.prospect.blocks.regularWelcomeBonus,
+    ),
+    'regular-2': createSegmentContent(
+        'regular-2',
+        content.prospect.segments.regular2,
+        content.prospect.blocks.regularClientBonus,
+        content.prospect.blocks.regularWelcomeBonus,
+    ),
+    'regular-3': createSegmentContent(
+        'regular-3',
+        content.prospect.segments.regular3,
+        content.prospect.blocks.regularClientBonus,
+        content.prospect.blocks.regularWelcomeBonus,
+    ),
+};
 
 export function getSegmentConfig(id: SegmentId): SegmentConfig {
     const segmentContent = SEGMENT_CONTENT[id];
@@ -125,7 +74,6 @@ export function getSegmentConfig(id: SegmentId): SegmentConfig {
             title: content.prospect.blocks.clubTitle,
             description: content.prospect.blocks.clubDescription,
             action: segmentContent.club.action,
-            media: segmentContent.club.media,
         },
         {
             id: 'cashback',
@@ -164,7 +112,7 @@ export function getSegmentConfig(id: SegmentId): SegmentConfig {
         ariaLabel: segmentContent.ariaLabel,
         blocks: definitions.map((block): ContentBlockConfig => ({
             ...block,
-            presentation: PROSPECT_BLOCK_PRESENTATION[block.id]
+            presentation: PROSPECT_BLOCK_PRESENTATION[block.id],
         })),
     };
 }

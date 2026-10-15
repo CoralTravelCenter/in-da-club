@@ -3,6 +3,7 @@ import {content} from '@/content/content';
 import {getSegmentConfig} from '@/segmentation/member-config';
 import type {CardLevel, CustomerContext, SegmentConfig, SegmentId} from '@/segmentation/member.types';
 import {renderSegment} from './member/render-segment';
+import {replaceChildrenWithCleanup} from '@/shared/runtime/dom-lifecycle';
 export interface BootstrapOptions {
     container: HTMLElement;
     segmentId: SegmentId;
@@ -52,7 +53,7 @@ function withAccumulatedBalance(config: SegmentConfig, accumulatedBalance?: numb
 
 export async function renderMemberBenefits({container, segmentId, cardLevelOverride, customerContext, accumulatedBalance}: BootstrapOptions): Promise<void> {
     if (customerContext) {
-        container.replaceChildren(renderSegment(withAccumulatedBalance(
+        replaceChildrenWithCleanup(container, renderSegment(withAccumulatedBalance(
             getSegmentConfig(segmentId, customerContext),
             accumulatedBalance,
         )));
@@ -64,7 +65,7 @@ export async function renderMemberBenefits({container, segmentId, cardLevelOverr
         getSegmentConfig(segmentId, withCardLevelOverride(cached.customer, cardLevelOverride)),
     );
 
-    container.replaceChildren(renderSegment(
+    replaceChildrenWithCleanup(container, renderSegment(
         cached.shouldRequestBonusProfile
             ? withLoadingBlocks(initialConfig, !cached.hasDisplayName)
             : initialConfig,
@@ -73,7 +74,7 @@ export async function renderMemberBenefits({container, segmentId, cardLevelOverr
     if (!cached.shouldRequestBonusProfile) return;
 
     const customer = await getCustomerContext();
-    container.replaceChildren(renderSegment(withAccumulatedBalance(
+    replaceChildrenWithCleanup(container, renderSegment(withAccumulatedBalance(
         getSegmentConfig(segmentId, withCardLevelOverride(customer, cardLevelOverride)),
     )));
 }
