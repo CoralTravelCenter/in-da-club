@@ -1,30 +1,20 @@
 @use 'abstracts/mixins' as mixins;
 @use 'abstracts/tokens' as tokens;
+@use 'patterns/segment';
 
 .in-da-club-member-segment {
   padding-block: 40px;
 }
 
 .in-da-club-member-segment__content {
-  display: grid;
-  gap: tokens.$layout-gap;
-  min-width: 0;
-
   @media (min-width: tokens.$breakpoint-desktop) {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, auto);
+    grid-template-rows: repeat(3, minmax(160px, auto));
     align-items: stretch;
   }
 }
-
 .in-da-club-member-segment__featured {
   min-height: 340px;
-  padding-inline: tokens.$space-md;
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    min-height: 0;
-    padding: 0;
-  }
 }
 
 .in-da-club-member-segment__featured--card-level {
@@ -39,38 +29,31 @@
     height: 100%;
   }
 }
-
 .in-da-club-member-segment__list {
-  min-height: 220px;
-  margin: 0;
-  padding-inline: tokens.$space-md;
-  scroll-padding-inline: tokens.$space-md;
-  list-style: none;
-
   @include mixins.scroll-snap(
     $gap: tokens.$layout-gap,
     $item-selector: '> li',
-    $item-size: 90%,
+    $item-size: calc(100% - 32px),
     $hide-scrollbar: true
   );
 
   @media (min-width: tokens.$breakpoint-desktop) {
     display: contents;
     min-height: 0;
-    padding: 0;
   }
-}
-
-.in-da-club-member-segment__list--scroll-locked {
-  overflow: hidden;
-  overscroll-behavior: none;
-  touch-action: none;
 }
 
 .in-da-club-member-segment__item {
   min-width: 0;
 
+  > .in-da-club-member-block {
+    min-height: 160px;
+  }
+
   @media (min-width: tokens.$breakpoint-desktop) {
-    scroll-snap-align: none;
+    > .in-da-club-member-block,
+    > .in-da-club-member-block > .in-da-club-member-block__content {
+      height: 100%;
+    }
   }
 }

@@ -27,13 +27,13 @@
   position: relative;
   gap: 0;
 
-  @media (max-width: tokens.$breakpoint-desktop) {
+  @media (max-width: calc(tokens.$breakpoint-desktop - 0.02px)) {
     padding: 0;
   }
 }
 
 .in-da-club-activation__close {
-  @media (max-width: tokens.$breakpoint-desktop) {
+  @media (max-width: calc(tokens.$breakpoint-desktop - 0.02px)) {
     display: none;
   }
 }

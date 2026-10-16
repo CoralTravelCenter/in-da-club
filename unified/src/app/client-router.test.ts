@@ -50,6 +50,38 @@ function bonusProfile(overrides: Partial<BonusProfile> = {}): BonusProfile {
 }
 
 describe('client routing', () => {
+    it('notifies about display only after the resolved block has rendered', async () => {
+        const storage = new StorageStub(JSON.stringify({isLoggedIn: true}));
+        let finishRender!: () => void;
+        const renderFinished = new Promise<void>((resolve) => {
+            finishRender = resolve;
+        });
+        const onDisplay = vi.fn();
+        const router = createClientRouter({
+            storage,
+            getCachedCustomer: () => cachedCustomer,
+            loadBonusProfile: vi.fn().mockResolvedValue(bonusProfile({bonusTripCount: 1})),
+            loadReservationTripCount: vi.fn(),
+            logDisplayContext: vi.fn(),
+            onDisplay,
+            renderLoading: vi.fn(),
+            renderError: vi.fn(),
+            renderNoCard: vi.fn(),
+            renderCardholder: () => renderFinished,
+        });
+
+        router.start();
+        await vi.waitFor(() => expect(onDisplay).not.toHaveBeenCalled());
+        finishRender();
+        await vi.waitFor(() => expect(onDisplay).toHaveBeenCalledOnce());
+
+        expect(onDisplay).toHaveBeenCalledWith(expect.objectContaining({
+            view: 'cardholder',
+            segmentId: 'one-trip',
+        }));
+        router.stop();
+    });
+
     it('shows the new-client config without requesting BonusProfile for a guest', async () => {
         const storage = new StorageStub(JSON.stringify({isLoggedIn: false}));
         const loadBonusProfile = vi.fn<() => Promise<BonusProfile>>();

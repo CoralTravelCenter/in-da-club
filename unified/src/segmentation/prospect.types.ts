@@ -20,10 +20,7 @@ export type BlockId =
 export interface BlockPresentation {
   mobilePlacement: 'featured' | 'list';
   desktopColumn: '1' | '2' | '3';
-  background?: {
-    mobile: {src: string};
-    desktop?: {src: string};
-  };
+  background?: {src: string};
 }
 
 interface ContentBlockBaseConfig {

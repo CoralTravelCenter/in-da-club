@@ -48,6 +48,33 @@ describe('bootstrap', () => {
         expect(fetchMock).not.toHaveBeenCalled();
     });
 
+    it('renders and updates the mobile carousel pagination', async () => {
+        const container = document.createElement('div');
+
+        await renderMemberBenefits({
+            container,
+            segmentId: 'three-plus',
+            customerContext: {displayName: 'Михаил', cardLevel: 'Platinum'},
+        });
+
+        const list = container.querySelector<HTMLElement>('.in-da-club-member-segment__list');
+        const items = [...container.querySelectorAll<HTMLElement>('.in-da-club-member-segment__item')];
+        const pagination = container.querySelector('.in-da-club-member-segment__pagination');
+        const dots = [...container.querySelectorAll('.in-da-club-member-segment__pagination-dot')];
+        items.forEach((item, index) => vi.spyOn(item, 'offsetLeft', 'get').mockReturnValue(index * 200));
+
+        expect(dots).toHaveLength(items.length);
+        expect(pagination?.getAttribute('aria-label')).toBe(`Карточка 1 из ${items.length}`);
+        expect(dots[0].classList.contains('in-da-club-member-segment__pagination-dot--active')).toBe(true);
+
+        if (!list) throw new Error('Не найден список карточек');
+        list.scrollLeft = 200;
+        list.dispatchEvent(new Event('scroll'));
+
+        expect(pagination?.getAttribute('aria-label')).toBe(`Карточка 2 из ${items.length}`);
+        expect(dots[1].classList.contains('in-da-club-member-segment__pagination-dot--active')).toBe(true);
+    });
+
     it.each(['two-trips', 'three-plus'] as const)(
         'renders accumulatedBalance for the unified %s flow',
         async (segmentId) => {

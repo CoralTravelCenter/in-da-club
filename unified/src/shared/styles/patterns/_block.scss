@@ -1,100 +1,120 @@
-@mixin styles(
-  $namespace,
-  $breakpoint-desktop,
-  $color-surface,
-  $color-text,
-  $radius-card,
-  $space-md,
-  $space-lg
-) {
-  .#{$namespace}-block {
-    position: relative;
-    display: block;
-    height: 100%;
-    min-width: 0;
-    padding: $space-md;
-    color: $color-text;
-    text-decoration: none;
-    background-color: $color-surface;
-    border-radius: $radius-card;
+@use 'abstracts/tokens' as tokens;
 
-    @media (min-width: $breakpoint-desktop) {
-      padding: $space-lg;
+@mixin block-selector($element: '') {
+  @if $element == '' {
+    :is(.in-da-club-member-block, .in-da-club-prospect-block) {
+      @content;
+    }
+  } @else {
+    :is(.in-da-club-member-block__#{$element}, .in-da-club-prospect-block__#{$element}) {
+      @content;
     }
   }
+}
 
-  .#{$namespace}-block__content {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 12px;
-    height: 100%;
+@include block-selector {
+  position: relative;
+  display: block;
+  height: 100%;
+  min-width: 0;
+  padding: tokens.$space-md;
+  color: tokens.$color-text;
+  text-decoration: none;
+  background-color: var(--in-da-club-block-background, tokens.$color-surface);
+  border-radius: tokens.$radius-card;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    padding: tokens.$space-lg;
   }
+}
 
-  .#{$namespace}-block__link {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 12px;
-    min-width: 0;
-    color: inherit;
-    text-decoration: none;
+@include block-selector('content') {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 12px;
+  height: 100%;
+}
+
+@include block-selector('link') {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+@include block-selector('title') {
+  color: var(--Text-color_Text_Dark, #000);
+  font-size: 24px !important;
+  font-weight: var(--font-font_Weight_Semibold, 600);
+  line-height: 27px !important;
+}
+
+@include block-selector('value') {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  padding: 9px 12px;
+  color: var(--Text-color_Text_Dark, #000);
+  font-size: 24px;
+  font-weight: var(--font-font_Weight_Semibold, 600);
+  line-height: 27px;
+  border-radius: 16px;
+}
+
+@include block-selector('value-prefix') {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+@include block-selector('quantity') {
+  font-size: 38px;
+  line-height: 1;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    font-size: 48px;
   }
+}
 
-  .#{$namespace}-block__title,
-  .#{$namespace}-block__value {
-    color: var(--Text-color_Text_Dark, #000);
-    font-size: 24px;
-    font-weight: var(--font-font_Weight_Semibold, 600);
-    line-height: 27px;
-  }
+@include block-selector('description') {
+  font-size: 16px;
+  line-height: 22px;
+}
 
-  .#{$namespace}-block__value-prefix {
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 1;
-  }
-
-  .#{$namespace}-block__quantity {
-    font-size: 38px;
-    line-height: 1;
-  }
-
-  .#{$namespace}-block__description {
-    font-size: 16px;
-    line-height: 22px;
-  }
-
-  .#{$namespace}-block__description + .#{$namespace}-block__action {
+@include block-selector('description') {
+  + :is(.in-da-club-member-block__action, .in-da-club-prospect-block__action) {
     margin-top: 8px;
   }
+}
 
-  .#{$namespace}-block__title + .#{$namespace}-block__action,
-  .#{$namespace}-block__value + .#{$namespace}-block__action {
+@include block-selector('title') {
+  + :is(.in-da-club-member-block__action, .in-da-club-prospect-block__action) {
     margin-top: 4px;
   }
+}
 
-  .#{$namespace}-block__badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
+@include block-selector('value') {
+  + :is(.in-da-club-member-block__action, .in-da-club-prospect-block__action) {
+    margin-top: 4px;
   }
+}
 
-  .#{$namespace}-block[data-has-background] {
-    background-image: var(--block-background-mobile);
+@include block-selector('badge') {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+@include block-selector {
+  &[data-has-background] {
+    background-image: var(--block-background);
     background-repeat: no-repeat;
     background-position: right bottom;
-    background-size: contain;
-
-    @media (min-width: $breakpoint-desktop) {
-      background-image: var(--block-background-desktop);
-    }
-  }
-
-  .#{$namespace}-block:is(
-    [data-block-id='welcome-bonus'],
-    [data-block-id='birthday-bonus']
-  )[data-has-background] {
     background-size: cover;
   }
 }

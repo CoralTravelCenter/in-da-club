@@ -1,6 +1,7 @@
 import {localStorage as reactiveLocalStorage} from 'reactive-localstorage';
 import {renderProspectBenefits} from '@/benefits/prospect';
 import {renderMemberBenefits} from '@/benefits/member';
+import {createMainBlockShowTracker} from '@/analytics/main-block-show';
 import {requestBonusProfileStrict} from '@/customer/bonus-profile';
 import {getCachedCustomerContext} from '@/customer/customer-context';
 import {requestReservationTripCount} from '@/customer/reservation-api';
@@ -18,6 +19,7 @@ mountWhenAvailable({
     selector: ROOT_SELECTOR,
     start: (container) => {
         const content = renderUnifiedShell(container);
+        const mainBlockShowTracker = createMainBlockShowTracker(container);
         if (import.meta.env.DEV) {
             const preview = getDevPreview(window.location.search);
 
@@ -45,6 +47,7 @@ mountWhenAvailable({
             logDisplayContext: (context) => {
                 console.info('[in-da-club] display context', context);
             },
+            onDisplay: mainBlockShowTracker.track,
             renderLoading: () => {
                 renderLoadingState(content, getCachedCustomerContext().customer);
             },

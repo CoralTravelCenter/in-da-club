@@ -1,0 +1,114 @@
+@use 'abstracts/tokens' as tokens;
+
+:is(.in-da-club-member-segment__content, .in-da-club-prospect-segment__content) {
+  display: grid;
+  gap: tokens.$layout-gap;
+  min-width: 0;
+}
+
+:is(.in-da-club-member-segment__featured, .in-da-club-prospect-segment__featured) {
+  padding-inline: tokens.$space-md;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    min-height: 0;
+    padding: 0;
+  }
+}
+
+:is(.in-da-club-member-segment__list, .in-da-club-prospect-segment__list) {
+  margin: 0;
+  padding-inline: tokens.$space-md;
+  scroll-padding-inline: tokens.$space-md;
+  list-style: none;
+}
+
+:is(
+  .in-da-club-member-segment__list--scroll-locked,
+  .in-da-club-prospect-segment__list--scroll-locked
+) {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+:is(.in-da-club-member-segment__pagination, .in-da-club-prospect-segment__pagination) {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  min-height: 10px;
+}
+
+:is(.in-da-club-member-segment__pagination-dot, .in-da-club-prospect-segment__pagination-dot) {
+  width: 10px;
+  height: 10px;
+  background: rgba(7, 125, 173, 0.2);
+  border-radius: 50%;
+}
+
+:is(
+  .in-da-club-member-segment__pagination-dot--active,
+  .in-da-club-prospect-segment__pagination-dot--active
+) {
+  background: #077dad;
+}
+
+@media (min-width: tokens.$breakpoint-desktop) {
+  :is(.in-da-club-member-segment__pagination, .in-da-club-prospect-segment__pagination) {
+    display: none;
+  }
+
+  :is(.in-da-club-member-segment__item, .in-da-club-prospect-segment__item) {
+    scroll-snap-align: none;
+  }
+
+  :is(
+    .in-da-club-member-segment__featured,
+    .in-da-club-member-segment__item,
+    .in-da-club-prospect-segment__featured,
+    .in-da-club-prospect-segment__item
+  ) {
+    &[data-block-id='balance'] {
+      grid-area: balance;
+    }
+
+    &[data-block-id='greeting'] {
+      grid-area: greeting;
+    }
+
+    &[data-block-id='welcome-bonus'] {
+      grid-area: welcome-bonus;
+    }
+
+    &[data-block-id='card-level'] {
+      grid-area: card-level;
+    }
+
+    &[data-block-id='manager'] {
+      grid-area: manager;
+    }
+
+    &[data-block-id='cashback'] {
+      grid-area: cashback;
+    }
+
+    &[data-block-id='birthday-bonus'] {
+      grid-area: birthday-bonus;
+    }
+
+    &[data-block-id='private-sales'] {
+      grid-area: private-sales;
+    }
+
+    &[data-block-id='club'] {
+      grid-area: club;
+    }
+
+    &[data-block-id='club-launch'] {
+      grid-area: club-launch;
+    }
+
+    &[data-block-id='travel-more'] {
+      grid-area: travel-more;
+    }
+  }
+}

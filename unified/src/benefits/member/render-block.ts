@@ -1,6 +1,7 @@
 import type {ContentBlockConfig} from '@/segmentation/member.types';
 import {applyBlockBackground} from '@/benefits/shared/block-background';
 import {createBlockTooltip} from '@/benefits/shared/block-tooltip';
+import {DESKTOP_MEDIA_QUERY} from '@/shared/runtime/media';
 import {appendTextWithBreaks} from '@/shared/runtime/text';
 
 function createSkeleton(part: 'name' | 'value' | 'badge' | 'image' | 'card'): HTMLSpanElement {
@@ -63,7 +64,6 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
         value.className = 'in-da-club-member-block__value';
         if (config.isLoading && config.id === 'cashback') {
             value.classList.add('in-da-club-member-block__skeleton', 'in-da-club-member-block__skeleton--value');
-            if (config.valuePrefix) value.classList.add('in-da-club-member-block__skeleton--value-wide');
             value.setAttribute('aria-hidden', 'true');
         } else {
             const quantity = document.createElement('span');
@@ -111,7 +111,7 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
             image.alt = config.image.alt;
             if (config.image.desktopSrc) {
                 const source = document.createElement('source');
-                source.media = '(min-width: 768px)';
+                source.media = DESKTOP_MEDIA_QUERY;
                 source.srcset = config.image.desktopSrc;
                 picture.append(source);
             }

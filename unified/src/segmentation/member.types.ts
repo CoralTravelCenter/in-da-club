@@ -8,10 +8,7 @@ export type BlockId = 'greeting' | 'card-level' | 'balance' | 'cashback' | 'club
 export interface CustomerContext { displayName: string; cardLevel: CardLevel; }
 export interface BlockPresentation {
     mobilePlacement: 'featured' | 'list';
-    background?: {
-        mobile: {src: string};
-        desktop?: {src: string};
-    };
+    background?: {src: string};
 }
 export interface ContentBlockDefinition {
     id: BlockId;

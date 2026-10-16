@@ -1,9 +1,9 @@
 import type {SegmentConfig} from '@/segmentation/prospect.types';
 import {content as copy} from '@/content/content';
+import {createSegmentPagination} from '@/benefits/shared/segment-pagination';
 import {registerCleanup} from '@/shared/runtime/dom-lifecycle';
+import {DESKTOP_MEDIA_QUERY} from '@/shared/runtime/media';
 import {renderBlock} from './render-block';
-
-const DESKTOP_MEDIA_QUERY = '(min-width: 768px)';
 
 export function renderSegment(
   config: SegmentConfig,
@@ -45,6 +45,7 @@ export function renderSegment(
 
   const renderedBlocks = new Map<string, HTMLElement>();
   let featured: HTMLElement | undefined;
+  let pagination: HTMLElement | undefined;
 
   for (const blockConfig of config.blocks) {
     if (blockConfig.presentation.mobilePlacement === 'featured') {
@@ -85,7 +86,8 @@ export function renderSegment(
       .filter(({presentation}) => presentation.mobilePlacement === 'list')
       .map(({id}) => renderedBlocks.get(id))
       .filter((element): element is HTMLElement => element !== undefined));
-    content.replaceChildren(...featured ? [featured, mobileList] : [mobileList]);
+    pagination ??= createSegmentPagination(mobileList, 'in-da-club-prospect');
+    content.replaceChildren(...featured ? [featured, mobileList, pagination] : [mobileList, pagination]);
   };
 
   const desktopMedia = window.matchMedia(DESKTOP_MEDIA_QUERY);

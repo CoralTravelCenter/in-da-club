@@ -1,21 +1,16 @@
 @use 'abstracts/tokens' as tokens;
 @use '../abstracts/theme';
 
-.in-da-club-member-segment[data-client='active'][data-ride='1'] .in-da-club-member-block {
-  background-color: theme.$color-ride-1-background;
+.in-da-club-member-segment[data-client='active'][data-ride='1'] {
+  --in-da-club-block-background: #{theme.$color-ride-1-background};
 }
 
-.in-da-club-member-segment[data-client='active'][data-ride='2'] .in-da-club-member-block {
-  background-color: theme.$color-ride-2-background;
+.in-da-club-member-segment[data-client='active'][data-ride='2'] {
+  --in-da-club-block-background: #{theme.$color-ride-2-background};
 }
 
-.in-da-club-member-segment[data-client='active'][data-ride='3'] .in-da-club-member-block {
-  background-color: theme.$color-ride-3-plus-background;
-}
-
-.in-da-club-member-segment[data-segment-id='two-trips']
-  .in-da-club-member-block[data-block-id='balance'][data-has-background] {
-  background-size: cover;
+.in-da-club-member-segment[data-client='active'][data-ride='3'] {
+  --in-da-club-block-background: #{theme.$color-ride-3-plus-background};
 }
 
 .in-da-club-member-segment[data-segment-id='inactive']
@@ -40,16 +35,11 @@
     [data-block-id='travel-more']
   )[data-has-background] {
   background-position: right center;
-  background-size: cover;
 }
 
-.in-da-club-member-segment[data-client='active'] .in-da-club-member-block__value,
-.in-da-club-member-segment[data-client='active'] .in-da-club-member-block__badge {
-  background: tokens.$color-surface;
-}
-
-.in-da-club-member-segment[data-client='active'] .in-da-club-member-block__value {
-  color: theme.$color-accent;
+.in-da-club-member-segment[data-client='active'] {
+  --in-da-club-member-value-color: #{theme.$color-accent};
+  --in-da-club-member-value-background: #{tokens.$color-surface};
 }
 
 .in-da-club-member-segment[data-client='active'][data-ride='3'] .in-da-club-member-block__title,
@@ -109,17 +99,4 @@
       'manager private-sales travel-more';
   }
 
-  .in-da-club-member-segment__featured,
-  .in-da-club-member-segment__item {
-    &[data-block-id='balance'] { grid-area: balance; }
-    &[data-block-id='greeting'] { grid-area: greeting; }
-    &[data-block-id='welcome-bonus'] { grid-area: welcome-bonus; }
-    &[data-block-id='card-level'] { grid-area: card-level; }
-    &[data-block-id='manager'] { grid-area: manager; }
-    &[data-block-id='cashback'] { grid-area: cashback; }
-    &[data-block-id='birthday-bonus'] { grid-area: birthday-bonus; }
-    &[data-block-id='private-sales'] { grid-area: private-sales; }
-    &[data-block-id='club-launch'] { grid-area: club-launch; }
-    &[data-block-id='travel-more'] { grid-area: travel-more; }
-  }
 }

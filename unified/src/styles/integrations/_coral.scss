@@ -1,12 +1,18 @@
+// Эти предки находятся вне [data-in-da-club-root] и принадлежат Coral.
+// Цепочка дочерних элементов фиксирует внешний layout-контракт, а :has() ограничивает override нашим блоком.
 .row-outer-container:has(
-  .in-da-club-member-segment:is(
-    [data-segment-id='one-trip'],
-    [data-segment-id='two-trips']
-  )
+  [data-in-da-club-root]
+    > .coral-custom-section
+    > .unified-content
+    > .in-da-club-member-segment:is(
+      [data-segment-id='one-trip'],
+      [data-segment-id='two-trips']
+    )
 ) {
+  // Coral задаёт фон этих контейнеров собственными приоритетными правилами.
   background: #fff !important;
 
-  .ant-col {
+  > .row-container > .ant-row > .ant-col {
     background: #fff !important;
   }
 
@@ -15,11 +21,12 @@
   }
 }
 
-.coral-custom-section:has(
-  .in-da-club-member-segment:is(
-    [data-segment-id='one-trip'],
-    [data-segment-id='two-trips']
-  )
+[data-in-da-club-root] > .coral-custom-section:has(
+  > .unified-content
+    > .in-da-club-member-segment:is(
+      [data-segment-id='one-trip'],
+      [data-segment-id='two-trips']
+    )
 ) {
   background: #fff;
 }

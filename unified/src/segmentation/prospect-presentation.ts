@@ -13,12 +13,10 @@ const featured = (
     background: blockBackground,
 });
 const background = (name: string): NonNullable<BlockPresentation['background']> => ({
-    mobile: {src: `${__V2_ASSETS_BASE__}/prospect-${name}-mobile.png`},
-    desktop: {src: `${__V2_ASSETS_BASE__}/prospect-${name}-desktop.png`},
+    src: `${__V2_ASSETS_BASE__}/prospect-${name}-desktop.png`,
 });
 const introBackground = (): NonNullable<BlockPresentation['background']> => ({
-    mobile: {src: `${__V2_ASSETS_BASE__}/intro-greeting-mobile.png`},
-    desktop: {src: `${__V2_ASSETS_BASE__}/intro-greeting-desktop.png`},
+    src: `${__V2_ASSETS_BASE__}/intro-greeting-desktop.png`,
 });
 
 export const PROSPECT_BLOCK_PRESENTATION = {

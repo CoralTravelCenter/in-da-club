@@ -28,10 +28,11 @@ interface ClientRouterOptions {
     loadBonusProfile: () => Promise<BonusProfile | null>;
     loadReservationTripCount: () => Promise<number>;
     logDisplayContext: (context: DisplayState) => void;
+    onDisplay?: (context: ResolvedDisplayState) => void;
     renderLoading: () => void;
     renderError: (retry: () => void) => void;
-    renderNoCard: (segmentId: NoCardSegmentId) => void;
-    renderCardholder: (segmentId: SegmentId, customer: CustomerContext, accumulatedBalance: number | null) => void;
+    renderNoCard: (segmentId: NoCardSegmentId) => void | Promise<void>;
+    renderCardholder: (segmentId: SegmentId, customer: CustomerContext, accumulatedBalance: number | null) => void | Promise<void>;
 }
 
 export function createClientRouter({
@@ -40,6 +41,7 @@ export function createClientRouter({
     loadBonusProfile,
     loadReservationTripCount,
     logDisplayContext,
+    onDisplay,
     renderLoading,
     renderError,
     renderNoCard,
@@ -47,13 +49,14 @@ export function createClientRouter({
 }: ClientRouterOptions): {start: () => void; stop: () => void} {
     let revision = 0;
 
-    const display = (state: ResolvedDisplayState): void => {
+    const display = async (state: ResolvedDisplayState): Promise<void> => {
         logDisplayContext(state);
         if (state.view === 'cardholder') {
-            renderCardholder(state.segmentId, state.customer, state.accumulatedBalance);
-            return;
+            await renderCardholder(state.segmentId, state.customer, state.accumulatedBalance);
+        } else {
+            await renderNoCard(state.segmentId);
         }
-        renderNoCard(state.segmentId);
+        onDisplay?.(state);
     };
 
     const displayError = (error: unknown, failedRequest: FailedRequest): void => {
@@ -67,7 +70,7 @@ export function createClientRouter({
         const currentRevision = ++revision;
 
         if (!isLoggedIn(storedUser)) {
-            display(createGuestDisplayState());
+            await display(createGuestDisplayState());
             return;
         }
 
@@ -94,11 +97,11 @@ export function createClientRouter({
             }
             if (currentRevision !== revision) return;
 
-            display(createProspectDisplayState(reservationTripCount));
+            await display(createProspectDisplayState(reservationTripCount));
             return;
         }
 
-        display(createCardholderDisplayState(bonusProfile, cachedCustomer));
+        await display(createCardholderDisplayState(bonusProfile, cachedCustomer));
     };
 
     const handleStorageChange: StorageChangeListener = (key, newValue) => {

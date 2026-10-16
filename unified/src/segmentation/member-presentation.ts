@@ -4,18 +4,12 @@ const placement = (
     mobilePlacement: BlockPresentation['mobilePlacement'],
     background?: BlockPresentation['background'],
 ): BlockPresentation => ({mobilePlacement, background});
-const background = (mobileSrc: string, desktopSrc: string): NonNullable<BlockPresentation['background']> => ({
-    mobile: {src: mobileSrc},
-    desktop: {src: desktopSrc},
+const segmentBackground = (folder: string, name: string): NonNullable<BlockPresentation['background']> => ({
+    src: `${__V2_ASSETS_BASE__}/member-${folder}-${name}-desktop.png`,
 });
-const segmentBackground = (folder: string, name: string): NonNullable<BlockPresentation['background']> => background(
-    `${__V2_ASSETS_BASE__}/member-${folder}-${name}-mobile.png`,
-    `${__V2_ASSETS_BASE__}/member-${folder}-${name}-desktop.png`,
-);
-const introGreetingBackground = (): NonNullable<BlockPresentation['background']> => background(
-    `${__V2_ASSETS_BASE__}/intro-greeting-mobile.png`,
-    `${__V2_ASSETS_BASE__}/intro-greeting-desktop.png`,
-);
+const introGreetingBackground = (): NonNullable<BlockPresentation['background']> => ({
+    src: `${__V2_ASSETS_BASE__}/intro-greeting-desktop.png`,
+});
 const PRESENTATION: Record<SegmentId, Partial<Record<BlockId, BlockPresentation>>> = {
     inactive: {
         greeting: placement('featured', introGreetingBackground()),

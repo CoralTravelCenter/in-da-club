@@ -1,33 +1,15 @@
 @use 'abstracts/tokens' as tokens;
-@use 'patterns/block' as shared-block;
+@use 'patterns/block';
 @use '../abstracts/theme';
 
-@include shared-block.styles(
-  $namespace: 'in-da-club-member',
-  $breakpoint-desktop: tokens.$breakpoint-desktop,
-  $color-surface: tokens.$color-surface,
-  $color-text: tokens.$color-text,
-  $radius-card: tokens.$radius-card,
-  $space-md: tokens.$space-md,
-  $space-lg: tokens.$space-lg
-);
-
-.in-da-club-member-block__value,
-.in-da-club-member-block__badge {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  width: fit-content;
-  padding: 9px 12px;
-  color: tokens.$color-accent-orange;
-  background: rgba(210, 233, 251, 0.8);
-  border-radius: 16px;
+.in-da-club-member-block__value {
+  color: var(--in-da-club-member-value-color, tokens.$color-accent-orange);
+  background: var(--in-da-club-member-value-background, rgba(210, 233, 251, 0.8));
 }
 
-.in-da-club-member-block__quantity {
-  @media (min-width: tokens.$breakpoint-desktop) {
-    font-size: 48px;
-  }
+.in-da-club-member-block__badge {
+  color: tokens.$color-accent-orange;
+  background: var(--in-da-club-member-value-background, rgba(210, 233, 251, 0.8));
 }
 
 .in-da-club-member-block__description {
@@ -42,10 +24,24 @@
   width: fit-content;
 }
 
+.in-da-club-member-block[data-block-id='greeting'][data-has-background] {
+  background-position: right -24px bottom;
+
+  @media (min-width: tokens.$breakpoint-desktop) {
+    background-position: right bottom;
+  }
+}
+
 .in-da-club-member-block__badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  padding: 9px 12px;
   font-size: 38px;
   font-weight: 600;
   line-height: 1;
+  border-radius: 16px;
 
   @media (min-width: tokens.$breakpoint-desktop) {
     min-height: 66px;

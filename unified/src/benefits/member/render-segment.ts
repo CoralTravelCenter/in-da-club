@@ -1,4 +1,5 @@
 import type {SegmentConfig} from '@/segmentation/member.types';
+import {createSegmentPagination} from '@/benefits/shared/segment-pagination';
 import {renderBlock} from './render-block';
 
 const RIDE_COUNT: Record<SegmentConfig['id'], number> = {
@@ -40,6 +41,7 @@ export function renderSegment(config: SegmentConfig): HTMLElement {
         list.append(item);
     }
     content.append(list);
+    content.append(createSegmentPagination(list, 'in-da-club-member'));
     container.append(content);
     return container;
 }

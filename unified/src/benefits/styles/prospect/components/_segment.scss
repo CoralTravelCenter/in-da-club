@@ -1,5 +1,6 @@
 @use 'abstracts/mixins' as mixins;
 @use 'abstracts/tokens' as tokens;
+@use 'patterns/segment';
 
 .in-da-club-prospect-segment {
   min-width: 0;
@@ -19,52 +20,25 @@
 }
 
 .in-da-club-prospect-segment__content {
-  display: grid;
-  gap: tokens.$layout-gap;
-  min-width: 0;
-
   @media (min-width: tokens.$breakpoint-desktop) {
     display: block;
   }
 }
 
 .in-da-club-prospect-segment__featured {
-  min-height: 340px;
-  padding-inline: tokens.$space-md;
-
-  @media (min-width: tokens.$breakpoint-desktop) {
-    min-height: 0;
-    padding: 0;
-  }
+  min-height: 270px;
 }
 
 .in-da-club-prospect-segment__list {
-  list-style: none;
-  margin: 0;
-  padding-inline: 16px;
-  scroll-padding-inline: 16px;
-
   @include mixins.scroll-snap(
     $gap: tokens.$layout-gap,
     $item-selector: '> li',
-    $item-size: 90%,
+    $item-size: 80%,
     $hide-scrollbar: true
   );
 
   @media (min-width: tokens.$breakpoint-desktop) {
     display: none;
-  }
-}
-
-.in-da-club-prospect-segment__list--scroll-locked {
-  overflow: hidden;
-  overscroll-behavior: none;
-  touch-action: none;
-}
-
-.in-da-club-prospect-segment__item {
-  @media (min-width: tokens.$breakpoint-desktop) {
-    scroll-snap-align: none;
   }
 }
 
@@ -75,11 +49,10 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
-      'welcome-bonus club cashback'
-      'manager club private-sales'
-      'manager club private-sales'
-      'manager birthday-bonus private-sales';
-    grid-template-rows: repeat(4, auto);
+      'welcome-bonus club           cashback'
+      'manager       club           private-sales'
+      'manager       birthday-bonus private-sales';
+    grid-template-rows: repeat(3, minmax(160px, auto));
     align-items: stretch;
     gap: tokens.$layout-gap;
   }
@@ -103,29 +76,5 @@
   .in-da-club-prospect-segment__column,
   .in-da-club-prospect-segment__column-list {
     display: contents;
-  }
-
-  .in-da-club-prospect-segment__featured[data-block-id='club'] {
-    grid-area: club;
-  }
-
-  .in-da-club-prospect-segment__item[data-block-id='welcome-bonus'] {
-    grid-area: welcome-bonus;
-  }
-
-  .in-da-club-prospect-segment__item[data-block-id='manager'] {
-    grid-area: manager;
-  }
-
-  .in-da-club-prospect-segment__item[data-block-id='birthday-bonus'] {
-    grid-area: birthday-bonus;
-  }
-
-  .in-da-club-prospect-segment__item[data-block-id='cashback'] {
-    grid-area: cashback;
-  }
-
-  .in-da-club-prospect-segment__item[data-block-id='private-sales'] {
-    grid-area: private-sales;
   }
 }
