@@ -4,6 +4,8 @@ import {describe, expect, it, vi} from 'vitest';
 import type {BonusProfile} from '@/customer/bonus-profile';
 import type {CustomerContext, SegmentId} from '@/segmentation/member.types';
 import {createClientRouter, type ReactiveStorage} from './client-router';
+import {localStorage as reactiveStorage} from 'reactive-localstorage';
+import {getCachedCustomerContext} from '@/customer/customer-context';
 
 type ChangeListener = (key: string | null, newValue: string | null, oldValue: string | null) => void;
 
@@ -50,6 +52,42 @@ function bonusProfile(overrides: Partial<BonusProfile> = {}): BonusProfile {
 }
 
 describe('client routing', () => {
+    it('uses the current profile on startup, login and profile updates before native storage is written', async () => {
+        window.localStorage.setItem('user', JSON.stringify({isLoggedIn: true, name: 'Анна', surname: 'Иванова'}));
+        const renderCardholder = vi.fn();
+        const router = createClientRouter({
+            storage: reactiveStorage,
+            getCachedCustomer: (...args: Parameters<typeof getCachedCustomerContext>) => getCachedCustomerContext(...args).customer,
+            loadBonusProfile: vi.fn().mockResolvedValue(bonusProfile({bonusTripCount: 3})),
+            loadReservationTripCount: vi.fn(),
+            logDisplayContext: vi.fn(),
+            renderLoading: vi.fn(),
+            renderError: vi.fn(),
+            renderNoCard: vi.fn(),
+            renderCardholder,
+        });
+        try {
+            router.start();
+            await vi.waitFor(() => expect(renderCardholder).toHaveBeenLastCalledWith(
+                'three-plus', {displayName: 'Анна Иванова', cardLevel: 'Gold'}, 0,
+            ));
+
+            window.localStorage.setItem('user', JSON.stringify({isLoggedIn: false}));
+            window.localStorage.setItem('user', JSON.stringify({isLoggedIn: true, name: 'Елена', surname: 'Булатова'}));
+            await vi.waitFor(() => expect(renderCardholder).toHaveBeenLastCalledWith(
+                'three-plus', {displayName: 'Елена Булатова', cardLevel: 'Gold'}, 0,
+            ));
+
+            window.localStorage.setItem('user', JSON.stringify({isLoggedIn: true, name: 'Елена', surname: 'Петрова'}));
+            await vi.waitFor(() => expect(renderCardholder).toHaveBeenLastCalledWith(
+                'three-plus', {displayName: 'Елена Петрова', cardLevel: 'Gold'}, 0,
+            ));
+        } finally {
+            router.stop();
+            window.localStorage.removeItem('user');
+        }
+    });
+
     it('notifies about display only after the resolved block has rendered', async () => {
         const storage = new StorageStub(JSON.stringify({isLoggedIn: true}));
         let finishRender!: () => void;

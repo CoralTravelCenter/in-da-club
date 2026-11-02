@@ -11,12 +11,12 @@ function getDisplayName(profile: ReturnType<typeof getStoredProfile>): string {
         .join(' ') || content.common.fallbackDisplayName;
 }
 
-export function getCachedCustomerContext(): {
+export function getCachedCustomerContext(storedUser?: string | null): {
     customer: CustomerContext;
     hasDisplayName: boolean;
     shouldRequestBonusProfile: boolean;
 } {
-    const profile = getStoredProfile();
+    const profile = getStoredProfile(storedUser);
     const displayName = getDisplayName(profile);
 
     return {

@@ -74,6 +74,18 @@ describe('getCustomerContext', () => {
         });
     });
 
+    it.each([null, '', '{invalid', '[]'])(
+        'does not reuse a stored name when the supplied profile is %j', (storedUser) => {
+            window.localStorage.setItem('user', JSON.stringify({name: 'Старое имя', BonusLevel: '3'}));
+
+            expect(getCachedCustomerContext(storedUser)).toEqual({
+                customer: {displayName: 'Имя, фамилия', cardLevel: 'Silver'},
+                hasDisplayName: false,
+                shouldRequestBonusProfile: false,
+            });
+        },
+    );
+
     it('marks a missing cached name', () => {
         window.localStorage.setItem('user', JSON.stringify({BonusUserId: 'bonus-user'}));
 

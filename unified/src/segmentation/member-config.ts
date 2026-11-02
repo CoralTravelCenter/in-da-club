@@ -38,7 +38,7 @@ const privateSalesBlock: ContentBlockDefinition = {
 };
 
 function inactiveBlocks(customer: CustomerContext): ContentBlockDefinition[] {
-    const hasDisplayName = customer.displayName !== content.common.fallbackDisplayName;
+    const hasDisplayName = Boolean(customer.displayName.trim()) && customer.displayName !== content.common.fallbackDisplayName;
 
     return [
         {
@@ -53,12 +53,13 @@ function inactiveBlocks(customer: CustomerContext): ContentBlockDefinition[] {
     ];
 }
 function oneTripBlocks(customer: CustomerContext): ContentBlockDefinition[] {
+    const hasDisplayName = Boolean(customer.displayName.trim()) && customer.displayName !== content.common.fallbackDisplayName;
     return [
         {...birthdayBlock(), description: copy.birthdayBonusWithBreak},
         {
             id: 'greeting',
-            titleAccent: `${customer.displayName},`,
-            title: copy.joinedClub,
+            titleAccent: hasDisplayName ? `${customer.displayName},` : undefined,
+            title: hasDisplayName ? copy.joinedClub : copy.joinedClubFallback,
             description: customer.cardLevel === 'Platinum'
                 ? copy.allAvailablePrefix
                 : copy.privilegesReady,
@@ -79,6 +80,7 @@ function oneTripBlocks(customer: CustomerContext): ContentBlockDefinition[] {
     ];
 }
 function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentBlockDefinition[] {
+    const hasDisplayName = Boolean(customer.displayName.trim()) && customer.displayName !== content.common.fallbackDisplayName;
     if (!isThreePlus) {
         const cardLevel = customer.cardLevel === 'Silver' ? 'Gold' : customer.cardLevel;
 
@@ -86,8 +88,8 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
             {id: 'balance', description: copy.balance},
             {
                 id: 'greeting',
-                title: copy.congratulations,
-                titleAccent: `${customer.displayName}!`,
+                title: hasDisplayName ? copy.congratulations : copy.congratulationsFallback,
+                titleAccent: hasDisplayName ? `${customer.displayName}!` : undefined,
                 titleAccentAfter: true,
                 description: copy.reachedLevel,
                 descriptionStrong: cardLevel,
@@ -117,8 +119,8 @@ function activeBlocks(customer: CustomerContext, isThreePlus: boolean): ContentB
         {id: 'balance', description: copy.availableToSpend},
         {
             id: 'greeting',
-            titleAccent: `${customer.displayName},`,
-            title: copy.exceptionalClient,
+            titleAccent: hasDisplayName ? `${customer.displayName},` : undefined,
+            title: hasDisplayName ? copy.exceptionalClient : copy.exceptionalClientFallback,
             description: copy.allPrivileges,
             action: {label: copy.accountAction, href: content.member.links.account, target: '_blank'},
         },

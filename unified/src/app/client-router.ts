@@ -24,12 +24,12 @@ export interface ReactiveStorage {
 type StorageChangeListener = (key: string | null, newValue: string | null, oldValue: string | null) => void;
 interface ClientRouterOptions {
     storage: ReactiveStorage;
-    getCachedCustomer: () => CustomerContext;
+    getCachedCustomer: (storedUser: string | null) => CustomerContext;
     loadBonusProfile: () => Promise<BonusProfile | null>;
     loadReservationTripCount: () => Promise<number>;
     logDisplayContext: (context: DisplayState) => void;
     onDisplay?: (context: ResolvedDisplayState) => void;
-    renderLoading: () => void;
+    renderLoading: (customer: CustomerContext) => void;
     renderError: (retry: () => void) => void;
     renderNoCard: (segmentId: NoCardSegmentId) => void | Promise<void>;
     renderCardholder: (segmentId: SegmentId, customer: CustomerContext, accumulatedBalance: number | null) => void | Promise<void>;
@@ -74,8 +74,8 @@ export function createClientRouter({
             return;
         }
 
-        const cachedCustomer = getCachedCustomer();
-        renderLoading();
+        const cachedCustomer = getCachedCustomer(storedUser);
+        renderLoading(cachedCustomer);
         let bonusProfile: BonusProfile | null;
         try {
             bonusProfile = await loadBonusProfile();

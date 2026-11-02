@@ -42,7 +42,7 @@ describe('getSegmentConfig', () => {
             const config = getSegmentConfig(segmentId, {displayName: 'Анна', cardLevel: 'Platinum'});
 
             expect(config.blocks.find(({id}) => id === 'greeting')?.action).toEqual({
-                label: 'Войти в\u00a0личный кабинет',
+                label: 'Перейти в\u00a0личный кабинет',
                 href: '/account/',
                 target: '_blank',
             });

@@ -11,10 +11,10 @@ export interface UserProfile {
     [key: string]: unknown;
 }
 
-export function getStoredProfile(): UserProfile | null {
+export function getStoredProfile(value?: string | null): UserProfile | null {
     try {
-        const value = window.localStorage.getItem('user');
-        const profile: unknown = value ? JSON.parse(value) : null;
+        const storedValue = value === undefined ? window.localStorage.getItem('user') : value;
+        const profile: unknown = storedValue ? JSON.parse(storedValue) : null;
         return profile && typeof profile === 'object' && !Array.isArray(profile)
             ? profile as UserProfile
             : null;

@@ -41,15 +41,15 @@ mountWhenAvailable({
 
         const router = createClientRouter({
             storage: reactiveLocalStorage,
-            getCachedCustomer: () => getCachedCustomerContext().customer,
+            getCachedCustomer: (storedUser) => getCachedCustomerContext(storedUser).customer,
             loadBonusProfile: requestBonusProfileStrict,
             loadReservationTripCount: requestReservationTripCount,
             logDisplayContext: (context) => {
                 console.info('[in-da-club] display context', context);
             },
             onDisplay: mainBlockShowTracker.track,
-            renderLoading: () => {
-                renderLoadingState(content, getCachedCustomerContext().customer);
+            renderLoading: (customer) => {
+                renderLoadingState(content, customer);
             },
             renderError: (retry) => {
                 renderErrorState(content, retry);

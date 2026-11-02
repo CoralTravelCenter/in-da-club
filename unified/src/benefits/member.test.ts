@@ -2,6 +2,7 @@
 
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {renderMemberBenefits} from './member';
+import {content} from '@/content/content';
 
 describe('bootstrap', () => {
     beforeEach(() => {
@@ -9,6 +10,37 @@ describe('bootstrap', () => {
         vi.unstubAllGlobals();
         vi.stubGlobal('matchMedia', vi.fn(() => ({matches: false})));
     });
+
+    describe.each(['', '   ', content.common.fallbackDisplayName])('greetings without a name (%j)', (displayName) => {
+        it.each([
+            ['inactive', 'Скучаем по вам'],
+            ['one-trip', 'Теперь вы в клубе «Море возможностей»!'],
+            ['two-trips', 'Поздравляем!'],
+            ['three-plus', 'Вы — исключительный клиент для нас!'],
+        ] as const)('renders a neutral greeting for %s', async (segmentId, expectedTitle) => {
+            const container = document.createElement('div');
+            await renderMemberBenefits({container, segmentId, customerContext: {displayName, cardLevel: 'Platinum'}});
+            const title = container.querySelector('[data-block-id="greeting"] h3');
+            const text = [...(title?.childNodes ?? [])]
+                .map((node) => node.nodeName === 'BR' ? ' ' : node.textContent)
+                .join('').replace(/\s+/g, ' ').trim();
+
+            expect(text).toBe(expectedTitle);
+            expect(title?.querySelector('.in-da-club-member-block__title-accent')).toBeNull();
+            expect(title?.firstChild?.nodeName).not.toBe('BR');
+            expect(title?.lastChild?.nodeName).not.toBe('BR');
+        });
+    });
+
+    it.each(['inactive', 'one-trip', 'two-trips', 'three-plus'] as const)(
+        'preserves the available name in %s', async (segmentId) => {
+            for (const displayName of ['Анна Иванова', 'Анна', 'Иванова']) {
+                const container = document.createElement('div');
+                await renderMemberBenefits({container, segmentId, customerContext: {displayName, cardLevel: 'Platinum'}});
+                expect(container.querySelector('[data-block-id="greeting"] h3')?.textContent).toContain(displayName);
+            }
+        },
+    );
 
     it('uses the card level override without a BonusProfile request', async () => {
         const container = document.createElement('div');

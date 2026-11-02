@@ -33,6 +33,7 @@ export interface ContentConfig {
             | 'privateSalesTitle' | 'privateSalesDescription' | 'privateSalesDescriptionWithBreak'
             | 'privateSalesAction' | 'inactiveGreetingNamed' | 'inactiveGreetingFallback'
             | 'inactiveDescription' | 'chooseTour' | 'welcomeBonusValue' | 'welcomeBonusDescription'
+            | 'joinedClubFallback' | 'congratulationsFallback' | 'exceptionalClientFallback'
             | 'joinedClub' | 'allAvailablePrefix' | 'privilegesReady' | 'all' | 'privilegesSuffix'
             | 'travelMore' | 'travelMoreLevel' | 'balance' | 'congratulations' | 'reachedLevel'
             | 'travelOften' | 'keepLevel' | 'moreTravel' | 'openPrivileges' | 'availableToSpend'
