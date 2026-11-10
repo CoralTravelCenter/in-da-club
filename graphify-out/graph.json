@@ -6348,6 +6348,18 @@
     },
     {
       "source": "unified_src_card_activation_verification_flow_renderverification",
+      "target": "unified_src_card_activation_ui_verification_view_validateverificationform",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/card-activation/verification-flow.ts",
+      "source_location": "L104",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_card_activation_verification_flow_renderverification",
       "target": "unified_src_card_activation_ui_verification_view_readverificationcode",
       "relation": "calls",
       "_origin": "ast",
@@ -6355,7 +6367,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/verification-flow.ts",
-      "source_location": "L102",
+      "source_location": "L107",
       "weight": 1.0
     },
     {
@@ -6367,7 +6379,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/verification-flow.ts",
-      "source_location": "L111",
+      "source_location": "L116",
       "weight": 1.0
     },
     {
@@ -6379,7 +6391,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/verification-flow.ts",
-      "source_location": "L113",
+      "source_location": "L118",
       "weight": 1.0
     },
     {
@@ -6403,7 +6415,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/verification-flow.ts",
-      "source_location": "L72",
+      "source_location": "L77",
       "weight": 1.0
     },
     {
@@ -6415,7 +6427,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/verification-flow.ts",
-      "source_location": "L74",
+      "source_location": "L79",
       "weight": 1.0
     },
     {
@@ -6427,7 +6439,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/verification-flow.ts",
-      "source_location": "L77",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -6439,19 +6451,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/verification-flow.ts",
-      "source_location": "L90",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_card_activation_verification_flow_renderverification",
-      "target": "unified_src_card_activation_ui_verification_view_validateverificationform",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/card-activation/verification-flow.ts",
-      "source_location": "L99",
+      "source_location": "L95",
       "weight": 1.0
     },
     {
@@ -15582,5 +15582,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "420e9aee1a413bdf09451fef5d8b8cb2ff1d2afc"
+  "built_at_commit": "83f065869e00decd863020c99da8eb76b08da81b"
 }

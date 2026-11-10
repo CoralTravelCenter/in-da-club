@@ -69,6 +69,11 @@ export async function renderVerification(dialog: CoralPopupElement, data: Regist
     if (!stage) throw new Error(content.activation.errors.openVerification);
 
     await sendVerificationCode(data.mobilePhone);
+    const metrika = (window as Window & {ym?: (counterId: number, method: 'reachGoal', goal: string) => void}).ym;
+    if (typeof metrika === 'function') {
+        metrika(96_674_199, 'reachGoal', 'coral_bonus_card_new_sms');
+    }
+
     setStep(dialog, 1);
     dialog.setAttribute('aria-label', content.activation.dialog.verification);
     const form = createVerificationForm(data.mobilePhone);

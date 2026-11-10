@@ -112,7 +112,10 @@ describe('card activation business flow', () => {
         expect(document.querySelector('#in-da-club-activation')?.textContent).toContain('123 4567 8901');
     });
 
-    it('проходит регистрацию, подтверждение SMS и активацию карты', async () => {
+    it('проходит регистрацию, подтверждение SMS и активацию карты', async ({onTestFinished}) => {
+        const metrika = vi.fn();
+        vi.stubGlobal('ym', metrika);
+        onTestFinished(() => { vi.unstubAllGlobals(); });
         await requestCardActivation('TEST_PROMO');
         const dialog = document.querySelector<HTMLElement>('#in-da-club-activation')!;
         const registration = dialog.querySelector<HTMLFormElement>('form')!;
@@ -127,6 +130,7 @@ describe('card activation business flow', () => {
         }));
         expect(sendBonusAccountRegistration).toHaveBeenCalledWith('Москва', 42);
         expect(sendVerificationCode).toHaveBeenCalledWith('79990000000');
+        expect(metrika).toHaveBeenCalledExactlyOnceWith(96_674_199, 'reachGoal', 'coral_bonus_card_new_sms');
 
         const verification = dialog.querySelector<HTMLFormElement>('.in-da-club-activation__verify')!;
         verification.querySelectorAll<HTMLInputElement>('[data-code-digit]').forEach((input) => { input.value = '1'; });
