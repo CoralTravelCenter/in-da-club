@@ -4,6 +4,32 @@
   "graph": {},
   "nodes": [
     {
+      "id": "unified_src_card_activation_activation_operations_issuedbonusprofile",
+      "label": "IssuedBonusProfile",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "issuedbonusprofile",
+      "source_file": "unified/src/card-activation/activation-operations.ts",
+      "source_location": "L12"
+    },
+    {
+      "id": "unified_src_card_activation_model_registration_registrationdata",
+      "label": "RegistrationData",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "registrationdata",
+      "source_file": "unified/src/card-activation/model/registration.ts",
+      "source_location": "L5"
+    },
+    {
       "id": "unified_src_card_activation_ui_activation_view_coralpopupelement",
       "label": "CoralPopupElement",
       "_callable": true,
@@ -30,6 +56,19 @@
       "source_location": "L14"
     },
     {
+      "id": "unified_src_customer_profile_storage_userprofile",
+      "label": "UserProfile",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "userprofile",
+      "source_file": "unified/src/customer/profile-storage.ts",
+      "source_location": "L1"
+    },
+    {
       "id": "vite_config_base_viteconfigoptions",
       "label": "ViteConfigOptions",
       "_callable": true,
@@ -54,6 +93,71 @@
       "norm_label": "testpopup",
       "source_file": "unified/src/card-activation/activation-sequence.test.ts",
       "source_location": "L6"
+    },
+    {
+      "id": "unified_src_segmentation_member_types_blockid",
+      "label": "BlockId",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "member-config.ts",
+      "file_type": "code",
+      "norm_label": "blockid",
+      "source_file": "unified/src/segmentation/member.types.ts",
+      "source_location": "L6"
+    },
+    {
+      "id": "unified_src_segmentation_member_types_blockpresentation",
+      "label": "BlockPresentation",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "member-config.ts",
+      "file_type": "code",
+      "norm_label": "blockpresentation",
+      "source_file": "unified/src/segmentation/member.types.ts",
+      "source_location": "L9"
+    },
+    {
+      "id": "unified_src_analytics_main_block_show_goal",
+      "label": "Goal",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": "goal",
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L5"
+    },
+    {
+      "id": "unified_src_analytics_main_block_show_test_intersectionobserverstub",
+      "label": "IntersectionObserverStub",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": "intersectionobserverstub",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L62"
+    },
+    {
+      "id": "unified_src_analytics_main_block_show_yandexmetrika",
+      "label": "YandexMetrika",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": "yandexmetrika",
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L18"
     },
     {
       "id": "unified_src_app_client_router_clientrouteroptions",
@@ -105,7 +209,7 @@
       "file_type": "code",
       "norm_label": "changelistener",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L8"
+      "source_location": "L10"
     },
     {
       "id": "unified_src_app_client_router_test_storagestub",
@@ -118,7 +222,7 @@
       "file_type": "code",
       "norm_label": "storagestub",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L10"
+      "source_location": "L12"
     },
     {
       "id": "unified_src_app_display_state_cardholderdisplaystate",
@@ -251,32 +355,6 @@
       "source_location": "L3"
     },
     {
-      "id": "unified_src_segmentation_member_types_blockid",
-      "label": "BlockId",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "display-state.ts",
-      "file_type": "code",
-      "norm_label": "blockid",
-      "source_file": "unified/src/segmentation/member.types.ts",
-      "source_location": "L6"
-    },
-    {
-      "id": "unified_src_segmentation_member_types_blockpresentation",
-      "label": "BlockPresentation",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "display-state.ts",
-      "file_type": "code",
-      "norm_label": "blockpresentation",
-      "source_file": "unified/src/segmentation/member.types.ts",
-      "source_location": "L9"
-    },
-    {
       "id": "unified_src_segmentation_member_types_cardlevel",
       "label": "CardLevel",
       "_callable": true,
@@ -316,6 +394,32 @@
       "source_location": "L4"
     },
     {
+      "id": "unified_src_segmentation_prospect_types_segmentid",
+      "label": "SegmentId",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": "segmentid",
+      "source_file": "unified/src/segmentation/prospect.types.ts",
+      "source_location": "L10"
+    },
+    {
+      "id": "unified_src_app_dev_preview_devpreview",
+      "label": "DevPreview",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "member.ts",
+      "file_type": "code",
+      "norm_label": "devpreview",
+      "source_file": "unified/src/app/dev-preview.ts",
+      "source_location": "L18"
+    },
+    {
       "id": "unified_src_segmentation_member_types_segmentconfig",
       "label": "SegmentConfig",
       "_callable": true,
@@ -326,7 +430,7 @@
       "file_type": "code",
       "norm_label": "segmentconfig",
       "source_file": "unified/src/segmentation/member.types.ts",
-      "source_location": "L34"
+      "source_location": "L31"
     },
     {
       "id": "unified_src_shared_runtime_dom_lifecycle_cleanup",
@@ -366,19 +470,6 @@
       "norm_label": "consentdocument",
       "source_file": "unified/src/card-activation/model/consents.ts",
       "source_location": "L5"
-    },
-    {
-      "id": "unified_src_app_dev_preview_devpreview",
-      "label": "DevPreview",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "prospect.types.ts",
-      "file_type": "code",
-      "norm_label": "devpreview",
-      "source_file": "unified/src/app/dev-preview.ts",
-      "source_location": "L18"
     },
     {
       "id": "unified_src_benefits_prospect_bootstrapoptions",
@@ -482,7 +573,7 @@
       "file_type": "code",
       "norm_label": "contentblockconfig",
       "source_file": "unified/src/segmentation/member.types.ts",
-      "source_location": "L33"
+      "source_location": "L30"
     },
     {
       "id": "unified_src_segmentation_member_types_contentblockdefinition",
@@ -495,7 +586,7 @@
       "file_type": "code",
       "norm_label": "contentblockdefinition",
       "source_file": "unified/src/segmentation/member.types.ts",
-      "source_location": "L16"
+      "source_location": "L13"
     },
     {
       "id": "unified_src_segmentation_prospect_types_blockid",
@@ -534,7 +625,7 @@
       "file_type": "code",
       "norm_label": "contentblockbaseconfig",
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L29"
+      "source_location": "L26"
     },
     {
       "id": "unified_src_segmentation_prospect_types_contentblockconfig",
@@ -547,7 +638,7 @@
       "file_type": "code",
       "norm_label": "contentblockconfig",
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L57"
+      "source_location": "L54"
     },
     {
       "id": "unified_src_segmentation_prospect_types_contentblockdefinition",
@@ -560,7 +651,7 @@
       "file_type": "code",
       "norm_label": "contentblockdefinition",
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L56"
+      "source_location": "L53"
     },
     {
       "id": "unified_src_segmentation_prospect_types_contentblocktextconfig",
@@ -573,7 +664,7 @@
       "file_type": "code",
       "norm_label": "contentblocktextconfig",
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L45"
+      "source_location": "L42"
     },
     {
       "id": "unified_src_segmentation_prospect_types_segmentconfig",
@@ -586,7 +677,7 @@
       "file_type": "code",
       "norm_label": "segmentconfig",
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L59"
+      "source_location": "L56"
     },
     {
       "id": "unified_src_segmentation_prospect_types_segmentcontentconfig",
@@ -599,33 +690,7 @@
       "file_type": "code",
       "norm_label": "segmentcontentconfig",
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L65"
-    },
-    {
-      "id": "unified_src_segmentation_prospect_types_segmentid",
-      "label": "SegmentId",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "prospect.types.ts",
-      "file_type": "code",
-      "norm_label": "segmentid",
-      "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L10"
-    },
-    {
-      "id": "unified_src_card_activation_activation_operations_issuedbonusprofile",
-      "label": "IssuedBonusProfile",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "issuedbonusprofile",
-      "source_file": "unified/src/card-activation/activation-operations.ts",
-      "source_location": "L12"
+      "source_location": "L62"
     },
     {
       "id": "unified_src_card_activation_api_customer_api_apiresult",
@@ -732,32 +797,6 @@
       "source_location": "L31"
     },
     {
-      "id": "unified_src_card_activation_model_registration_registrationdata",
-      "label": "RegistrationData",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "registrationdata",
-      "source_file": "unified/src/card-activation/model/registration.ts",
-      "source_location": "L5"
-    },
-    {
-      "id": "unified_src_customer_profile_storage_userprofile",
-      "label": "UserProfile",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "userprofile",
-      "source_file": "unified/src/customer/profile-storage.ts",
-      "source_location": "L1"
-    },
-    {
       "id": "unified_src_card_activation_activation_operations_activatebonusaccount",
       "label": "activateBonusAccount()",
       "_callable": true,
@@ -806,6 +845,42 @@
       "source_location": "L18"
     },
     {
+      "id": "unified_src_card_activation_card_activation_openpopup",
+      "label": "openPopup()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "openpopup()",
+      "source_file": "unified/src/card-activation/card-activation.ts",
+      "source_location": "L16"
+    },
+    {
+      "id": "unified_src_card_activation_card_activation_rememberfirststepheight",
+      "label": "rememberFirstStepHeight()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "rememberfirststepheight()",
+      "source_file": "unified/src/card-activation/card-activation.ts",
+      "source_location": "L21"
+    },
+    {
+      "id": "unified_src_card_activation_card_activation_requestcardactivation",
+      "label": "requestCardActivation()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "requestcardactivation()",
+      "source_file": "unified/src/card-activation/card-activation.ts",
+      "source_location": "L51"
+    },
+    {
       "id": "unified_src_card_activation_card_activation_showexistingcard",
       "label": "showExistingCard()",
       "_callable": true,
@@ -816,6 +891,18 @@
       "norm_label": "showexistingcard()",
       "source_file": "unified/src/card-activation/card-activation.ts",
       "source_location": "L28"
+    },
+    {
+      "id": "unified_src_card_activation_login_wait_waitforlogin",
+      "label": "waitForLogin()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "waitforlogin()",
+      "source_file": "unified/src/card-activation/login-wait.ts",
+      "source_location": "L3"
     },
     {
       "id": "unified_src_card_activation_registration_flow_renderregistration",
@@ -863,7 +950,7 @@
       "file_type": "code",
       "norm_label": "showexistingcardresult()",
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L54"
+      "source_location": "L58"
     },
     {
       "id": "unified_src_card_activation_ui_activation_result_view_showrefreshrequiredresult",
@@ -875,7 +962,7 @@
       "file_type": "code",
       "norm_label": "showrefreshrequiredresult()",
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L45"
+      "source_location": "L49"
     },
     {
       "id": "unified_src_card_activation_ui_activation_result_view_showsuccessresult",
@@ -996,6 +1083,18 @@
       "norm_label": "renderverification()",
       "source_file": "unified/src/card-activation/verification-flow.ts",
       "source_location": "L67"
+    },
+    {
+      "id": "unified_src_customer_profile_storage_getstoredprofile",
+      "label": "getStoredProfile()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "getstoredprofile()",
+      "source_file": "unified/src/customer/profile-storage.ts",
+      "source_location": "L14"
     },
     {
       "id": "unified_src_shared_runtime_text_texttosafehtml",
@@ -1163,7 +1262,7 @@
       "file_type": "code",
       "norm_label": "activeblocks()",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L81"
+      "source_location": "L82"
     },
     {
       "id": "unified_src_segmentation_member_config_birthdayblock",
@@ -1223,7 +1322,7 @@
       "file_type": "code",
       "norm_label": "getsegmentconfig()",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L135"
+      "source_location": "L137"
     },
     {
       "id": "unified_src_segmentation_member_config_inactiveblocks",
@@ -1259,7 +1358,91 @@
       "file_type": "code",
       "norm_label": "getmemberblockpresentation()",
       "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L55"
+      "source_location": "L49"
+    },
+    {
+      "id": "unified_src_segmentation_member_presentation_introgreetingbackground",
+      "label": "introGreetingBackground()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "member-config.ts",
+      "file_type": "code",
+      "norm_label": "introgreetingbackground()",
+      "source_file": "unified/src/segmentation/member-presentation.ts",
+      "source_location": "L10"
+    },
+    {
+      "id": "unified_src_segmentation_member_presentation_placement",
+      "label": "placement()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "member-config.ts",
+      "file_type": "code",
+      "norm_label": "placement()",
+      "source_file": "unified/src/segmentation/member-presentation.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "unified_src_segmentation_member_presentation_segmentbackground",
+      "label": "segmentBackground()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "member-config.ts",
+      "file_type": "code",
+      "norm_label": "segmentbackground()",
+      "source_file": "unified/src/segmentation/member-presentation.ts",
+      "source_location": "L7"
+    },
+    {
+      "id": "unified_src_analytics_main_block_show_createmainblockshowtracker",
+      "label": "createMainBlockShowTracker()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": "createmainblockshowtracker()",
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L48"
+    },
+    {
+      "id": "unified_src_analytics_main_block_show_getmainblockshowgoal",
+      "label": "getMainBlockShowGoal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": "getmainblockshowgoal()",
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L20"
+    },
+    {
+      "id": "unified_src_analytics_main_block_show_test_bonusprofile",
+      "label": "bonusProfile()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": "bonusprofile()",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L9"
+    },
+    {
+      "id": "unified_src_analytics_main_block_show_test_intersectionobserverstub_constructor",
+      "label": ".constructor()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": ".constructor()",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L63"
     },
     {
       "id": "unified_src_app_client_router_createclientrouter",
@@ -1271,7 +1454,7 @@
       "file_type": "code",
       "norm_label": "createclientrouter()",
       "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L37"
+      "source_location": "L38"
     },
     {
       "id": "unified_src_app_client_router_reactivestorage_getitem",
@@ -1319,7 +1502,7 @@
       "file_type": "code",
       "norm_label": "bonusprofile()",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L36"
+      "source_location": "L38"
     },
     {
       "id": "unified_src_app_client_router_test_storagestub_constructor",
@@ -1331,7 +1514,7 @@
       "file_type": "code",
       "norm_label": ".constructor()",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L13"
+      "source_location": "L15"
     },
     {
       "id": "unified_src_app_client_router_test_storagestub_getitem",
@@ -1343,7 +1526,7 @@
       "file_type": "code",
       "norm_label": ".getitem()",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L15"
+      "source_location": "L17"
     },
     {
       "id": "unified_src_app_client_router_test_storagestub_off",
@@ -1355,7 +1538,7 @@
       "file_type": "code",
       "norm_label": ".off()",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L23"
+      "source_location": "L25"
     },
     {
       "id": "unified_src_app_client_router_test_storagestub_on",
@@ -1367,7 +1550,7 @@
       "file_type": "code",
       "norm_label": ".on()",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L19"
+      "source_location": "L21"
     },
     {
       "id": "unified_src_app_client_router_test_storagestub_setuser",
@@ -1379,7 +1562,7 @@
       "file_type": "code",
       "norm_label": ".setuser()",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L27"
+      "source_location": "L29"
     },
     {
       "id": "unified_src_app_display_state_createcardholderdisplaystate",
@@ -1490,52 +1673,52 @@
       "source_location": "L60"
     },
     {
-      "id": "unified_src_segmentation_member_presentation_background",
-      "label": "background()",
+      "id": "unified_src_customer_bonus_profile_asnumber",
+      "label": "asNumber()",
       "_callable": true,
       "_origin": "ast",
       "community": 21,
       "community_name": "display-state.ts",
       "file_type": "code",
-      "norm_label": "background()",
-      "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L7"
+      "norm_label": "asnumber()",
+      "source_file": "unified/src/customer/bonus-profile.ts",
+      "source_location": "L19"
     },
     {
-      "id": "unified_src_segmentation_member_presentation_introgreetingbackground",
-      "label": "introGreetingBackground()",
+      "id": "unified_src_customer_bonus_profile_asstring",
+      "label": "asString()",
       "_callable": true,
       "_origin": "ast",
       "community": 21,
       "community_name": "display-state.ts",
       "file_type": "code",
-      "norm_label": "introgreetingbackground()",
-      "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L15"
+      "norm_label": "asstring()",
+      "source_file": "unified/src/customer/bonus-profile.ts",
+      "source_location": "L28"
     },
     {
-      "id": "unified_src_segmentation_member_presentation_placement",
-      "label": "placement()",
+      "id": "unified_src_customer_bonus_profile_normalizebonusprofile",
+      "label": "normalizeBonusProfile()",
       "_callable": true,
       "_origin": "ast",
       "community": 21,
       "community_name": "display-state.ts",
       "file_type": "code",
-      "norm_label": "placement()",
-      "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L3"
+      "norm_label": "normalizebonusprofile()",
+      "source_file": "unified/src/customer/bonus-profile.ts",
+      "source_location": "L40"
     },
     {
-      "id": "unified_src_segmentation_member_presentation_segmentbackground",
-      "label": "segmentBackground()",
+      "id": "unified_src_app_dev_preview_getdevpreview",
+      "label": "getDevPreview()",
       "_callable": true,
       "_origin": "ast",
-      "community": 21,
-      "community_name": "display-state.ts",
+      "community": 22,
+      "community_name": "member.ts",
       "file_type": "code",
-      "norm_label": "segmentbackground()",
-      "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L11"
+      "norm_label": "getdevpreview()",
+      "source_file": "unified/src/app/dev-preview.ts",
+      "source_location": "L26"
     },
     {
       "id": "unified_src_app_render_state_rendererrorstate",
@@ -1583,7 +1766,7 @@
       "file_type": "code",
       "norm_label": "rendersegment()",
       "source_file": "unified/src/benefits/member/render-segment.ts",
-      "source_location": "L11"
+      "source_location": "L12"
     },
     {
       "id": "unified_src_benefits_member_rendermemberbenefits",
@@ -1634,40 +1817,16 @@
       "source_location": "L22"
     },
     {
-      "id": "unified_src_customer_bonus_profile_asnumber",
-      "label": "asNumber()",
+      "id": "unified_src_benefits_shared_segment_pagination_createsegmentpagination",
+      "label": "createSegmentPagination()",
       "_callable": true,
       "_origin": "ast",
       "community": 22,
       "community_name": "member.ts",
       "file_type": "code",
-      "norm_label": "asnumber()",
-      "source_file": "unified/src/customer/bonus-profile.ts",
-      "source_location": "L19"
-    },
-    {
-      "id": "unified_src_customer_bonus_profile_asstring",
-      "label": "asString()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "member.ts",
-      "file_type": "code",
-      "norm_label": "asstring()",
-      "source_file": "unified/src/customer/bonus-profile.ts",
-      "source_location": "L28"
-    },
-    {
-      "id": "unified_src_customer_bonus_profile_normalizebonusprofile",
-      "label": "normalizeBonusProfile()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "member.ts",
-      "file_type": "code",
-      "norm_label": "normalizebonusprofile()",
-      "source_file": "unified/src/customer/bonus-profile.ts",
-      "source_location": "L40"
+      "norm_label": "createsegmentpagination()",
+      "source_file": "unified/src/benefits/shared/segment-pagination.ts",
+      "source_location": "L1"
     },
     {
       "id": "unified_src_customer_bonus_profile_normalizecardlevel",
@@ -1886,18 +2045,6 @@
       "source_location": "L29"
     },
     {
-      "id": "unified_src_app_dev_preview_getdevpreview",
-      "label": "getDevPreview()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "prospect.types.ts",
-      "file_type": "code",
-      "norm_label": "getdevpreview()",
-      "source_file": "unified/src/app/dev-preview.ts",
-      "source_location": "L26"
-    },
-    {
       "id": "unified_src_benefits_member_render_block_createskeleton",
       "label": "createSkeleton()",
       "_callable": true,
@@ -1907,7 +2054,7 @@
       "file_type": "code",
       "norm_label": "createskeleton()",
       "source_file": "unified/src/benefits/member/render-block.ts",
-      "source_location": "L6"
+      "source_location": "L7"
     },
     {
       "id": "unified_src_benefits_member_render_block_renderblock",
@@ -1919,7 +2066,7 @@
       "file_type": "code",
       "norm_label": "renderblock()",
       "source_file": "unified/src/benefits/member/render-block.ts",
-      "source_location": "L13"
+      "source_location": "L14"
     },
     {
       "id": "unified_src_benefits_prospect_render_block_appendaction",
@@ -2027,7 +2174,7 @@
       "file_type": "code",
       "norm_label": "applyblockbackground()",
       "source_file": "unified/src/benefits/shared/block-background.ts",
-      "source_location": "L6"
+      "source_location": "L5"
     },
     {
       "id": "unified_src_benefits_shared_block_tooltip_createblocktooltip",
@@ -2111,7 +2258,7 @@
       "file_type": "code",
       "norm_label": "introbackground()",
       "source_file": "unified/src/segmentation/prospect-presentation.ts",
-      "source_location": "L19"
+      "source_location": "L18"
     },
     {
       "id": "unified_src_segmentation_prospect_presentation_list",
@@ -2330,42 +2477,6 @@
       "source_location": "L129"
     },
     {
-      "id": "unified_src_card_activation_card_activation_openpopup",
-      "label": "openPopup()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "openpopup()",
-      "source_file": "unified/src/card-activation/card-activation.ts",
-      "source_location": "L16"
-    },
-    {
-      "id": "unified_src_card_activation_card_activation_rememberfirststepheight",
-      "label": "rememberFirstStepHeight()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "rememberfirststepheight()",
-      "source_file": "unified/src/card-activation/card-activation.ts",
-      "source_location": "L21"
-    },
-    {
-      "id": "unified_src_card_activation_card_activation_requestcardactivation",
-      "label": "requestCardActivation()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "requestcardactivation()",
-      "source_file": "unified/src/card-activation/card-activation.ts",
-      "source_location": "L51"
-    },
-    {
       "id": "unified_src_card_activation_card_activation_test_fillrequiredfields",
       "label": "fillRequiredFields()",
       "_callable": true,
@@ -2412,42 +2523,6 @@
       "norm_label": ".show()",
       "source_file": "unified/src/card-activation/card-activation.test.ts",
       "source_location": "L32"
-    },
-    {
-      "id": "unified_src_card_activation_login_wait_waitforlogin",
-      "label": "waitForLogin()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "waitforlogin()",
-      "source_file": "unified/src/card-activation/login-wait.ts",
-      "source_location": "L3"
-    },
-    {
-      "id": "unified_src_card_activation_model_registration_normalizephone",
-      "label": "normalizePhone()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "normalizephone()",
-      "source_file": "unified/src/card-activation/model/registration.ts",
-      "source_location": "L31"
-    },
-    {
-      "id": "unified_src_customer_profile_storage_getstoredprofile",
-      "label": "getStoredProfile()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "getstoredprofile()",
-      "source_file": "unified/src/customer/profile-storage.ts",
-      "source_location": "L14"
     },
     {
       "id": "unified_src_customer_profile_storage_setstoredprofile",
@@ -2520,6 +2595,18 @@
       "norm_label": "isvalidphone()",
       "source_file": "unified/src/card-activation/model/registration.ts",
       "source_location": "L26"
+    },
+    {
+      "id": "unified_src_card_activation_model_registration_normalizephone",
+      "label": "normalizePhone()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "registration-view.ts",
+      "file_type": "code",
+      "norm_label": "normalizephone()",
+      "source_file": "unified/src/card-activation/model/registration.ts",
+      "source_location": "L31"
     },
     {
       "id": "unified_src_card_activation_model_registration_parsebirthdate",
@@ -2642,6 +2729,39 @@
       "source_location": "L41"
     },
     {
+      "id": "unified_src_card_activation_activation_operations",
+      "label": "activation-operations.ts",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "activation-operations.ts",
+      "source_file": "unified/src/card-activation/activation-operations.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "unified_src_card_activation_card_activation",
+      "label": "card-activation.ts",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "card-activation.ts",
+      "source_file": "unified/src/card-activation/card-activation.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "unified_src_card_activation_login_wait",
+      "label": "login-wait.ts",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "login-wait.ts",
+      "source_file": "unified/src/card-activation/login-wait.ts",
+      "source_location": "L1"
+    },
+    {
       "id": "unified_src_card_activation_registration_flow",
       "label": "registration-flow.ts",
       "_origin": "ast",
@@ -2728,6 +2848,39 @@
       "norm_label": "content",
       "source_file": "unified/src/content/content.ts",
       "source_location": "L4"
+    },
+    {
+      "id": "unified_src_customer_profile_storage",
+      "label": "profile-storage.ts",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "profile-storage.ts",
+      "source_file": "unified/src/customer/profile-storage.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "unified_src_shared_runtime_text",
+      "label": "text.ts",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "text.ts",
+      "source_file": "unified/src/shared/runtime/text.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "unified_src_shared_runtime_text_test",
+      "label": "text.test.ts",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "verification-flow.ts",
+      "file_type": "code",
+      "norm_label": "text.test.ts",
+      "source_file": "unified/src/shared/runtime/text.test.ts",
+      "source_location": "L1"
     },
     {
       "id": "unified_src_shared_runtime_typography",
@@ -2894,7 +3047,7 @@
       "node_kind": "heading",
       "norm_label": "dev-preview",
       "source_file": "README.md",
-      "source_location": "L84"
+      "source_location": "L83"
     },
     {
       "id": "readme_in_da_club",
@@ -2918,7 +3071,7 @@
       "node_kind": "heading",
       "norm_label": "production",
       "source_file": "README.md",
-      "source_location": "L108"
+      "source_location": "L107"
     },
     {
       "id": "readme_\u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430",
@@ -2942,7 +3095,7 @@
       "node_kind": "heading",
       "norm_label": "\u043a\u043e\u043c\u0430\u043d\u0434\u044b",
       "source_file": "README.md",
-      "source_location": "L72"
+      "source_location": "L71"
     },
     {
       "id": "readme_\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430_\u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0439",
@@ -2954,7 +3107,7 @@
       "node_kind": "heading",
       "norm_label": "\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0438",
       "source_file": "README.md",
-      "source_location": "L120"
+      "source_location": "L119"
     },
     {
       "id": "readme_\u0441\u0442\u0438\u043b\u0438",
@@ -2966,7 +3119,7 @@
       "node_kind": "heading",
       "norm_label": "\u0441\u0442\u0438\u043b\u0438",
       "source_file": "README.md",
-      "source_location": "L53"
+      "source_location": "L52"
     },
     {
       "id": "readme_\u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f_\u0438_\u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0430",
@@ -3113,6 +3266,28 @@
       "source_location": "L1"
     },
     {
+      "id": "unified_src_segmentation_member_presentation",
+      "label": "member-presentation.ts",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "member-config.ts",
+      "file_type": "code",
+      "norm_label": "member-presentation.ts",
+      "source_file": "unified/src/segmentation/member-presentation.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "unified_src_segmentation_member_presentation_presentation",
+      "label": "PRESENTATION",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "member-config.ts",
+      "file_type": "code",
+      "norm_label": "presentation",
+      "source_file": "unified/src/segmentation/member-presentation.ts",
+      "source_location": "L13"
+    },
+    {
       "id": "unified_src_vite_env_d",
       "label": "src/vite-env.d.ts",
       "_origin": "ast",
@@ -3121,6 +3296,28 @@
       "file_type": "code",
       "norm_label": "src/vite-env.d.ts",
       "source_file": "unified/src/vite-env.d.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "unified_src_analytics_main_block_show",
+      "label": "main-block-show.ts",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": "main-block-show.ts",
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "unified_src_analytics_main_block_show_test",
+      "label": "main-block-show.test.ts",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "display-state.ts",
+      "file_type": "code",
+      "norm_label": "main-block-show.test.ts",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
       "source_location": "L1"
     },
     {
@@ -3154,7 +3351,7 @@
       "file_type": "code",
       "norm_label": "cachedcustomer",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L34"
+      "source_location": "L36"
     },
     {
       "id": "unified_src_app_display_state",
@@ -3190,26 +3387,15 @@
       "source_location": "L14"
     },
     {
-      "id": "unified_src_segmentation_member_presentation",
-      "label": "member-presentation.ts",
+      "id": "unified_src_customer_bonus_profile",
+      "label": "bonus-profile.ts",
       "_origin": "ast",
       "community": 21,
       "community_name": "display-state.ts",
       "file_type": "code",
-      "norm_label": "member-presentation.ts",
-      "source_file": "unified/src/segmentation/member-presentation.ts",
+      "norm_label": "bonus-profile.ts",
+      "source_file": "unified/src/customer/bonus-profile.ts",
       "source_location": "L1"
-    },
-    {
-      "id": "unified_src_segmentation_member_presentation_presentation",
-      "label": "PRESENTATION",
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "display-state.ts",
-      "file_type": "code",
-      "norm_label": "presentation",
-      "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L19"
     },
     {
       "id": "unified_src_segmentation_member_types",
@@ -3234,15 +3420,37 @@
       "source_location": "L3"
     },
     {
-      "id": "unified_src_segmentation_prospect_types_segment_ids",
-      "label": "SEGMENT_IDS",
+      "id": "unified_src_app_dev_preview",
+      "label": "dev-preview.ts",
       "_origin": "ast",
-      "community": 21,
-      "community_name": "display-state.ts",
+      "community": 22,
+      "community_name": "member.ts",
       "file_type": "code",
-      "norm_label": "segment_ids",
-      "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L3"
+      "norm_label": "dev-preview.ts",
+      "source_file": "unified/src/app/dev-preview.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "unified_src_app_dev_preview_member_segments",
+      "label": "MEMBER_SEGMENTS",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "member.ts",
+      "file_type": "code",
+      "norm_label": "member_segments",
+      "source_file": "unified/src/app/dev-preview.ts",
+      "source_location": "L11"
+    },
+    {
+      "id": "unified_src_app_dev_preview_prospect_segments",
+      "label": "PROSPECT_SEGMENTS",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "member.ts",
+      "file_type": "code",
+      "norm_label": "prospect_segments",
+      "source_file": "unified/src/app/dev-preview.ts",
+      "source_location": "L4"
     },
     {
       "id": "unified_src_app_main",
@@ -3319,7 +3527,7 @@
       "file_type": "code",
       "norm_label": "ride_count",
       "source_file": "unified/src/benefits/member/render-segment.ts",
-      "source_location": "L4"
+      "source_location": "L5"
     },
     {
       "id": "unified_src_benefits_member_test",
@@ -3333,14 +3541,14 @@
       "source_location": "L1"
     },
     {
-      "id": "unified_src_customer_bonus_profile",
-      "label": "bonus-profile.ts",
+      "id": "unified_src_benefits_shared_segment_pagination",
+      "label": "segment-pagination.ts",
       "_origin": "ast",
       "community": 22,
       "community_name": "member.ts",
       "file_type": "code",
-      "norm_label": "bonus-profile.ts",
-      "source_file": "unified/src/customer/bonus-profile.ts",
+      "norm_label": "segment-pagination.ts",
+      "source_file": "unified/src/benefits/shared/segment-pagination.ts",
       "source_location": "L1"
     },
     {
@@ -3498,39 +3706,6 @@
       "source_location": "L5"
     },
     {
-      "id": "unified_src_app_dev_preview",
-      "label": "dev-preview.ts",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "prospect.types.ts",
-      "file_type": "code",
-      "norm_label": "dev-preview.ts",
-      "source_file": "unified/src/app/dev-preview.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "unified_src_app_dev_preview_member_segments",
-      "label": "MEMBER_SEGMENTS",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "prospect.types.ts",
-      "file_type": "code",
-      "norm_label": "member_segments",
-      "source_file": "unified/src/app/dev-preview.ts",
-      "source_location": "L11"
-    },
-    {
-      "id": "unified_src_app_dev_preview_prospect_segments",
-      "label": "PROSPECT_SEGMENTS",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "prospect.types.ts",
-      "file_type": "code",
-      "norm_label": "prospect_segments",
-      "source_file": "unified/src/app/dev-preview.ts",
-      "source_location": "L4"
-    },
-    {
       "id": "unified_src_benefits_member_render_block",
       "label": "member/render-block.ts",
       "_origin": "ast",
@@ -3572,6 +3747,17 @@
       "file_type": "code",
       "norm_label": "prospect/render-segment.ts",
       "source_file": "unified/src/benefits/prospect/render-segment.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "unified_src_benefits_prospect_render_segment_test",
+      "label": "render-segment.test.ts",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "prospect.types.ts",
+      "file_type": "code",
+      "norm_label": "render-segment.test.ts",
+      "source_file": "unified/src/benefits/prospect/render-segment.test.ts",
       "source_location": "L1"
     },
     {
@@ -3671,7 +3857,7 @@
       "file_type": "code",
       "norm_label": "prospect_block_presentation",
       "source_file": "unified/src/segmentation/prospect-presentation.ts",
-      "source_location": "L24"
+      "source_location": "L22"
     },
     {
       "id": "unified_src_segmentation_prospect_types",
@@ -3685,25 +3871,36 @@
       "source_location": "L1"
     },
     {
-      "id": "unified_src_shared_runtime_text",
-      "label": "text.ts",
+      "id": "unified_src_segmentation_prospect_types_segment_ids",
+      "label": "SEGMENT_IDS",
       "_origin": "ast",
       "community": 3,
       "community_name": "prospect.types.ts",
       "file_type": "code",
-      "norm_label": "text.ts",
-      "source_file": "unified/src/shared/runtime/text.ts",
+      "norm_label": "segment_ids",
+      "source_file": "unified/src/segmentation/prospect.types.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "unified_src_shared_runtime_media",
+      "label": "media.ts",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "prospect.types.ts",
+      "file_type": "code",
+      "norm_label": "media.ts",
+      "source_file": "unified/src/shared/runtime/media.ts",
       "source_location": "L1"
     },
     {
-      "id": "unified_src_shared_runtime_text_test",
-      "label": "text.test.ts",
+      "id": "unified_src_shared_runtime_media_desktop_media_query",
+      "label": "DESKTOP_MEDIA_QUERY",
       "_origin": "ast",
       "community": 3,
       "community_name": "prospect.types.ts",
       "file_type": "code",
-      "norm_label": "text.test.ts",
-      "source_file": "unified/src/shared/runtime/text.test.ts",
+      "norm_label": "desktop_media_query",
+      "source_file": "unified/src/shared/runtime/media.ts",
       "source_location": "L1"
     },
     {
@@ -3916,17 +4113,6 @@
       "source_location": "L6"
     },
     {
-      "id": "unified_src_card_activation_activation_operations",
-      "label": "activation-operations.ts",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "activation-operations.ts",
-      "source_file": "unified/src/card-activation/activation-operations.ts",
-      "source_location": "L1"
-    },
-    {
       "id": "unified_src_card_activation_api_customer_api",
       "label": "customer-api.ts",
       "_origin": "ast",
@@ -4004,17 +4190,6 @@
       "source_location": "L1"
     },
     {
-      "id": "unified_src_card_activation_card_activation",
-      "label": "card-activation.ts",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "card-activation.ts",
-      "source_file": "unified/src/card-activation/card-activation.ts",
-      "source_location": "L1"
-    },
-    {
       "id": "unified_src_card_activation_card_activation_test",
       "label": "card-activation.test.ts",
       "_origin": "ast",
@@ -4035,28 +4210,6 @@
       "norm_label": "profile",
       "source_file": "unified/src/card-activation/card-activation.test.ts",
       "source_location": "L38"
-    },
-    {
-      "id": "unified_src_card_activation_login_wait",
-      "label": "login-wait.ts",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "login-wait.ts",
-      "source_file": "unified/src/card-activation/login-wait.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "unified_src_customer_profile_storage",
-      "label": "profile-storage.ts",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "customer-api.ts",
-      "file_type": "code",
-      "norm_label": "profile-storage.ts",
-      "source_file": "unified/src/customer/profile-storage.ts",
-      "source_location": "L1"
     },
     {
       "id": "unified_src_card_activation_model_cities",
@@ -4610,99 +4763,15 @@
   ],
   "links": [
     {
-      "source": "unified_src_app_client_router_createclientrouter",
-      "target": "unified_src_app_display_state_createcardholderdisplaystate",
+      "source": "unified_src_analytics_main_block_show_createmainblockshowtracker",
+      "target": "unified_src_analytics_main_block_show_getmainblockshowgoal",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
-      "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L101",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_createclientrouter",
-      "target": "unified_src_app_client_router_reactivestorage_on",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L111",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_createclientrouter",
-      "target": "unified_src_app_client_router_reactivestorage_off",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L116",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_createclientrouter",
-      "target": "unified_src_app_display_state_createerrordisplaystate",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L60",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_createclientrouter",
-      "target": "unified_src_app_client_router_reactivestorage_getitem",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L62",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_createclientrouter",
-      "target": "unified_src_app_display_state_isloggedin",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L69",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_createclientrouter",
-      "target": "unified_src_app_display_state_createguestdisplaystate",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L70",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_createclientrouter",
-      "target": "unified_src_app_display_state_hasbonuscard",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L86",
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L74",
       "weight": 1.0
     },
     {
@@ -4714,7 +4783,103 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L97",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_createclientrouter",
+      "target": "unified_src_app_display_state_createcardholderdisplaystate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/app/client-router.ts",
+      "source_location": "L104",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_createclientrouter",
+      "target": "unified_src_app_client_router_reactivestorage_on",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/app/client-router.ts",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_createclientrouter",
+      "target": "unified_src_app_client_router_reactivestorage_off",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/app/client-router.ts",
+      "source_location": "L119",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_createclientrouter",
+      "target": "unified_src_app_display_state_createerrordisplaystate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/app/client-router.ts",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_createclientrouter",
+      "target": "unified_src_app_client_router_reactivestorage_getitem",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/app/client-router.ts",
+      "source_location": "L65",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_createclientrouter",
+      "target": "unified_src_app_display_state_isloggedin",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/app/client-router.ts",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_createclientrouter",
+      "target": "unified_src_app_display_state_createguestdisplaystate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/app/client-router.ts",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_createclientrouter",
+      "target": "unified_src_app_display_state_hasbonuscard",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/app/client-router.ts",
+      "source_location": "L89",
       "weight": 1.0
     },
     {
@@ -4846,7 +5011,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/benefits/member/render-block.ts",
-      "source_location": "L138",
+      "source_location": "L148",
       "weight": 1.0
     },
     {
@@ -4858,7 +5023,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/benefits/member/render-block.ts",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -4870,7 +5035,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/benefits/member/render-block.ts",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -4882,7 +5047,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/benefits/member/render-block.ts",
-      "source_location": "L58",
+      "source_location": "L59",
       "weight": 1.0
     },
     {
@@ -4894,7 +5059,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/benefits/member/render-segment.ts",
-      "source_location": "L31",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_member_render_segment_rendersegment",
+      "target": "unified_src_benefits_shared_segment_pagination_createsegmentpagination",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/benefits/member/render-segment.ts",
+      "source_location": "L44",
       "weight": 1.0
     },
     {
@@ -5098,7 +5275,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/benefits/prospect/render-segment.ts",
-      "source_location": "L54",
+      "source_location": "L55",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_prospect_render_segment_rendersegment",
+      "target": "unified_src_benefits_shared_segment_pagination_createsegmentpagination",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/benefits/prospect/render-segment.ts",
+      "source_location": "L89",
       "weight": 1.0
     },
     {
@@ -5110,7 +5299,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/benefits/prospect/render-segment.ts",
-      "source_location": "L95",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -5842,7 +6031,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L57",
+      "source_location": "L61",
       "weight": 1.0
     },
     {
@@ -5854,7 +6043,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L58",
+      "source_location": "L62",
       "weight": 1.0
     },
     {
@@ -5866,7 +6055,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L65",
+      "source_location": "L69",
       "weight": 1.0
     },
     {
@@ -5878,7 +6067,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L48",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -5890,7 +6079,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L49",
+      "source_location": "L53",
       "weight": 1.0
     },
     {
@@ -5926,7 +6115,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L42",
+      "source_location": "L46",
       "weight": 1.0
     },
     {
@@ -6399,31 +6588,31 @@
     },
     {
       "source": "unified_src_segmentation_member_config_activeblocks",
-      "target": "unified_src_segmentation_member_config_cashbackblock",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L96",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_segmentation_member_config_activeblocks",
-      "target": "unified_src_segmentation_member_config_clublaunchblock",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L97",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_segmentation_member_config_activeblocks",
       "target": "unified_src_segmentation_member_config_cardblock",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/segmentation/member-config.ts",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_segmentation_member_config_activeblocks",
+      "target": "unified_src_segmentation_member_config_birthdayblock",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "unified/src/segmentation/member-config.ts",
+      "source_location": "L101",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_segmentation_member_config_activeblocks",
+      "target": "unified_src_segmentation_member_config_cashbackblock",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -6435,7 +6624,7 @@
     },
     {
       "source": "unified_src_segmentation_member_config_activeblocks",
-      "target": "unified_src_segmentation_member_config_birthdayblock",
+      "target": "unified_src_segmentation_member_config_clublaunchblock",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -6454,7 +6643,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L136",
+      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -6466,7 +6655,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L136",
+      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -6478,7 +6667,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L136",
+      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -6490,7 +6679,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L138",
+      "source_location": "L140",
       "weight": 1.0
     },
     {
@@ -6538,7 +6727,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L57",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -6550,7 +6739,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L69",
+      "source_location": "L70",
       "weight": 1.0
     },
     {
@@ -6562,7 +6751,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L70",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -6574,31 +6763,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L71",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_segmentation_member_presentation_introgreetingbackground",
-      "target": "unified_src_segmentation_member_presentation_background",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L15",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_segmentation_member_presentation_segmentbackground",
-      "target": "unified_src_segmentation_member_presentation_background",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L11",
+      "source_location": "L72",
       "weight": 1.0
     },
     {
@@ -6663,6 +6828,18 @@
     },
     {
       "source": "unified_src_app_client_router_clientrouteroptions",
+      "target": "unified_src_app_display_state_resolveddisplaystate",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "field",
+      "source_file": "unified/src/app/client-router.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_clientrouteroptions",
       "target": "unified_src_segmentation_prospect_types_segmentid",
       "relation": "references",
       "_origin": "ast",
@@ -6670,7 +6847,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0
     },
     {
@@ -6682,7 +6859,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0
     },
     {
@@ -6766,7 +6943,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "unified/src/segmentation/member.types.ts",
-      "source_location": "L31",
+      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -6778,7 +6955,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L32",
+      "source_location": "L29",
       "weight": 1.0
     },
     {
@@ -6947,6 +7124,102 @@
       "context": "import",
       "source_file": "package.json",
       "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show",
+      "target": "unified_src_app_display_state_resolveddisplaystate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_customer_bonus_profile_bonusprofile",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_app_display_state_createcardholderdisplaystate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_app_display_state_createguestdisplaystate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_app_display_state_createprospectdisplaystate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_segmentation_member_types_cardlevel",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_analytics_main_block_show_createmainblockshowtracker",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_analytics_main_block_show_getmainblockshowgoal",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -7166,6 +7439,18 @@
       "weight": 1.0
     },
     {
+      "source": "unified_src_app_client_router_test",
+      "target": "unified_src_customer_customer_context_getcachedcustomercontext",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/app/client-router.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
       "source": "unified_src_app_dev_preview",
       "target": "unified_src_segmentation_member_types_segmentid",
       "relation": "imports",
@@ -7371,7 +7656,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_app_render_state_rendererrorstate",
+      "target": "unified_src_app_dev_preview_getdevpreview",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7379,6 +7664,18 @@
       "context": "import",
       "source_file": "unified/src/app/main.ts",
       "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_main",
+      "target": "unified_src_app_render_state_rendererrorstate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/app/main.ts",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -7390,7 +7687,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "unified/src/app/main.ts",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -7402,7 +7699,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "unified/src/app/main.ts",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -7431,7 +7728,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_customer_bonus_profile_requestbonusprofilestrict",
+      "target": "unified_src_analytics_main_block_show_createmainblockshowtracker",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7443,7 +7740,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_customer_customer_context_getcachedcustomercontext",
+      "target": "unified_src_customer_bonus_profile_requestbonusprofilestrict",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7455,7 +7752,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_customer_reservation_api_requestreservationtripcount",
+      "target": "unified_src_customer_customer_context_getcachedcustomercontext",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7467,7 +7764,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_shared_runtime_mount_when_available_mountwhenavailable",
+      "target": "unified_src_customer_reservation_api_requestreservationtripcount",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7479,7 +7776,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_app_client_router_createclientrouter",
+      "target": "unified_src_shared_runtime_mount_when_available_mountwhenavailable",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7491,7 +7788,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_app_dev_preview_getdevpreview",
+      "target": "unified_src_app_client_router_createclientrouter",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7743,7 +8040,7 @@
     },
     {
       "source": "unified_src_benefits_member_render_block",
-      "target": "unified_src_shared_runtime_text_appendtextwithbreaks",
+      "target": "unified_src_shared_runtime_media_desktop_media_query",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7751,6 +8048,18 @@
       "context": "import",
       "source_file": "unified/src/benefits/member/render-block.ts",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_member_render_block",
+      "target": "unified_src_shared_runtime_text_appendtextwithbreaks",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/member/render-block.ts",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -7767,7 +8076,7 @@
     },
     {
       "source": "unified_src_benefits_member_render_segment",
-      "target": "unified_src_benefits_member_render_block_renderblock",
+      "target": "unified_src_benefits_shared_segment_pagination_createsegmentpagination",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7775,6 +8084,18 @@
       "context": "import",
       "source_file": "unified/src/benefits/member/render-segment.ts",
       "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_member_render_segment",
+      "target": "unified_src_benefits_member_render_block_renderblock",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/member/render-segment.ts",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -7787,6 +8108,18 @@
       "context": "import",
       "source_file": "unified/src/benefits/member.test.ts",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_member_test",
+      "target": "unified_src_content_content_content",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/member.test.ts",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -7923,7 +8256,7 @@
     },
     {
       "source": "unified_src_benefits_prospect_render_segment",
-      "target": "unified_src_shared_runtime_dom_lifecycle_registercleanup",
+      "target": "unified_src_benefits_shared_segment_pagination_createsegmentpagination",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7935,7 +8268,7 @@
     },
     {
       "source": "unified_src_benefits_prospect_render_segment",
-      "target": "unified_src_benefits_prospect_render_block_renderblock",
+      "target": "unified_src_shared_runtime_dom_lifecycle_registercleanup",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7943,6 +8276,54 @@
       "context": "import",
       "source_file": "unified/src/benefits/prospect/render-segment.ts",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_prospect_render_segment",
+      "target": "unified_src_shared_runtime_media_desktop_media_query",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/prospect/render-segment.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_prospect_render_segment",
+      "target": "unified_src_benefits_prospect_render_block_renderblock",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/prospect/render-segment.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_prospect_render_segment_test",
+      "target": "unified_src_segmentation_prospect_config_getsegmentconfig",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/prospect/render-segment.test.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_prospect_render_segment_test",
+      "target": "unified_src_benefits_prospect_render_segment_rendersegment",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/prospect/render-segment.test.ts",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -8848,6 +9229,18 @@
     {
       "source": "unified_src_card_activation_ui_activation_result_view",
       "target": "unified_src_card_activation_ui_activation_view_activation_dialog_id",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_card_activation_ui_activation_result_view",
+      "target": "unified_src_card_activation_ui_activation_view_coralpopupelement",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9770,6 +10163,66 @@
       "weight": 1.0
     },
     {
+      "source": "unified_src_analytics_main_block_show",
+      "target": "unified_src_app_display_state",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_customer_bonus_profile",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_app_display_state",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_segmentation_member_types",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_analytics_main_block_show",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
       "source": "unified_src_app_client_router",
       "target": "unified_src_customer_bonus_profile",
       "relation": "imports_from",
@@ -9851,6 +10304,18 @@
       "context": "import",
       "source_file": "unified/src/app/client-router.test.ts",
       "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_test",
+      "target": "unified_src_customer_customer_context",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/app/client-router.test.ts",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -9951,7 +10416,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_app_render_state",
+      "target": "unified_src_app_dev_preview",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9959,6 +10424,18 @@
       "context": "import",
       "source_file": "unified/src/app/main.ts",
       "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_main",
+      "target": "unified_src_app_render_state",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/app/main.ts",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -9987,7 +10464,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_customer_bonus_profile",
+      "target": "unified_src_analytics_main_block_show",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9999,7 +10476,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_customer_customer_context",
+      "target": "unified_src_customer_bonus_profile",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10011,7 +10488,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_customer_reservation_api",
+      "target": "unified_src_customer_customer_context",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10023,7 +10500,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_shared_runtime_mount_when_available",
+      "target": "unified_src_customer_reservation_api",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10035,7 +10512,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_app_client_router",
+      "target": "unified_src_shared_runtime_mount_when_available",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10047,7 +10524,7 @@
     },
     {
       "source": "unified_src_app_main",
-      "target": "unified_src_app_dev_preview",
+      "target": "unified_src_app_client_router",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10251,7 +10728,7 @@
     },
     {
       "source": "unified_src_benefits_member_render_block",
-      "target": "unified_src_shared_runtime_text",
+      "target": "unified_src_shared_runtime_media",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10259,6 +10736,18 @@
       "context": "import",
       "source_file": "unified/src/benefits/member/render-block.ts",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_member_render_block",
+      "target": "unified_src_shared_runtime_text",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/member/render-block.ts",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -10275,7 +10764,7 @@
     },
     {
       "source": "unified_src_benefits_member_render_segment",
-      "target": "unified_src_benefits_member_render_block",
+      "target": "unified_src_benefits_shared_segment_pagination",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10283,6 +10772,18 @@
       "context": "import",
       "source_file": "unified/src/benefits/member/render-segment.ts",
       "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_member_render_segment",
+      "target": "unified_src_benefits_member_render_block",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/member/render-segment.ts",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -10295,6 +10796,18 @@
       "context": "import",
       "source_file": "unified/src/benefits/member.test.ts",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_member_test",
+      "target": "unified_src_content_content",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/member.test.ts",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -10431,7 +10944,7 @@
     },
     {
       "source": "unified_src_benefits_prospect_render_segment",
-      "target": "unified_src_shared_runtime_dom_lifecycle",
+      "target": "unified_src_benefits_shared_segment_pagination",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10443,7 +10956,7 @@
     },
     {
       "source": "unified_src_benefits_prospect_render_segment",
-      "target": "unified_src_benefits_prospect_render_block",
+      "target": "unified_src_shared_runtime_dom_lifecycle",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -10451,6 +10964,54 @@
       "context": "import",
       "source_file": "unified/src/benefits/prospect/render-segment.ts",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_prospect_render_segment",
+      "target": "unified_src_shared_runtime_media",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/prospect/render-segment.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_prospect_render_segment",
+      "target": "unified_src_benefits_prospect_render_block",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/prospect/render-segment.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_prospect_render_segment_test",
+      "target": "unified_src_segmentation_prospect_config",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/prospect/render-segment.test.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_prospect_render_segment_test",
+      "target": "unified_src_benefits_prospect_render_segment",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "unified/src/benefits/prospect/render-segment.test.ts",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -11626,7 +12187,7 @@
       "confidence_score": 1.0,
       "context": "type",
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L10",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -11912,7 +12473,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L108",
+      "source_location": "L107",
       "weight": 1.0
     },
     {
@@ -11923,7 +12484,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L120",
+      "source_location": "L119",
       "weight": 1.0
     },
     {
@@ -11945,7 +12506,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L72",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -11956,7 +12517,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L84",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -11967,7 +12528,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L53",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -12191,6 +12752,72 @@
       "weight": 1.0
     },
     {
+      "source": "unified_src_analytics_main_block_show",
+      "target": "unified_src_analytics_main_block_show_yandexmetrika",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show",
+      "target": "unified_src_analytics_main_block_show_getmainblockshowgoal",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show",
+      "target": "unified_src_analytics_main_block_show_createmainblockshowtracker",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show",
+      "target": "unified_src_analytics_main_block_show_goal",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/analytics/main-block-show.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_analytics_main_block_show_test_intersectionobserverstub",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L62",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_analytics_main_block_show_test",
+      "target": "unified_src_analytics_main_block_show_test_bonusprofile",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
       "source": "unified_src_app_client_router",
       "target": "unified_src_app_client_router_reactivestorage",
       "relation": "contains",
@@ -12231,40 +12858,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/app/client-router.ts",
-      "source_location": "L37",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_test",
-      "target": "unified_src_app_client_router_test_storagestub",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L10",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_test",
-      "target": "unified_src_app_client_router_test_cachedcustomer",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L34",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_app_client_router_test",
-      "target": "unified_src_app_client_router_test_bonusprofile",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L36",
+      "source_location": "L38",
       "weight": 1.0
     },
     {
@@ -12275,7 +12869,40 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L8",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_test",
+      "target": "unified_src_app_client_router_test_storagestub",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/app/client-router.test.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_test",
+      "target": "unified_src_app_client_router_test_cachedcustomer",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/app/client-router.test.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_app_client_router_test",
+      "target": "unified_src_app_client_router_test_bonusprofile",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/app/client-router.test.ts",
+      "source_location": "L38",
       "weight": 1.0
     },
     {
@@ -12627,7 +13254,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/benefits/member/render-block.ts",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -12638,7 +13265,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/benefits/member/render-block.ts",
-      "source_location": "L6",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -12649,7 +13276,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/benefits/member/render-segment.ts",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -12660,7 +13287,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/benefits/member/render-segment.ts",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -12781,7 +13408,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/benefits/shared/block-background.ts",
-      "source_location": "L6",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -12815,6 +13442,17 @@
       "confidence_score": 1.0,
       "source_file": "unified/src/benefits/shared/block-tooltip.ts",
       "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_benefits_shared_segment_pagination",
+      "target": "unified_src_benefits_shared_segment_pagination_createsegmentpagination",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/benefits/shared/segment-pagination.ts",
+      "source_location": "L1",
       "weight": 1.0
     },
     {
@@ -13584,7 +14222,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L45",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -13595,7 +14233,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/card-activation/ui/activation-result-view.ts",
-      "source_location": "L54",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -14079,7 +14717,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L135",
+      "source_location": "L137",
       "weight": 1.0
     },
     {
@@ -14178,18 +14816,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/member-config.ts",
-      "source_location": "L81",
-      "weight": 1.0
-    },
-    {
-      "source": "unified_src_segmentation_member_presentation",
-      "target": "unified_src_segmentation_member_presentation_segmentbackground",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L11",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -14200,7 +14827,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L15",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -14211,7 +14838,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L19",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -14233,12 +14860,12 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/member-presentation.ts",
-      "source_location": "L55",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
       "source": "unified_src_segmentation_member_presentation",
-      "target": "unified_src_segmentation_member_presentation_background",
+      "target": "unified_src_segmentation_member_presentation_segmentbackground",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14255,7 +14882,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/member.types.ts",
-      "source_location": "L16",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -14277,7 +14904,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/member.types.ts",
-      "source_location": "L33",
+      "source_location": "L30",
       "weight": 1.0
     },
     {
@@ -14288,7 +14915,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/member.types.ts",
-      "source_location": "L34",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -14409,7 +15036,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/prospect-presentation.ts",
-      "source_location": "L19",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -14420,7 +15047,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/prospect-presentation.ts",
-      "source_location": "L24",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -14486,7 +15113,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L29",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -14508,7 +15135,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L45",
+      "source_location": "L42",
       "weight": 1.0
     },
     {
@@ -14519,7 +15146,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L56",
+      "source_location": "L53",
       "weight": 1.0
     },
     {
@@ -14530,7 +15157,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L57",
+      "source_location": "L54",
       "weight": 1.0
     },
     {
@@ -14541,7 +15168,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L59",
+      "source_location": "L56",
       "weight": 1.0
     },
     {
@@ -14552,7 +15179,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/segmentation/prospect.types.ts",
-      "source_location": "L65",
+      "source_location": "L62",
       "weight": 1.0
     },
     {
@@ -14608,6 +15235,17 @@
       "confidence_score": 1.0,
       "source_file": "unified/src/shared/runtime/dom-lifecycle.ts",
       "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "unified_src_shared_runtime_media",
+      "target": "unified_src_shared_runtime_media_desktop_media_query",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/shared/runtime/media.ts",
+      "source_location": "L1",
       "weight": 1.0
     },
     {
@@ -14776,6 +15414,17 @@
       "weight": 1.0
     },
     {
+      "source": "unified_src_analytics_main_block_show_test_intersectionobserverstub",
+      "target": "unified_src_analytics_main_block_show_test_intersectionobserverstub_constructor",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "unified/src/analytics/main-block-show.test.ts",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
       "source": "unified_src_app_client_router_reactivestorage",
       "target": "unified_src_app_client_router_reactivestorage_getitem",
       "relation": "method",
@@ -14816,7 +15465,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L13",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -14827,7 +15476,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L15",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -14838,7 +15487,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L19",
+      "source_location": "L21",
       "weight": 1.0
     },
     {
@@ -14849,7 +15498,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L23",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -14860,7 +15509,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "unified/src/app/client-router.test.ts",
-      "source_location": "L27",
+      "source_location": "L29",
       "weight": 1.0
     },
     {
@@ -14933,5 +15582,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fd0ffde5a5e12e13f6c745cba04d11a5243a3575"
+  "built_at_commit": "420e9aee1a413bdf09451fef5d8b8cb2ff1d2afc"
 }

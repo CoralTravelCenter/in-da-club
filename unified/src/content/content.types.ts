@@ -40,7 +40,7 @@ export interface ContentConfig {
             | 'exceptionalClient' | 'allPrivileges' | 'accountAction' | 'individualApproach'
             | 'bookingsPriority'
         >;
-        links: TextGroup<'offers' | 'tours' | 'account'>;
+        links: TextGroup<'offers' | 'account'>;
     };
     activation: {
         steps: TextGroup<'label' | 'of' | 'separator'>;
@@ -70,7 +70,7 @@ export interface ContentConfig {
             | 'request' | 'register' | 'sendCode' | 'activate' | 'loadCard' | 'refreshCard'
             | 'openVerification' | 'resendCode' | 'activateCard' | 'loadConsents' | 'saveConsents'
         >;
-        links: TextGroup<'personalConsent' | 'personalPolicy' | 'loyaltyRules' | 'offersConsent' | 'tours'>;
+        links: TextGroup<'personalConsent' | 'personalPolicy' | 'loyaltyRules' | 'offersConsent'>;
     };
     promotionTerms: {
         noCard: Record<'birthdayBonus' | 'welcomeBonus', PromotionTerms>;

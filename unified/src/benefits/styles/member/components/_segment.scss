@@ -6,6 +6,13 @@
   padding-block: 40px;
 }
 
+@media (width < tokens.$breakpoint-desktop) {
+  .in-da-club-member-segment__list,
+  .in-da-club-member-segment__featured {
+    padding-inline: 0;
+  }
+}
+
 .in-da-club-member-segment__content {
   @media (min-width: tokens.$breakpoint-desktop) {
     grid-template-columns: repeat(3, 1fr);

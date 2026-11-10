@@ -105,7 +105,6 @@ export const content = {
         },
         links: {
             offers: '/poleznaya-informatsiya/offers/more-vozmozhnostej/',
-            tours: '/',
             account: '/account/',
         },
     },
@@ -202,7 +201,6 @@ export const content = {
             personalPolicy: 'https://b2ccdn.coral.ru/content/doc/cb/politika-obrabotki-persdannyh-coralbonus-24-09-25.pdf',
             loyaltyRules: 'https://b2ccdn.coral.ru/content/doc/legal/pravila-loyalty-program-22062026.pdf',
             offersConsent: 'https://b2ccdn.coral.ru/content/doc/cb/soglasie-na-rassylku-coralbonus-24-09-2025.pdf',
-            tours: '/',
         },
     },
     promotionTerms: {

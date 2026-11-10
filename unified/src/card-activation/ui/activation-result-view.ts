@@ -1,6 +1,6 @@
 import type {BonusProfile} from '@/customer/bonus-profile';
 import type {UserProfile} from '@/customer/profile-storage';
-import {ACTIVATION_DIALOG_ID} from './activation-view';
+import {ACTIVATION_DIALOG_ID, type CoralPopupElement} from './activation-view';
 import {content} from '@/content/content';
 import {textToSafeHtml} from '@/shared/runtime/text';
 
@@ -34,8 +34,12 @@ export function showSuccessResult(stage: HTMLElement, bonus: BonusProfile, profi
             <h2 id="${ACTIVATION_DIALOG_ID}-title">${textToSafeHtml(content.activation.result.successTitle)}</h2>
             <p>${textToSafeHtml(content.activation.result.levelPrefix)} <strong data-card-level></strong>, ${textToSafeHtml(content.activation.result.cashback)} <strong data-card-cashback></strong> ${textToSafeHtml(content.activation.result.cashbackSuffix)}</p>
             <div class="in-da-club-activation__card"></div>
-            <a class="in-da-club-activation__submit" href="${textToSafeHtml(content.activation.links.tours)}">${textToSafeHtml(content.activation.result.chooseTour)}</a>
+            <button type="button" class="in-da-club-activation__submit">${textToSafeHtml(content.activation.result.chooseTour)}</button>
         </div>`;
+    stage.querySelector<HTMLButtonElement>('.in-da-club-activation__submit')!.addEventListener('click', () => {
+        stage.closest<CoralPopupElement>('coral-popup')?.hide();
+        window.requestAnimationFrame(() => window.scrollTo({top: 0}));
+    });
     const level = bonus.cardType ?? 'Silver';
     stage.querySelector<HTMLElement>('[data-card-level]')!.textContent = level;
     stage.querySelector<HTMLElement>('[data-card-cashback]')!.textContent = `${({Silver: 1, Gold: 2, Platinum: 3} as Record<string, number>)[level] ?? 1}%`;

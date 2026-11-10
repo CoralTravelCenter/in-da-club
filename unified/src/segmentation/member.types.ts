@@ -24,7 +24,7 @@ export interface ContentBlockDefinition {
     descriptionSuffix?: string;
     badge?: string;
     image?: {src: string; desktopSrc?: string; alt: string};
-    action?: {label: string; href: string; target?: '_blank'};
+    action?: {label: string; href: string; target?: '_blank'} | {label: string; type: 'scroll-to-top'};
     tooltip?: {title: string; content: TooltipContentItem[]};
 }
 export type ContentBlockConfig = ContentBlockDefinition & {presentation: BlockPresentation};

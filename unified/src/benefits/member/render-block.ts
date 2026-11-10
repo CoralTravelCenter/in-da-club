@@ -119,19 +119,29 @@ export function renderBlock(config: ContentBlockConfig): HTMLElement {
             content.append(picture);
         }
     }
-    if (config.action) {
+    const blockAction = config.action;
+    if (blockAction) {
         const action = document.createElement('coral-button');
-        const link = document.createElement('a');
         action.className = 'in-da-club-member-block__action';
         action.setAttribute('trait', 'vivid');
         action.setAttribute('shape', 'pill');
-        link.href = config.action.href;
-        link.textContent = config.action.label;
-        if (config.action.target) {
-            link.target = config.action.target;
-            link.rel = 'noopener';
+        if ('href' in blockAction) {
+            const link = document.createElement('a');
+            link.href = blockAction.href;
+            link.textContent = blockAction.label;
+            if (blockAction.target) {
+                link.target = blockAction.target;
+                link.rel = 'noopener';
+            }
+            action.append(link);
+        } else {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = blockAction.label;
+            button.style.width = 'fit-content';
+            button.addEventListener('click', () => window.scrollTo({top: 0}));
+            action.append(button);
         }
-        action.append(link);
         content.append(action);
     }
     const tooltip = config.tooltip

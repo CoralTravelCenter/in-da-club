@@ -46,7 +46,7 @@ function inactiveBlocks(customer: CustomerContext): ContentBlockDefinition[] {
             title: hasDisplayName ? copy.inactiveGreetingNamed : copy.inactiveGreetingFallback,
             titleAccent: hasDisplayName ? customer.displayName : undefined,
             description: copy.inactiveDescription,
-            action: {label: copy.chooseTour, href: content.member.links.tours},
+            action: {label: copy.chooseTour, type: 'scroll-to-top'},
         },
         {id: 'welcome-bonus', value: copy.welcomeBonusValue, description: copy.welcomeBonusDescription, tooltip: WELCOME_TOOLTIP},
         cardBlock(customer.cardLevel), managerBlock, cashbackBlock(customer.cardLevel, true), birthdayBlock(), privateSalesBlock,
